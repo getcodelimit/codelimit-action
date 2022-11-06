@@ -1,0 +1,8 @@
+name: 'Code Limit'
+description: 'Upload Code Limit report'
+branding:
+  icon: 'activity'
+  color: 'orange'
+runs:
+  using: 'node16'
+  main: 'dist/index.js'
