@@ -1,0 +1,31 @@
+name: 'main'
+on:
+  push:
+    branches:
+      - main
+jobs:
+  main:
+    runs-on: ubuntu-latest
+    - name: 'Checkout sources'
+      uses: actions/checkout@v3
+    - name: 'Setup NodeJS'
+      uses: actions/setup-node@v3
+      with:
+        node-version: '16.x'
+    - name: 'Install dependencies'
+      run: yarn install
+    - name: 'Build distribution'
+      run: yarn dist
+    - name: 'Commit GitHub Action distribution'
+      run: |
+        git config --local user.email "action@github.com"
+        git config --local user.name "GitHub Action"
+        git add dist/index.js
+        git commit -m ":construction_worker: Build by GitHub Actions" || true
+      if: job.status == 'success'
+    - name: 'Push changes'
+      uses: ad-m/github-push-action@master
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        branch: ${{ github.ref }}
+        force: true 

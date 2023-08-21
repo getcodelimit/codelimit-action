@@ -9,7 +9,7 @@ function getBinaryName() {
     if (envVar) {
         platform = envVar.toLowerCase();
     }
-    return {'macos': 'clim-macos', 'windows': 'clim.exe', 'linux': 'clim-linux'}[platform];
+    return {'macos': 'codelimit-macos', 'windows': 'codelimit.exe', 'linux': 'codelimit-linux'}[platform];
 }
 
 https.get('https://github.com/getcodelimit/codelimit/releases/latest', (res) => {
@@ -36,7 +36,7 @@ https.get('https://github.com/getcodelimit/codelimit/releases/latest', (res) => 
                         console.log(`ERROR: ${err}`);
                     });
                 };
-                await exec(filename)
+                await exec(filename, ['check', '.'])
                     .catch((err) => {
                         console.log(`ERROR: ${err}`);
                     }).then(() => {
