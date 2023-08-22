@@ -4,15 +4,18 @@ const {exec} = require("@actions/exec");
 const nodeFetch = require('node-fetch');
 const {promisify} = require("util");
 const streamPipeline = promisify(require('stream').pipeline);
-const core = require('@actions/core');
-const {context, GitHub} = require('@actions/github');
+const {context} = require('@actions/github');
+const {Octokit} = require("@octokit/action");
 
 
 function getBinaryName() {
-    let platform = 'macos';
-    let envVar = process.env.RUNNER_OS;
-    if (envVar) {
-        platform = envVar.toLowerCase();
+    let platform = 'linux';
+    if (process.env.RUNNER_OS) {
+        platform = process.env.RUNNER_OS.toLowerCase();
+    } else if (process.platform === 'darwin') {
+        platform = 'macos';
+    } else if (process.platform === 'win32') {
+        platform = 'windows';
     }
     return {'macos': 'codelimit-macos', 'windows': 'codelimit.exe', 'linux': 'codelimit-linux'}[platform];
 }
@@ -42,8 +45,8 @@ async function getChangedFiles() {
     console.log(`Base commit: ${base}`);
     console.log(`Head commit: ${head}`);
 
-    const client = new GitHub(core.getInput('token', {required: true}));
-    const response = await client.repos.compareCommits({
+    const octokit = new Octokit();
+    const response = await octokit.repos.compareCommits({
         base,
         head,
         owner: context.repo.owner,

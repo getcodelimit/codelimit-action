@@ -4,8 +4,8 @@ branding:
   icon: 'activity'
   color: 'orange'
 runs:
-  using: 'node16'
-  main: 'dist/index.js'
+  using: 'docker'
+  main: 'Dockerfile'
 inputs:
   token:
     description: 'GitHub token for GitHub API requests'
