@@ -1,7 +1,10 @@
-const https = require("https");
 const path = require("path");
 const fs = require("fs");
 const {exec} = require("@actions/exec");
+const nodeFetch = require('node-fetch');
+const {promisify} = require("util");
+const streamPipeline = promisify(require('stream').pipeline)
+
 
 function getBinaryName() {
     let platform = 'macos';
@@ -12,37 +15,23 @@ function getBinaryName() {
     return {'macos': 'codelimit-macos', 'windows': 'codelimit.exe', 'linux': 'codelimit-linux'}[platform];
 }
 
-https.get('https://github.com/getcodelimit/codelimit/releases/latest', (res) => {
-    const downloadUrl = res.headers.location.replace('/tag/', '/download/');
-    const binaryUrl = `${downloadUrl}/${getBinaryName()}`;
-    console.log(binaryUrl);
-    https.get(binaryUrl, (res) => {
-        https.get(res.headers.location, (res) => {
-            const filename = path.join(__dirname, getBinaryName());
-            const file = fs.createWriteStream(filename);
-            res.pipe(file);
-            file.on("finish", () => {
-                file.close();
-                console.log("Download Completed");
-            });
-            file
-                .on('error', (err) => {
-                    console.log(`ERROR: ${err}`);
-                }).on('finish', async () => {
-                file.close();
-                fs.chmodSync(filename, '777');
-                const unlink = () => {
-                    fs.unlink(filename, (err) => {
-                        console.log(`ERROR: ${err}`);
-                    });
-                };
-                await exec(filename, ['check', '.'])
-                    .catch((err) => {
-                        console.log(`ERROR: ${err}`);
-                    }).then(() => {
-                        unlink();
-                    });
-            });
-        });
-    });
-});
+async function getLatestBinaryUrl() {
+    const latestUrl = 'https://github.com/getcodelimit/codelimit/releases/latest';
+    const res = await nodeFetch(latestUrl);
+    const downloadUrl = res.url.replace('/tag/', '/download/');
+    return `${downloadUrl}/${getBinaryName()}`;
+}
+
+(async function main() {
+    const binaryUrl = await getLatestBinaryUrl();
+    console.log(`Downloading Code Limit binary from URL: ${binaryUrl}`);
+    const response = await nodeFetch(binaryUrl);
+    const filename = path.join(__dirname, getBinaryName());
+    console.log(`Code Limit binary downloaded: ${filename}`);
+    await streamPipeline(response.body, fs.createWriteStream(filename));
+    fs.chmodSync(filename, '777');
+    console.log('Running Code Limit...');
+    await exec(filename, ['check', '.']);
+    fs.unlinkSync(filename);
+    console.log('Done!');
+})();

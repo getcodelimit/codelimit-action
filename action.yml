@@ -1,5 +1,5 @@
 name: 'Code Limit'
-description: 'Upload Code Limit report'
+description: 'Your Refactoring Alarm ⏰'
 branding:
   icon: 'activity'
   color: 'orange'
