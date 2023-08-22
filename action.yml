@@ -6,3 +6,8 @@ branding:
 runs:
   using: 'node16'
   main: 'dist/index.js'
+inputs:
+  token:
+    description: 'GitHub token for GitHub API requests'
+    required: true
+    default: ${{ github.token }}
