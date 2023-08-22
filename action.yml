@@ -7,7 +7,7 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
 inputs:
-  github-token:
+  github_token:
     description: 'GitHub token for GitHub API requests'
     required: true
     default: ${{ github.token }}
