@@ -5398,9 +5398,10 @@ async function getLatestBinaryUrl() {
     await streamPipeline(response.body, fs.createWriteStream(filename));
     fs.chmodSync(filename, '777');
     console.log('Running Code Limit...');
-    await exec(filename, ['check', '.']);
+    const exitCode = await exec(filename, ['check', '.'], {ignoreReturnCode: true});
     fs.unlinkSync(filename);
     console.log('Done!');
+    process.exit(exitCode);
 })();
 })();
 
