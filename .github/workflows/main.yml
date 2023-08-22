@@ -14,19 +14,4 @@ jobs:
       with:
         node-version: '20.x'
     - name: 'Install dependencies'
-      run: yarn install
-    - name: 'Build distribution'
-      run: yarn dist
-    - name: 'Commit GitHub Action distribution'
-      run: |
-        git config --local user.email "action@github.com"
-        git config --local user.name "GitHub Action"
-        git add dist/index.js
-        git commit -m ":construction_worker: Build by GitHub Actions" || true
-      if: job.status == 'success'
-    - name: 'Push changes'
-      uses: ad-m/github-push-action@master
-      with:
-        github_token: ${{ secrets.GITHUB_TOKEN }}
-        branch: ${{ github.ref }}
-        force: true 
+      run: npm install
