@@ -3,4 +3,4 @@ WORKDIR /usr/src/app
 COPY package*.json ./
 RUN npm install
 COPY src ./src
-CMD [ "node", "src/action.js" ]
+CMD [ "node", "/usr/src/app/src/action.js" ]
