@@ -41,7 +41,6 @@ async function getChangedFiles() {
         base = context.payload.before
         head = context.payload.after
     }
-
     console.log(`Base commit: ${base}`);
     console.log(`Head commit: ${head}`);
     const octokit = new Octokit();
@@ -51,13 +50,10 @@ async function getChangedFiles() {
         owner: context.repo.owner,
         repo: context.repo.repo
     });
-
     if (response.status !== 200) {
         return ['.'];
     }
-
     const files = response.data.files
-    console.log(files);
     const result = [];
     for (const file of files) {
         const filename = file.filename
@@ -65,12 +61,12 @@ async function getChangedFiles() {
             result.push(filename);
         }
     }
-    console.log(result);
     return result;
 }
 
 (async function main() {
     const changedFiles = await getChangedFiles();
+    console.log(`Number of files changed: ${changedFiles.length}`);
     const binaryUrl = await getLatestBinaryUrl();
     console.log(`Downloading Code Limit binary from URL: ${binaryUrl}`);
     const response = await nodeFetch(binaryUrl);
