@@ -44,7 +44,6 @@ async function getChangedFiles() {
 
     console.log(`Base commit: ${base}`);
     console.log(`Head commit: ${head}`);
-    console.log(process.env.INPUT_GITHUB_TOKEN);
     const octokit = new Octokit();
     const response = await octokit.repos.compareCommits({
         base,
@@ -53,9 +52,7 @@ async function getChangedFiles() {
         repo: context.repo.repo
     });
 
-    console.log(response);
-
-    if (response.status !== "200") {
+    if (response.status !== 200) {
         return ['.'];
     }
 
