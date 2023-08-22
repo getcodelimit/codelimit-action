@@ -5,7 +5,7 @@ branding:
   color: 'orange'
 runs:
   using: 'docker'
-  main: 'Dockerfile'
+  image: 'Dockerfile'
 inputs:
   token:
     description: 'GitHub token for GitHub API requests'
