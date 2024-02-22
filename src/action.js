@@ -1,12 +1,13 @@
 const path = require("path");
 const fs = require("fs");
 const {exec} = require("@actions/exec");
+import * as core from '@actions/core';
+
 const nodeFetch = require('node-fetch');
 const {promisify} = require("util");
 const streamPipeline = promisify(require('stream').pipeline);
 const {context} = require('@actions/github');
 const {Octokit} = require("@octokit/action");
-
 
 function getBinaryName() {
     let platform = 'linux';
@@ -27,6 +28,17 @@ async function getLatestBinaryUrl() {
     return `${downloadUrl}/${getBinaryName()}`;
 }
 
+async function downloadBinary() {
+    const binaryUrl = await getLatestBinaryUrl();
+    console.log(`Downloading Code Limit binary from URL: ${binaryUrl}`);
+    const response = await nodeFetch(binaryUrl);
+    const filename = path.join(__dirname, getBinaryName());
+    await streamPipeline(response.body, fs.createWriteStream(filename));
+    fs.chmodSync(filename, '777');
+    console.log(`Code Limit binary downloaded: ${filename}`);
+    return filename;
+}
+
 async function getChangedFiles() {
     const eventName = context.eventName
     if (eventName === undefined) {
@@ -45,10 +57,7 @@ async function getChangedFiles() {
     console.log(`Head commit: ${head}`);
     const octokit = new Octokit();
     const response = await octokit.repos.compareCommits({
-        base,
-        head,
-        owner: context.repo.owner,
-        repo: context.repo.repo
+        base, head, owner: context.repo.owner, repo: context.repo.repo
     });
     if (response.status !== 200) {
         return ['.'];
@@ -65,17 +74,27 @@ async function getChangedFiles() {
 }
 
 (async function main() {
-    const changedFiles = await getChangedFiles();
-    console.log(`Number of files changed: ${changedFiles.length}`);
-    const binaryUrl = await getLatestBinaryUrl();
-    console.log(`Downloading Code Limit binary from URL: ${binaryUrl}`);
-    const response = await nodeFetch(binaryUrl);
-    const filename = path.join(__dirname, getBinaryName());
-    console.log(`Code Limit binary downloaded: ${filename}`);
-    await streamPipeline(response.body, fs.createWriteStream(filename));
-    fs.chmodSync(filename, '777');
-    console.log('Running Code Limit...');
-    const exitCode = await exec(filename, ['check'].concat(changedFiles), {ignoreReturnCode: true});
+    const filename = await downloadBinary();
+    const doUpload = core.getInput('upload') || false;
+    const token = core.getInput('token');
+    let exitCode = 0;
+    if (doUpload) {
+        console.log('Scanning codebase...');
+        await exec(filename, ['scan', '.']);
+        console.log('Uploading results...');
+        if (!token) {
+            console.error('Token for upload not provided.');
+            exitCode = 1;
+        }
+        exitCode = await exec(filename, ['upload', '--token', token]);
+    }
+    const doCheck = core.getInput('check') || true;
+    if (doCheck && exitCode === 0) {
+        const changedFiles = await getChangedFiles();
+        console.log(`Number of files changed: ${changedFiles.length}`);
+        console.log('Running Code Limit...');
+        exitCode = await exec(filename, ['check'].concat(changedFiles), {ignoreReturnCode: true});
+    }
     fs.unlinkSync(filename);
     console.log('Done!');
     process.exit(exitCode);
