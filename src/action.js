@@ -1,7 +1,7 @@
 const path = require("path");
 const fs = require("fs");
 const {exec} = require("@actions/exec");
-import * as core from '@actions/core';
+const core = require('@actions/core');
 
 const nodeFetch = require('node-fetch');
 const {promisify} = require("util");
