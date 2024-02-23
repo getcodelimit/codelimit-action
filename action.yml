@@ -7,7 +7,9 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
 inputs:
-  github_token:
-    description: 'GitHub token for GitHub API requests'
-    required: true
-    default: ${{ github.token }}
+  upload:
+    description: 'Upload report to Code Limit'
+    required: false
+  token:
+    description: 'GitHub token used for upload to Code Limit'
+    required: false
