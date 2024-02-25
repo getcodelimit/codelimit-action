@@ -7,9 +7,14 @@ runs:
   using: 'docker'
   image: 'Dockerfile'
 inputs:
+  token:
+    description: 'GitHub token for repository'
+    required: true
+  check:
+    description: 'Checked changed files'
+    default: 'true'
+    required: false
   upload:
     description: 'Upload report to Code Limit'
-    required: false
-  token:
-    description: 'GitHub token used for upload to Code Limit'
+    default: 'false'
     required: false

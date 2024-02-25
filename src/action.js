@@ -39,7 +39,7 @@ async function downloadBinary() {
     return filename;
 }
 
-async function getChangedFiles() {
+async function getChangedFiles(token) {
     const eventName = context.eventName
     if (eventName === undefined) {
         return ['.'];
@@ -55,7 +55,7 @@ async function getChangedFiles() {
     }
     console.log(`Base commit: ${base}`);
     console.log(`Head commit: ${head}`);
-    const octokit = new Octokit();
+    const octokit = new Octokit({auth: token});
     const response = await octokit.repos.compareCommits({
         base, head, owner: context.repo.owner, repo: context.repo.repo
     });
@@ -90,7 +90,7 @@ async function getChangedFiles() {
     }
     const doCheck = core.getInput('check') || true;
     if (doCheck && exitCode === 0) {
-        const changedFiles = await getChangedFiles();
+        const changedFiles = await getChangedFiles(token);
         console.log(`Number of files changed: ${changedFiles.length}`);
         console.log('Running Code Limit...');
         exitCode = await exec(filename, ['check'].concat(changedFiles), {ignoreReturnCode: true});
