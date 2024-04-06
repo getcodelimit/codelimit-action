@@ -73,6 +73,14 @@ async function getChangedFiles(token) {
     return result;
 }
 
+function getSourceBranch() {
+    if (context.eventName === 'pull_request') {
+        return process.env.GITHUB_HEAD_REF;
+    } else {
+        return process.env.GITHUB_REF_NAME;
+    }
+}
+
 (async function main() {
     const filename = await downloadBinary();
     const doUpload = core.getInput('upload') || false;
@@ -86,7 +94,9 @@ async function getChangedFiles(token) {
             console.error('Token for upload not provided.');
             exitCode = 1;
         }
-        exitCode = await exec(filename, ['upload', '--token', token]);
+        const slug = context.payload.repository.full_name;
+        const branch = getSourceBranch();
+        exitCode = await exec(filename, ['upload', '--token', token, slug, branch]);
     }
     const doCheck = core.getInput('check') || true;
     if (doCheck && exitCode === 0) {
