@@ -96,7 +96,7 @@ function getSourceBranch() {
         }
         const slug = context.payload.repository.full_name;
         const branch = getSourceBranch();
-        exitCode = await exec(filename, ['upload', '--token', token, slug, branch]);
+        exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
     }
     const doCheck = core.getInput('check') || true;
     if (doCheck && exitCode === 0) {
