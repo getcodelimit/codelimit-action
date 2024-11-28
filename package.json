@@ -4,9 +4,10 @@
   "description": "",
   "main": "action.js",
   "scripts": {
-    "action": "node src/action.js",
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "dist": "ncc build src/action.js"
+    "build": "tsc",
+    "start": "yarn build && node ./build/action.js",
+    "dist": "esbuild build/action.js --bundle --platform=node --outfile=dist/index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,10 @@
   },
   "homepage": "https://github.com/getcodelimit/codelimit-action#readme",
   "devDependencies": {
-    "@vercel/ncc": "^0.34.0"
+    "@types/node": "^22.10.0",
+    "@types/node-fetch": "^2.6.12",
+    "esbuild": "^0.24.0",
+    "typescript": "^5.7.2"
   },
   "dependencies": {
     "@actions/core": "^1.10.1",

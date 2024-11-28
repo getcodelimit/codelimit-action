@@ -1,24 +1,31 @@
-const path = require("path");
-const fs = require("fs");
-const {exec} = require("@actions/exec");
-const core = require('@actions/core');
+import nodeFetch from "node-fetch";
+import path from "path";
+import fs from "fs";
+import {exec} from "@actions/exec";
+import {getInput} from "@actions/core";
+import {promisify} from "util";
+import {context} from "@actions/github";
+import {Octokit} from "@octokit/action";
 
-const nodeFetch = require('node-fetch');
-const {promisify} = require("util");
 const streamPipeline = promisify(require('stream').pipeline);
-const {context} = require('@actions/github');
-const {Octokit} = require("@octokit/action");
+
 
 function getBinaryName() {
-    let platform = 'linux';
+    const binaries: { [platform: string]: string } = {
+        'darwin': 'codelimit-macos',
+        'win32': 'codelimit.exe',
+        'linux': 'codelimit-linux'
+    };
     if (process.env.RUNNER_OS) {
-        platform = process.env.RUNNER_OS.toLowerCase();
-    } else if (process.platform === 'darwin') {
-        platform = 'macos';
-    } else if (process.platform === 'win32') {
-        platform = 'windows';
+        const platform = process.env.RUNNER_OS.toLowerCase();
+        if (platform in binaries) {
+            return binaries[platform];
+        }
     }
-    return {'macos': 'codelimit-macos', 'windows': 'codelimit.exe', 'linux': 'codelimit-linux'}[platform];
+    if (process.platform in binaries) {
+        return binaries[process.platform];
+    }
+    return binaries['linux'];
 }
 
 async function getLatestBinaryUrl() {
@@ -39,7 +46,7 @@ async function downloadBinary() {
     return filename;
 }
 
-async function getChangedFiles(token) {
+async function getChangedFiles(token: string) {
     const eventName = context.eventName
     if (eventName === undefined) {
         return ['.'];
@@ -64,10 +71,12 @@ async function getChangedFiles(token) {
     }
     const files = response.data.files
     const result = [];
-    for (const file of files) {
-        const filename = file.filename
-        if (file.status === 'modified' || file.status === 'added') {
-            result.push(filename);
+    if (files) {
+        for (const file of files) {
+            const filename = file.filename
+            if (file.status === 'modified' || file.status === 'added') {
+                result.push(filename);
+            }
         }
     }
     return result;
@@ -81,10 +90,10 @@ function getSourceBranch() {
     }
 }
 
-(async function main() {
+async function main() {
     const filename = await downloadBinary();
-    const doUpload = core.getInput('upload') || false;
-    const token = core.getInput('token');
+    const doUpload = getInput('upload') || false;
+    const token = getInput('token');
     let exitCode = 0;
     if (doUpload) {
         console.log('Scanning codebase...');
@@ -94,11 +103,13 @@ function getSourceBranch() {
             console.error('Token for upload not provided.');
             exitCode = 1;
         }
-        const slug = context.payload.repository.full_name;
+        const slug = context.payload.repository?.full_name;
         const branch = getSourceBranch();
-        exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
+        if (slug && branch) {
+            exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
+        }
     }
-    const doCheck = core.getInput('check') || true;
+    const doCheck = getInput('check') || true;
     if (doCheck && exitCode === 0) {
         const changedFiles = await getChangedFiles(token);
         console.log(`Number of files changed: ${changedFiles.length}`);
@@ -112,4 +123,6 @@ function getSourceBranch() {
     fs.unlinkSync(filename);
     console.log('Done!');
     process.exit(exitCode);
-})();
+}
+
+main();
