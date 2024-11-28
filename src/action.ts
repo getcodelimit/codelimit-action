@@ -1,11 +1,11 @@
 import nodeFetch from "node-fetch";
 import path from "path";
 import fs from "fs";
-import {exec} from "@actions/exec";
 import {getInput} from "@actions/core";
 import {promisify} from "util";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
+import {branchExists, createBranch, getBranchHeadSha, getDefaultBranch, getRepoName, getRepoOwner} from "./github";
 
 const streamPipeline = promisify(require('stream').pipeline);
 
@@ -91,38 +91,62 @@ function getSourceBranch() {
 }
 
 async function main() {
-    const filename = await downloadBinary();
-    const doUpload = getInput('upload') || false;
+
+    // const filename = await downloadBinary();
+    // const doUpload = getInput('upload') || false;
     const token = getInput('token');
-    let exitCode = 0;
-    if (doUpload) {
-        console.log('Scanning codebase...');
-        await exec(filename, ['scan', '.']);
-        console.log('Uploading results...');
-        if (!token) {
-            console.error('Token for upload not provided.');
-            exitCode = 1;
-        }
-        const slug = context.payload.repository?.full_name;
-        const branch = getSourceBranch();
-        if (slug && branch) {
-            exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
-        }
+    const octokit = new Octokit({auth: token});
+    const owner = getRepoOwner(context);
+    const repo = getRepoName(context);
+    if (!owner || !repo) {
+        console.error('Could not determine repository owner or name');
+        process.exit(1);
     }
-    const doCheck = getInput('check') || true;
-    if (doCheck && exitCode === 0) {
-        const changedFiles = await getChangedFiles(token);
-        console.log(`Number of files changed: ${changedFiles.length}`);
-        if (changedFiles.length === 0) {
-            console.log('No files changed, skipping Code Limit');
-        } else {
-            console.log('Running Code Limit...');
-            exitCode = await exec(filename, ['check'].concat(changedFiles), {ignoreReturnCode: true});
+    if (!await branchExists(octokit, owner, repo, '_codelimit_reports')) {
+        const defaultBranch = getDefaultBranch(context);
+        if (!defaultBranch) {
+            console.error('Could not determine default branch');
+            process.exit(1);
         }
+        const sha = await getBranchHeadSha(octokit, owner, repo, defaultBranch);
+        if (!sha) {
+            console.error('Could not determine default branch sha');
+            process.exit(1);
+        }
+        await createBranch(octokit, owner, repo, '_codelimit_reports', sha);
+    } else {
+        console.log('Branch _codelimit_reports already exists');
     }
-    fs.unlinkSync(filename);
-    console.log('Done!');
-    process.exit(exitCode);
+    
+    // let exitCode = 0;
+    // if (doUpload) {
+    //     console.log('Scanning codebase...');
+    //     await exec(filename, ['scan', '.']);
+    //     console.log('Uploading results...');
+    //     if (!token) {
+    //         console.error('Token for upload not provided.');
+    //         exitCode = 1;
+    //     }
+    //     const slug = context.payload.repository?.full_name;
+    //     const branch = getSourceBranch();
+    //     if (slug && branch) {
+    //         exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
+    //     }
+    // }
+    // const doCheck = getInput('check') || true;
+    // if (doCheck && exitCode === 0) {
+    //     const changedFiles = await getChangedFiles(token);
+    //     console.log(`Number of files changed: ${changedFiles.length}`);
+    //     if (changedFiles.length === 0) {
+    //         console.log('No files changed, skipping Code Limit');
+    //     } else {
+    //         console.log('Running Code Limit...');
+    //         exitCode = await exec(filename, ['check'].concat(changedFiles), {ignoreReturnCode: true});
+    //     }
+    // }
+    // fs.unlinkSync(filename);
+    // console.log('Done!');
+    // process.exit(exitCode);
 }
 
 main();
