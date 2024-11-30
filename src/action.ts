@@ -117,7 +117,7 @@ async function main() {
     } else {
         console.log('Branch _codelimit_reports already exists');
     }
-    
+
     // let exitCode = 0;
     // if (doUpload) {
     //     console.log('Scanning codebase...');
