@@ -46871,7 +46871,15 @@ function main() {
         process.exit(1);
       }
       const empty_tree_object = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
-      yield (0, github_2.createBranch)(octokit, owner, repo, "_codelimit_reports", empty_tree_object);
+      const res = yield octokit.git.createCommit({
+        owner,
+        repo,
+        message: "Initial commit",
+        tree: empty_tree_object,
+        parents: []
+      });
+      const initialCommitSha = res.data.sha;
+      yield (0, github_2.createBranch)(octokit, owner, repo, "_codelimit_reports", initialCommitSha);
     } else {
       console.log("Branch _codelimit_reports already exists");
     }
