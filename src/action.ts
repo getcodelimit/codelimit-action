@@ -113,7 +113,8 @@ async function main() {
             console.error('Could not determine default branch sha');
             process.exit(1);
         }
-        await createBranch(octokit, owner, repo, '_codelimit_reports', sha);
+        const empty_tree_object = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
+        await createBranch(octokit, owner, repo, '_codelimit_reports', empty_tree_object);
     } else {
         console.log('Branch _codelimit_reports already exists');
     }
