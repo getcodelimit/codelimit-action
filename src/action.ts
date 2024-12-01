@@ -5,7 +5,7 @@ import {getInput} from "@actions/core";
 import {promisify} from "util";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
-import {branchExists, createBranch, getBranchHeadSha, getDefaultBranch, getRepoName, getRepoOwner} from "./github";
+import {branchExists, createBranch, createFile, createInitialCommit, getRepoName, getRepoOwner} from "./github";
 
 const streamPipeline = promisify(require('stream').pipeline);
 
@@ -103,29 +103,12 @@ async function main() {
         process.exit(1);
     }
     if (!await branchExists(octokit, owner, repo, '_codelimit_reports')) {
-        const defaultBranch = getDefaultBranch(context);
-        if (!defaultBranch) {
-            console.error('Could not determine default branch');
-            process.exit(1);
-        }
-        const sha = await getBranchHeadSha(octokit, owner, repo, defaultBranch);
-        if (!sha) {
-            console.error('Could not determine default branch sha');
-            process.exit(1);
-        }
-        const empty_tree_object = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
-        const res = await octokit.git.createCommit({
-            owner: owner,
-            repo: repo,
-            message: 'Initial commit',
-            tree: empty_tree_object,
-            parents: []
-        });
-        const initialCommitSha = res.data.sha
+        const initialCommitSha = await createInitialCommit(octokit, owner, repo);
         await createBranch(octokit, owner, repo, '_codelimit_reports', initialCommitSha);
     } else {
         console.log('Branch _codelimit_reports already exists');
     }
+    await createFile(octokit, owner, repo, '_codelimit_reports', 'main/badge.svg', 'Hello from Code Limit');
 
     // let exitCode = 0;
     // if (doUpload) {

@@ -24,20 +24,16 @@ export async function createBranch(octokit: Octokit, owner: string, repo: string
     }
 }
 
-export async function getBranchHeadSha(octokit: Octokit, owner: string, repo: string, branch: string) {
-    try {
-        const res = await octokit.git.getRef({
-            owner: owner, repo: repo, ref: `heads/${branch}`
-        })
-        const ref = res.data.object
-        return ref.sha
-    } catch (e) {
-        return undefined
-    }
-}
-
-export function getDefaultBranch(ctx: Context): string | undefined {
-    return ctx.payload.repository?.default_branch
+export async function createInitialCommit(octokit: Octokit, owner: string, repo: string): Promise<string> {
+    const empty_tree_object = '4b825dc642cb6eb9a060e54bf8d69288fbee4904';
+    const res = await octokit.git.createCommit({
+        owner: owner,
+        repo: repo,
+        message: 'Initial commit',
+        tree: empty_tree_object,
+        parents: []
+    });
+    return res.data.sha;
 }
 
 export function getRepoOwner(ctx: Context): string | undefined {
@@ -46,4 +42,19 @@ export function getRepoOwner(ctx: Context): string | undefined {
 
 export function getRepoName(ctx: Context): string | undefined {
     return ctx.payload.repository?.name
+}
+
+export async function createFile(octokit: Octokit, owner: string, repo: string, branchName: string, path: string, content: string) {
+    await octokit.repos.createOrUpdateFileContents({
+        owner: owner,
+        repo: repo,
+        path: path,
+        message: `Update by Code Limit`,
+        branch: branchName,
+        content: Buffer.from(content).toString('base64'),
+        committer: {
+            name: 'Code Limit Action',
+            email: 'robvanderleek@gmail.com'
+        }
+    });
 }

@@ -46744,10 +46744,10 @@ var require_github2 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.branchExists = branchExists;
     exports2.createBranch = createBranch;
-    exports2.getBranchHeadSha = getBranchHeadSha;
-    exports2.getDefaultBranch = getDefaultBranch;
+    exports2.createInitialCommit = createInitialCommit;
     exports2.getRepoOwner = getRepoOwner;
     exports2.getRepoName = getRepoName;
+    exports2.createFile = createFile;
     function branchExists(octokit, owner, repo, branchName) {
       return __awaiter2(this, void 0, void 0, function* () {
         try {
@@ -46778,24 +46778,18 @@ var require_github2 = __commonJS({
         }
       });
     }
-    function getBranchHeadSha(octokit, owner, repo, branch) {
+    function createInitialCommit(octokit, owner, repo) {
       return __awaiter2(this, void 0, void 0, function* () {
-        try {
-          const res = yield octokit.git.getRef({
-            owner,
-            repo,
-            ref: `heads/${branch}`
-          });
-          const ref = res.data.object;
-          return ref.sha;
-        } catch (e) {
-          return void 0;
-        }
+        const empty_tree_object = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
+        const res = yield octokit.git.createCommit({
+          owner,
+          repo,
+          message: "Initial commit",
+          tree: empty_tree_object,
+          parents: []
+        });
+        return res.data.sha;
       });
-    }
-    function getDefaultBranch(ctx) {
-      var _a;
-      return (_a = ctx.payload.repository) === null || _a === void 0 ? void 0 : _a.default_branch;
     }
     function getRepoOwner(ctx) {
       var _a;
@@ -46804,6 +46798,22 @@ var require_github2 = __commonJS({
     function getRepoName(ctx) {
       var _a;
       return (_a = ctx.payload.repository) === null || _a === void 0 ? void 0 : _a.name;
+    }
+    function createFile(octokit, owner, repo, branchName, path, content) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        yield octokit.repos.createOrUpdateFileContents({
+          owner,
+          repo,
+          path,
+          message: `Update by Code Limit`,
+          branch: branchName,
+          content: Buffer.from(content).toString("base64"),
+          committer: {
+            name: "Code Limit Action",
+            email: "robvanderleek@gmail.com"
+          }
+        });
+      });
     }
   }
 });
@@ -46860,29 +46870,12 @@ function main() {
       process.exit(1);
     }
     if (!(yield (0, github_2.branchExists)(octokit, owner, repo, "_codelimit_reports"))) {
-      const defaultBranch = (0, github_2.getDefaultBranch)(github_1.context);
-      if (!defaultBranch) {
-        console.error("Could not determine default branch");
-        process.exit(1);
-      }
-      const sha = yield (0, github_2.getBranchHeadSha)(octokit, owner, repo, defaultBranch);
-      if (!sha) {
-        console.error("Could not determine default branch sha");
-        process.exit(1);
-      }
-      const empty_tree_object = "4b825dc642cb6eb9a060e54bf8d69288fbee4904";
-      const res = yield octokit.git.createCommit({
-        owner,
-        repo,
-        message: "Initial commit",
-        tree: empty_tree_object,
-        parents: []
-      });
-      const initialCommitSha = res.data.sha;
+      const initialCommitSha = yield (0, github_2.createInitialCommit)(octokit, owner, repo);
       yield (0, github_2.createBranch)(octokit, owner, repo, "_codelimit_reports", initialCommitSha);
     } else {
       console.log("Branch _codelimit_reports already exists");
     }
+    yield (0, github_2.createFile)(octokit, owner, repo, "_codelimit_reports", "main/badge.svg", "Hello from Code Limit");
   });
 }
 main();
