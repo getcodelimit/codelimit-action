@@ -1,29 +1,38 @@
 {
-  "version": "0.10.0",
-  "uuid": "4ad5952a-6b54-4ff0-9a79-99479f96becf",
+  "version": "0.11.0",
+  "uuid": "13610eb7-6301-4eaf-9885-0b3ad24e75fd",
   "root": "/github/workspace",
   "codebase": {
+    "totals": {
+      "TypeScript": {
+        "files": 2,
+        "lines_of_code": 246,
+        "functions": 17,
+        "hard_to_maintain": 2,
+        "unmaintainable": 0
+      }
+    },
     "tree": {
       "./": {
         "entries": [
           "src/"
         ],
-        "profile": [96, 47, 70, 0]
+        "profile": [96, 47, 82, 0]
       },
       "src/": {
         "entries": [
           "action.ts",
           "github.ts"
         ],
-        "profile": [96, 47, 70, 0]
+        "profile": [96, 47, 82, 0]
       }
     },
     "files": {
       "src/action.ts": {
-        "checksum": "51e7da3757d9f2246dd2d65a54b4668e",
+        "checksum": "4f6100564c79fe68c9b11bf211471915",
         "language": "TypeScript",
-        "loc": 156,
-        "profile": [57, 17, 70, 0],
+        "loc": 168,
+        "profile": [57, 17, 82, 0],
         "measurements": [
           {"unit_name": "getBinaryName", "start": {"line": 15, "column": 10}, "end": {"line": 31, "column": 2}, "value": 17},
           {"unit_name": "getLatestBinaryUrl", "start": {"line": 33, "column": 16}, "end": {"line": 38, "column": 2}, "value": 6},
@@ -34,7 +43,7 @@
           {"unit_name": "makeResponse", "start": {"line": 104, "column": 10}, "end": {"line": 111, "column": 2}, "value": 8},
           {"unit_name": "getReportContent", "start": {"line": 113, "column": 10}, "end": {"line": 115, "column": 2}, "value": 3},
           {"unit_name": "getBadgeContent", "start": {"line": 117, "column": 10}, "end": {"line": 131, "column": 2}, "value": 15},
-          {"unit_name": "main", "start": {"line": 133, "column": 16}, "end": {"line": 179, "column": 2}, "value": 35}
+          {"unit_name": "main", "start": {"line": 133, "column": 16}, "end": {"line": 179, "column": 2}, "value": 47}
         ]
       },
       "src/github.ts": {
