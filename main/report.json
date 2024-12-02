@@ -1,13 +1,13 @@
 {
   "version": "0.11.0",
-  "uuid": "13610eb7-6301-4eaf-9885-0b3ad24e75fd",
+  "uuid": "d5d9b585-bf1a-4772-ba25-26b9aa483cd8",
   "root": "/github/workspace",
   "codebase": {
     "totals": {
       "TypeScript": {
         "files": 2,
-        "lines_of_code": 246,
-        "functions": 17,
+        "lines_of_code": 254,
+        "functions": 18,
         "hard_to_maintain": 2,
         "unmaintainable": 0
       }
@@ -17,33 +17,34 @@
         "entries": [
           "src/"
         ],
-        "profile": [96, 47, 82, 0]
+        "profile": [99, 47, 87, 0]
       },
       "src/": {
         "entries": [
           "action.ts",
           "github.ts"
         ],
-        "profile": [96, 47, 82, 0]
+        "profile": [99, 47, 87, 0]
       }
     },
     "files": {
       "src/action.ts": {
-        "checksum": "4f6100564c79fe68c9b11bf211471915",
+        "checksum": "5549e0a67ebd30f111f21d84bb95e689",
         "language": "TypeScript",
-        "loc": 168,
-        "profile": [57, 17, 82, 0],
+        "loc": 176,
+        "profile": [60, 17, 87, 0],
         "measurements": [
           {"unit_name": "getBinaryName", "start": {"line": 15, "column": 10}, "end": {"line": 31, "column": 2}, "value": 17},
           {"unit_name": "getLatestBinaryUrl", "start": {"line": 33, "column": 16}, "end": {"line": 38, "column": 2}, "value": 6},
           {"unit_name": "downloadBinary", "start": {"line": 40, "column": 16}, "end": {"line": 49, "column": 2}, "value": 10},
           {"unit_name": "getChangedFiles", "start": {"line": 51, "column": 16}, "end": {"line": 85, "column": 2}, "value": 35},
-          {"unit_name": "getSourceBranch", "start": {"line": 87, "column": 10}, "end": {"line": 93, "column": 2}, "value": 7},
-          {"unit_name": "createReportsBranchIfNotExists", "start": {"line": 95, "column": 16}, "end": {"line": 102, "column": 2}, "value": 8},
-          {"unit_name": "makeResponse", "start": {"line": 104, "column": 10}, "end": {"line": 111, "column": 2}, "value": 8},
-          {"unit_name": "getReportContent", "start": {"line": 113, "column": 10}, "end": {"line": 115, "column": 2}, "value": 3},
-          {"unit_name": "getBadgeContent", "start": {"line": 117, "column": 10}, "end": {"line": 131, "column": 2}, "value": 15},
-          {"unit_name": "main", "start": {"line": 133, "column": 16}, "end": {"line": 179, "column": 2}, "value": 47}
+          {"unit_name": "isPullRequest", "start": {"line": 87, "column": 10}, "end": {"line": 89, "column": 2}, "value": 3},
+          {"unit_name": "getSourceBranch", "start": {"line": 91, "column": 10}, "end": {"line": 97, "column": 2}, "value": 7},
+          {"unit_name": "createReportsBranchIfNotExists", "start": {"line": 99, "column": 16}, "end": {"line": 106, "column": 2}, "value": 8},
+          {"unit_name": "makeResponse", "start": {"line": 108, "column": 10}, "end": {"line": 115, "column": 2}, "value": 8},
+          {"unit_name": "getReportContent", "start": {"line": 117, "column": 10}, "end": {"line": 119, "column": 2}, "value": 3},
+          {"unit_name": "getBadgeContent", "start": {"line": 121, "column": 10}, "end": {"line": 135, "column": 2}, "value": 15},
+          {"unit_name": "main", "start": {"line": 137, "column": 16}, "end": {"line": 188, "column": 2}, "value": 52}
         ]
       },
       "src/github.ts": {
