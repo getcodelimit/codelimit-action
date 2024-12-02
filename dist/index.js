@@ -46813,7 +46813,7 @@ var require_github2 = __commonJS({
     `;
         const queryResult = yield octokit.graphql(identityQuery);
         const databaseId = (_a = queryResult === null || queryResult === void 0 ? void 0 : queryResult.viewer) === null || _a === void 0 ? void 0 : _a.databaseId;
-        const login = (_b = queryResult === null || queryResult === void 0 ? void 0 : queryResult.viewer) === null || _b === void 0 ? void 0 : _b.databaseId;
+        const login = String((_b = queryResult === null || queryResult === void 0 ? void 0 : queryResult.viewer) === null || _b === void 0 ? void 0 : _b.databaseId);
         return { name: login, email: `${databaseId}+${login}@users.noreply.github.com` };
       });
     }

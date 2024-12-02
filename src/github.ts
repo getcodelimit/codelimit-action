@@ -55,7 +55,7 @@ export async function getIdentity(octokit: Octokit): Promise<{ name: string, ema
     `;
     const queryResult: any = await octokit.graphql(identityQuery);
     const databaseId = queryResult?.viewer?.databaseId;
-    const login = queryResult?.viewer?.databaseId;
+    const login = String(queryResult?.viewer?.databaseId);
     return {name: login, email: `${databaseId}+${login}@users.noreply.github.com`};
 }
 
