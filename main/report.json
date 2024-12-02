@@ -1,0 +1,56 @@
+{
+  "version": "0.10.0",
+  "uuid": "e2fa8b79-5201-482b-9cd3-44bd171ce2e2",
+  "root": "/github/workspace",
+  "codebase": {
+    "tree": {
+      "./": {
+        "entries": [
+          "src/"
+        ],
+        "profile": [95, 46, 70, 0]
+      },
+      "src/": {
+        "entries": [
+          "action.ts",
+          "github.ts"
+        ],
+        "profile": [95, 46, 70, 0]
+      }
+    },
+    "files": {
+      "src/action.ts": {
+        "checksum": "6cc1263bf487d533984dd8da0854adc0",
+        "language": "TypeScript",
+        "loc": 156,
+        "profile": [57, 17, 70, 0],
+        "measurements": [
+          {"unit_name": "getBinaryName", "start": {"line": 15, "column": 10}, "end": {"line": 31, "column": 2}, "value": 17},
+          {"unit_name": "getLatestBinaryUrl", "start": {"line": 33, "column": 16}, "end": {"line": 38, "column": 2}, "value": 6},
+          {"unit_name": "downloadBinary", "start": {"line": 40, "column": 16}, "end": {"line": 49, "column": 2}, "value": 10},
+          {"unit_name": "getChangedFiles", "start": {"line": 51, "column": 16}, "end": {"line": 85, "column": 2}, "value": 35},
+          {"unit_name": "getSourceBranch", "start": {"line": 87, "column": 10}, "end": {"line": 93, "column": 2}, "value": 7},
+          {"unit_name": "createReportsBranchIfNotExists", "start": {"line": 95, "column": 16}, "end": {"line": 102, "column": 2}, "value": 8},
+          {"unit_name": "makeResponse", "start": {"line": 104, "column": 10}, "end": {"line": 111, "column": 2}, "value": 8},
+          {"unit_name": "getReportContent", "start": {"line": 113, "column": 10}, "end": {"line": 115, "column": 2}, "value": 3},
+          {"unit_name": "getBadgeContent", "start": {"line": 117, "column": 10}, "end": {"line": 131, "column": 2}, "value": 15},
+          {"unit_name": "main", "start": {"line": 133, "column": 16}, "end": {"line": 179, "column": 2}, "value": 35}
+        ]
+      },
+      "src/github.ts": {
+        "checksum": "992c8a9fbcd264806c653da932ebab44",
+        "language": "TypeScript",
+        "loc": 69,
+        "profile": [38, 29, 0, 0],
+        "measurements": [
+          {"unit_name": "branchExists", "start": {"line": 4, "column": 23}, "end": {"line": 13, "column": 2}, "value": 10},
+          {"unit_name": "createBranch", "start": {"line": 15, "column": 23}, "end": {"line": 25, "column": 2}, "value": 11},
+          {"unit_name": "createInitialCommit", "start": {"line": 27, "column": 23}, "end": {"line": 37, "column": 2}, "value": 11},
+          {"unit_name": "getRepoOwner", "start": {"line": 39, "column": 17}, "end": {"line": 41, "column": 2}, "value": 3},
+          {"unit_name": "getRepoName", "start": {"line": 43, "column": 17}, "end": {"line": 45, "column": 2}, "value": 3},
+          {"unit_name": "createOrUpdateFile", "start": {"line": 47, "column": 23}, "end": {"line": 76, "column": 2}, "value": 29}
+        ]
+      }
+    }
+  }
+}
