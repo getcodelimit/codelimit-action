@@ -1,6 +1,6 @@
 {
   "version": "0.10.0",
-  "uuid": "ee3f9747-b667-4212-9902-a40d3932e41c",
+  "uuid": "4ad5952a-6b54-4ff0-9a79-99479f96becf",
   "root": "/github/workspace",
   "codebase": {
     "tree": {
@@ -20,7 +20,7 @@
     },
     "files": {
       "src/action.ts": {
-        "checksum": "6cc1263bf487d533984dd8da0854adc0",
+        "checksum": "51e7da3757d9f2246dd2d65a54b4668e",
         "language": "TypeScript",
         "loc": 156,
         "profile": [57, 17, 70, 0],
