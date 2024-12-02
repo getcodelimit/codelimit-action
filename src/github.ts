@@ -44,6 +44,21 @@ export function getRepoName(ctx: Context): string | undefined {
     return ctx.payload.repository?.name
 }
 
+export async function getIdentity(octokit: Octokit): Promise<{ name: string, email: string }> {
+    const identityQuery = `
+        query {
+            viewer {
+                databaseId
+                login
+            }
+        }
+    `;
+    const queryResult: any = await octokit.graphql(identityQuery);
+    const databaseId = queryResult?.viewer?.databaseId;
+    const login = queryResult?.viewer?.databaseId;
+    return {name: login, email: `${databaseId}+${login}@users.noreply.github.com`};
+}
+
 export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: string, branchName: string, path: string, content: string) {
     let sha = undefined;
     try {
@@ -60,6 +75,7 @@ export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: 
     } catch (e) {
         /* do nothing */
     }
+    const identity = await getIdentity(octokit);
     await octokit.repos.createOrUpdateFileContents({
         owner: owner,
         repo: repo,
@@ -69,8 +85,8 @@ export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: 
         branch: branchName,
         content: Buffer.from(content).toString('base64'),
         committer: {
-            name: 'Code Limit Action',
-            email: 'robvanderleek@gmail.com'
+            name: identity.name,
+            email: identity.email
         }
     });
 }

@@ -46747,6 +46747,7 @@ var require_github2 = __commonJS({
     exports2.createInitialCommit = createInitialCommit;
     exports2.getRepoOwner = getRepoOwner;
     exports2.getRepoName = getRepoName;
+    exports2.getIdentity = getIdentity;
     exports2.createOrUpdateFile = createOrUpdateFile;
     function branchExists(octokit, owner, repo, branchName) {
       return __awaiter2(this, void 0, void 0, function* () {
@@ -46799,6 +46800,23 @@ var require_github2 = __commonJS({
       var _a;
       return (_a = ctx.payload.repository) === null || _a === void 0 ? void 0 : _a.name;
     }
+    function getIdentity(octokit) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        var _a, _b;
+        const identityQuery = `
+        query {
+            viewer {
+                databaseId
+                login
+            }
+        }
+    `;
+        const queryResult = yield octokit.graphql(identityQuery);
+        const databaseId = (_a = queryResult === null || queryResult === void 0 ? void 0 : queryResult.viewer) === null || _a === void 0 ? void 0 : _a.databaseId;
+        const login = (_b = queryResult === null || queryResult === void 0 ? void 0 : queryResult.viewer) === null || _b === void 0 ? void 0 : _b.databaseId;
+        return { name: login, email: `${databaseId}+${login}@users.noreply.github.com` };
+      });
+    }
     function createOrUpdateFile(octokit, owner, repo, branchName, path, content) {
       return __awaiter2(this, void 0, void 0, function* () {
         let sha = void 0;
@@ -46815,6 +46833,7 @@ var require_github2 = __commonJS({
           sha = res.data.sha;
         } catch (e) {
         }
+        const identity = yield getIdentity(octokit);
         yield octokit.repos.createOrUpdateFileContents({
           owner,
           repo,
@@ -46824,8 +46843,8 @@ var require_github2 = __commonJS({
           branch: branchName,
           content: Buffer.from(content).toString("base64"),
           committer: {
-            name: "Code Limit Action",
-            email: "robvanderleek@gmail.com"
+            name: identity.name,
+            email: identity.email
           }
         });
       });
