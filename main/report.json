@@ -1,6 +1,6 @@
 {
   "version": "0.10.0",
-  "uuid": "e2fa8b79-5201-482b-9cd3-44bd171ce2e2",
+  "uuid": "ee3f9747-b667-4212-9902-a40d3932e41c",
   "root": "/github/workspace",
   "codebase": {
     "tree": {
@@ -8,14 +8,14 @@
         "entries": [
           "src/"
         ],
-        "profile": [95, 46, 70, 0]
+        "profile": [96, 47, 70, 0]
       },
       "src/": {
         "entries": [
           "action.ts",
           "github.ts"
         ],
-        "profile": [95, 46, 70, 0]
+        "profile": [96, 47, 70, 0]
       }
     },
     "files": {
@@ -38,17 +38,18 @@
         ]
       },
       "src/github.ts": {
-        "checksum": "992c8a9fbcd264806c653da932ebab44",
+        "checksum": "acc2fd91dc479fe3174a6dc28e58310a",
         "language": "TypeScript",
-        "loc": 69,
-        "profile": [38, 29, 0, 0],
+        "loc": 78,
+        "profile": [39, 30, 0, 0],
         "measurements": [
           {"unit_name": "branchExists", "start": {"line": 4, "column": 23}, "end": {"line": 13, "column": 2}, "value": 10},
           {"unit_name": "createBranch", "start": {"line": 15, "column": 23}, "end": {"line": 25, "column": 2}, "value": 11},
           {"unit_name": "createInitialCommit", "start": {"line": 27, "column": 23}, "end": {"line": 37, "column": 2}, "value": 11},
           {"unit_name": "getRepoOwner", "start": {"line": 39, "column": 17}, "end": {"line": 41, "column": 2}, "value": 3},
           {"unit_name": "getRepoName", "start": {"line": 43, "column": 17}, "end": {"line": 45, "column": 2}, "value": 3},
-          {"unit_name": "createOrUpdateFile", "start": {"line": 47, "column": 23}, "end": {"line": 76, "column": 2}, "value": 29}
+          {"unit_name": "getIdentity", "start": {"line": 47, "column": 23}, "end": {"line": 47, "column": 93}, "value": 1},
+          {"unit_name": "createOrUpdateFile", "start": {"line": 62, "column": 23}, "end": {"line": 92, "column": 2}, "value": 30}
         ]
       }
     }
