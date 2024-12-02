@@ -5,7 +5,7 @@ import {getInput} from "@actions/core";
 import {promisify} from "util";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
-import {branchExists, createBranch, createOrUpdateFile, createInitialCommit, getRepoName, getRepoOwner} from "./github";
+import {branchExists, createBranch, createInitialCommit, createOrUpdateFile, getRepoName, getRepoOwner} from "./github";
 import {exec} from "@actions/exec";
 import {makeBadge} from "badge-maker";
 
@@ -110,12 +110,15 @@ function makeResponse(message: string, color: 'red' | 'orange' | 'green' | 'grey
     return makeBadge(badge);
 }
 
-function getBadgeContent(): string {
-    const report = fs.readFileSync('.codelimit_cache/codelimit.json', 'utf8');
-    if (!report) {
+function getReportContent(): string | undefined {
+    return fs.readFileSync('.codelimit_cache/codelimit.json', 'utf8');
+}
+
+function getBadgeContent(reportContent: string | undefined): string {
+    if (!reportContent) {
         return makeResponse('Not found', 'grey');
     } else {
-        const reportJson = JSON.parse(report);
+        const reportJson = JSON.parse(reportContent);
         const profile = reportJson.codebase.tree['./'].profile
         if (profile[3] > 0) {
             return makeResponse('Needs refactoring', 'red');
@@ -141,7 +144,11 @@ async function main() {
         process.exit(1);
     }
     await createReportsBranchIfNotExists(octokit, owner, repo);
-    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', 'main/badge.svg', getBadgeContent());
+    const reportContent = getReportContent();
+    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', 'main/badge.svg', getBadgeContent(reportContent));
+    if (reportContent) {
+        await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', 'main/report.json', reportContent);
+    }
     let exitCode = 0;
     if (doUpload) {
         console.log('Uploading results...');

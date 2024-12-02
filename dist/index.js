@@ -46807,7 +46807,10 @@ var require_github2 = __commonJS({
             owner,
             repo,
             ref: `refs/heads/${branchName}`,
-            path
+            path,
+            headers: {
+              "Accept": "application/vnd.github.object+json"
+            }
           });
           sha = res.data.sha;
         } catch (e) {
@@ -48824,12 +48827,14 @@ function makeResponse(message, color) {
   };
   return (0, badge_maker_1.makeBadge)(badge);
 }
-function getBadgeContent() {
-  const report = fs_1.default.readFileSync(".codelimit_cache/codelimit.json", "utf8");
-  if (!report) {
+function getReportContent() {
+  return fs_1.default.readFileSync(".codelimit_cache/codelimit.json", "utf8");
+}
+function getBadgeContent(reportContent) {
+  if (!reportContent) {
     return makeResponse("Not found", "grey");
   } else {
-    const reportJson = JSON.parse(report);
+    const reportJson = JSON.parse(reportContent);
     const profile = reportJson.codebase.tree["./"].profile;
     if (profile[3] > 0) {
       return makeResponse("Needs refactoring", "red");
@@ -48856,7 +48861,11 @@ function main() {
       process.exit(1);
     }
     yield createReportsBranchIfNotExists(octokit, owner, repo);
-    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", "main/badge.svg", getBadgeContent());
+    const reportContent = getReportContent();
+    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", "main/badge.svg", getBadgeContent(reportContent));
+    if (reportContent) {
+      yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", "main/report.json", reportContent);
+    }
     let exitCode = 0;
     if (doUpload) {
       console.log("Uploading results...");

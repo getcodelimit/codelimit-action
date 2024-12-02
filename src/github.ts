@@ -51,7 +51,10 @@ export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: 
             owner: owner,
             repo: repo,
             ref: `refs/heads/${branchName}`,
-            path: path
+            path: path,
+            headers: {
+                "Accept": "application/vnd.github.object+json"
+            }
         });
         sha = (res.data as any).sha;
     } catch (e) {
