@@ -6,7 +6,7 @@ import {promisify} from "util";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
 import {branchExists, createBranch, createInitialCommit, createOrUpdateFile, getRepoName, getRepoOwner} from "./github";
-import {exec} from "@actions/exec";
+import {exec, getExecOutput} from "@actions/exec";
 import {makeBadge} from "badge-maker";
 
 const streamPipeline = promisify(require('stream').pipeline);
@@ -84,8 +84,12 @@ async function getChangedFiles(token: string) {
     return result;
 }
 
+function isPullRequest() {
+    return context.eventName === 'pull_request';
+}
+
 function getSourceBranch() {
-    if (context.eventName === 'pull_request') {
+    if (isPullRequest()) {
         return process.env.GITHUB_HEAD_REF;
     } else {
         return process.env.GITHUB_REF_NAME;
@@ -134,6 +138,10 @@ async function main() {
     const filename = await downloadBinary();
     console.log('Scanning codebase...');
     await exec(filename, ['scan', '.']);
+    const totalsMarkdown = await getExecOutput(filename, ['report', '--totals', '--format', 'markdown']);
+    const unitsMarkdown = await getExecOutput(filename, ['report', '--full', '--format', 'markdown']);
+    console.log(totalsMarkdown.stdout);
+    console.log(unitsMarkdown.stdout);
     const doUpload = getInput('upload') || false;
     const token = getInput('token');
     const octokit = new Octokit({auth: token});
@@ -150,6 +158,7 @@ async function main() {
     if (reportContent) {
         await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/report.json`, reportContent);
     }
+    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/codelimit.md`, `${totalsMarkdown}\n${unitsMarkdown}`);
     let exitCode = 0;
     if (doUpload) {
         console.log('Uploading results...');

@@ -48821,8 +48821,52 @@ function downloadBinary() {
     return filename;
   });
 }
+function getChangedFiles(token) {
+  return __awaiter(this, void 0, void 0, function* () {
+    var _a, _b, _c, _d;
+    const eventName = github_1.context.eventName;
+    if (eventName === void 0) {
+      return ["."];
+    }
+    let base;
+    let head;
+    if (eventName === "pull_request") {
+      base = (_b = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
+      head = (_d = (_c = github_1.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+    } else {
+      base = github_1.context.payload.before;
+      head = github_1.context.payload.after;
+    }
+    console.log(`Base commit: ${base}`);
+    console.log(`Head commit: ${head}`);
+    const octokit = new action_1.Octokit({ auth: token });
+    const response = yield octokit.repos.compareCommits({
+      base,
+      head,
+      owner: github_1.context.repo.owner,
+      repo: github_1.context.repo.repo
+    });
+    if (response.status !== 200) {
+      return ["."];
+    }
+    const files = response.data.files;
+    const result = [];
+    if (files) {
+      for (const file of files) {
+        const filename = file.filename;
+        if (file.status === "modified" || file.status === "added") {
+          result.push(filename);
+        }
+      }
+    }
+    return result;
+  });
+}
+function isPullRequest() {
+  return github_1.context.eventName === "pull_request";
+}
 function getSourceBranch() {
-  if (github_1.context.eventName === "pull_request") {
+  if (isPullRequest()) {
     return process.env.GITHUB_HEAD_REF;
   } else {
     return process.env.GITHUB_REF_NAME;
@@ -48870,6 +48914,10 @@ function main() {
     const filename = yield downloadBinary();
     console.log("Scanning codebase...");
     yield (0, exec_1.exec)(filename, ["scan", "."]);
+    const totalsMarkdown = yield (0, exec_1.getExecOutput)(filename, ["report", "--totals", "--format", "markdown"]);
+    const unitsMarkdown = yield (0, exec_1.getExecOutput)(filename, ["report", "--full", "--format", "markdown"]);
+    console.log(totalsMarkdown.stdout);
+    console.log(unitsMarkdown.stdout);
     const doUpload = (0, core_1.getInput)("upload") || false;
     const token = (0, core_1.getInput)("token");
     const octokit = new action_1.Octokit({ auth: token });
@@ -48886,6 +48934,8 @@ function main() {
     if (reportContent) {
       yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/report.json`, reportContent);
     }
+    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/codelimit.md`, `${totalsMarkdown}
+${unitsMarkdown}`);
     let exitCode = 0;
     if (doUpload) {
       console.log("Uploading results...");
@@ -48898,6 +48948,18 @@ function main() {
         exitCode = yield (0, exec_1.exec)(filename, ["app", "upload", "--token", token, slug, branch]);
       }
     }
+    const doCheck = (0, core_1.getInput)("check") || true;
+    if (doCheck && exitCode === 0) {
+      const changedFiles = yield getChangedFiles(token);
+      console.log(`Number of files changed: ${changedFiles.length}`);
+      if (changedFiles.length === 0) {
+        console.log("No files changed, skipping Code Limit");
+      } else {
+        console.log("Running Code Limit...");
+        exitCode = yield (0, exec_1.exec)(filename, ["check"].concat(changedFiles), { ignoreReturnCode: true });
+      }
+    }
+    fs_1.default.unlinkSync(filename);
     console.log("Done!");
     process.exit(exitCode);
   });
