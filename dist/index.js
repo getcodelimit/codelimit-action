@@ -48879,11 +48879,12 @@ function main() {
       console.error("Could not determine repository owner or name");
       process.exit(1);
     }
+    const branch = getSourceBranch();
     yield createReportsBranchIfNotExists(octokit, owner, repo);
     const reportContent = getReportContent();
-    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", "main/badge.svg", getBadgeContent(reportContent));
+    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/badge.svg`, getBadgeContent(reportContent));
     if (reportContent) {
-      yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", "main/report.json", reportContent);
+      yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/report.json`, reportContent);
     }
     let exitCode = 0;
     if (doUpload) {
@@ -48893,7 +48894,6 @@ function main() {
         exitCode = 1;
       }
       const slug = (_a = github_1.context.payload.repository) === null || _a === void 0 ? void 0 : _a.full_name;
-      const branch = getSourceBranch();
       if (slug && branch) {
         exitCode = yield (0, exec_1.exec)(filename, ["app", "upload", "--token", token, slug, branch]);
       }

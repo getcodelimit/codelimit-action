@@ -143,11 +143,12 @@ async function main() {
         console.error('Could not determine repository owner or name');
         process.exit(1);
     }
+    const branch = getSourceBranch();
     await createReportsBranchIfNotExists(octokit, owner, repo);
     const reportContent = getReportContent();
-    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', 'main/badge.svg', getBadgeContent(reportContent));
+    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/badge.svg`, getBadgeContent(reportContent));
     if (reportContent) {
-        await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', 'main/report.json', reportContent);
+        await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/report.json`, reportContent);
     }
     let exitCode = 0;
     if (doUpload) {
@@ -157,7 +158,6 @@ async function main() {
             exitCode = 1;
         }
         const slug = context.payload.repository?.full_name;
-        const branch = getSourceBranch();
         if (slug && branch) {
             exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
         }
