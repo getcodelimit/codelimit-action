@@ -5,7 +5,7 @@ import {getInput} from "@actions/core";
 import {promisify} from "util";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
-import {branchExists, createBranch, createFile, createInitialCommit, getRepoName, getRepoOwner} from "./github";
+import {branchExists, createBranch, createOrUpdateFile, createInitialCommit, getRepoName, getRepoOwner} from "./github";
 import {exec} from "@actions/exec";
 import {makeBadge} from "badge-maker";
 
@@ -141,7 +141,7 @@ async function main() {
         process.exit(1);
     }
     await createReportsBranchIfNotExists(octokit, owner, repo);
-    await createFile(octokit, owner, repo, '_codelimit_reports', 'main/badge.svg', getBadgeContent());
+    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', 'main/badge.svg', getBadgeContent());
     let exitCode = 0;
     if (doUpload) {
         console.log('Uploading results...');

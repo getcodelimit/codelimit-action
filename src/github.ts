@@ -44,11 +44,23 @@ export function getRepoName(ctx: Context): string | undefined {
     return ctx.payload.repository?.name
 }
 
-export async function createFile(octokit: Octokit, owner: string, repo: string, branchName: string, path: string, content: string) {
+export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: string, branchName: string, path: string, content: string) {
+    let sha = undefined;
+    try {
+        const res = await octokit.repos.getContent({
+            owner: owner,
+            repo: repo,
+            path: path,
+        });
+        sha = (res.data as any).sha;
+    } catch (e) {
+        /* do nothing */
+    }
     await octokit.repos.createOrUpdateFileContents({
         owner: owner,
         repo: repo,
         path: path,
+        sha: sha,
         message: `Update by Code Limit`,
         branch: branchName,
         content: Buffer.from(content).toString('base64'),
