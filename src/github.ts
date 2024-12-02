@@ -50,7 +50,8 @@ export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: 
         const res = await octokit.repos.getContent({
             owner: owner,
             repo: repo,
-            path: path,
+            ref: `refs/heads/${branchName}`,
+            path: path
         });
         sha = (res.data as any).sha;
     } catch (e) {

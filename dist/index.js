@@ -46806,6 +46806,7 @@ var require_github2 = __commonJS({
           const res = yield octokit.repos.getContent({
             owner,
             repo,
+            ref: `refs/heads/${branchName}`,
             path
           });
           sha = res.data.sha;
