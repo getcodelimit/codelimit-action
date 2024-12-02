@@ -6,6 +6,8 @@ import {promisify} from "util";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
 import {branchExists, createBranch, createFile, createInitialCommit, getRepoName, getRepoOwner} from "./github";
+import {exec} from "@actions/exec";
+import {makeBadge} from "badge-maker";
 
 const streamPipeline = promisify(require('stream').pipeline);
 
@@ -90,10 +92,46 @@ function getSourceBranch() {
     }
 }
 
-async function main() {
+async function createReportsBranchIfNotExists(octokit: Octokit, owner: string, repo: string) {
+    if (!await branchExists(octokit, owner, repo, '_codelimit_reports')) {
+        const initialCommitSha = await createInitialCommit(octokit, owner, repo);
+        await createBranch(octokit, owner, repo, '_codelimit_reports', initialCommitSha);
+    } else {
+        console.log('Branch _codelimit_reports already exists');
+    }
+}
 
-    // const filename = await downloadBinary();
-    // const doUpload = getInput('upload') || false;
+function makeResponse(message: string, color: 'red' | 'orange' | 'green' | 'grey'): string {
+    const badge = {
+        label: 'Code Limit',
+        message: message,
+        color: color
+    };
+    return makeBadge(badge);
+}
+
+function getBadgeContent(): string {
+    const report = fs.readFileSync('.codelimit_cache/codelimit.json', 'utf8');
+    if (!report) {
+        return makeResponse('Not found', 'grey');
+    } else {
+        const reportJson = JSON.parse(report);
+        const profile = reportJson.codebase.tree['./'].profile
+        if (profile[3] > 0) {
+            return makeResponse('Needs refactoring', 'red');
+        } else if (profile[2] > 0) {
+            return makeResponse('Needs refactoring', 'orange');
+        } else {
+            return makeResponse('Passed', 'green');
+        }
+    }
+}
+
+async function main() {
+    const filename = await downloadBinary();
+    console.log('Scanning codebase...');
+    await exec(filename, ['scan', '.']);
+    const doUpload = getInput('upload') || false;
     const token = getInput('token');
     const octokit = new Octokit({auth: token});
     const owner = getRepoOwner(context);
@@ -102,29 +140,21 @@ async function main() {
         console.error('Could not determine repository owner or name');
         process.exit(1);
     }
-    if (!await branchExists(octokit, owner, repo, '_codelimit_reports')) {
-        const initialCommitSha = await createInitialCommit(octokit, owner, repo);
-        await createBranch(octokit, owner, repo, '_codelimit_reports', initialCommitSha);
-    } else {
-        console.log('Branch _codelimit_reports already exists');
+    await createReportsBranchIfNotExists(octokit, owner, repo);
+    await createFile(octokit, owner, repo, '_codelimit_reports', 'main/badge.svg', getBadgeContent());
+    let exitCode = 0;
+    if (doUpload) {
+        console.log('Uploading results...');
+        if (!token) {
+            console.error('Token for upload not provided.');
+            exitCode = 1;
+        }
+        const slug = context.payload.repository?.full_name;
+        const branch = getSourceBranch();
+        if (slug && branch) {
+            exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
+        }
     }
-    await createFile(octokit, owner, repo, '_codelimit_reports', 'main/badge.svg', 'Hello from Code Limit');
-
-    // let exitCode = 0;
-    // if (doUpload) {
-    //     console.log('Scanning codebase...');
-    //     await exec(filename, ['scan', '.']);
-    //     console.log('Uploading results...');
-    //     if (!token) {
-    //         console.error('Token for upload not provided.');
-    //         exitCode = 1;
-    //     }
-    //     const slug = context.payload.repository?.full_name;
-    //     const branch = getSourceBranch();
-    //     if (slug && branch) {
-    //         exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
-    //     }
-    // }
     // const doCheck = getInput('check') || true;
     // if (doCheck && exitCode === 0) {
     //     const changedFiles = await getChangedFiles(token);
@@ -137,8 +167,8 @@ async function main() {
     //     }
     // }
     // fs.unlinkSync(filename);
-    // console.log('Done!');
-    // process.exit(exitCode);
+    console.log('Done!');
+    process.exit(exitCode);
 }
 
 main();
