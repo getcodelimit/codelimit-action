@@ -1,5 +1,7 @@
 # codelimit-action
 
+[![Checked with Code Limit](https://github.com/getcodelimit/codelimit-action/blob/_codelimit_reports/main/badge.svg)](https://github.com/getcodelimit/codelimit)
+
 To run Code Limit on every push and before every merge to main, append it to your GH Action workflow:
 
 ```yaml

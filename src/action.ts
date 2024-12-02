@@ -162,18 +162,18 @@ async function main() {
             exitCode = await exec(filename, ['app', 'upload', '--token', token, slug, branch]);
         }
     }
-    // const doCheck = getInput('check') || true;
-    // if (doCheck && exitCode === 0) {
-    //     const changedFiles = await getChangedFiles(token);
-    //     console.log(`Number of files changed: ${changedFiles.length}`);
-    //     if (changedFiles.length === 0) {
-    //         console.log('No files changed, skipping Code Limit');
-    //     } else {
-    //         console.log('Running Code Limit...');
-    //         exitCode = await exec(filename, ['check'].concat(changedFiles), {ignoreReturnCode: true});
-    //     }
-    // }
-    // fs.unlinkSync(filename);
+    const doCheck = getInput('check') || true;
+    if (doCheck && exitCode === 0) {
+        const changedFiles = await getChangedFiles(token);
+        console.log(`Number of files changed: ${changedFiles.length}`);
+        if (changedFiles.length === 0) {
+            console.log('No files changed, skipping Code Limit');
+        } else {
+            console.log('Running Code Limit...');
+            exitCode = await exec(filename, ['check'].concat(changedFiles), {ignoreReturnCode: true});
+        }
+    }
+    fs.unlinkSync(filename);
     console.log('Done!');
     process.exit(exitCode);
 }
