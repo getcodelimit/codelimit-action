@@ -113,7 +113,7 @@ async function createReportsBranchIfNotExists(octokit: Octokit, owner: string, r
     }
 }
 
-function makeResponse(message: string, color: 'red' | 'orange' | 'green' | 'grey'): string {
+function makeBadgeSvg(message: string, color: 'red' | 'orange' | 'green' | 'grey'): string {
     const badge = {
         label: 'Code Limit',
         message: message,
@@ -128,16 +128,16 @@ function getReportContent(): string | undefined {
 
 function getBadgeContent(reportContent: string | undefined): string {
     if (!reportContent) {
-        return makeResponse('Not found', 'grey');
+        return makeBadgeSvg('Not found', 'grey');
     } else {
         const reportJson = JSON.parse(reportContent);
         const profile = reportJson.codebase.tree['./'].profile
         if (profile[3] > 0) {
-            return makeResponse('Needs refactoring', 'red');
+            return makeBadgeSvg('Needs refactoring', 'red');
         } else if (profile[2] > 0) {
-            return makeResponse('Needs refactoring', 'orange');
+            return makeBadgeSvg('Needs refactoring', 'orange');
         } else {
-            return makeResponse('Passed', 'green');
+            return makeBadgeSvg('Passed', 'green');
         }
     }
 }
