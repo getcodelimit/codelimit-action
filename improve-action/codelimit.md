@@ -1,5 +1,5 @@
 | **Language** | **Files** | **Lines of Code** | **Functions** | ⚠ | ✖ |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| TypeScript | 2 | 275 | 19 | 2 | 0 |
+| TypeScript | 4 | 288 | 20 | 2 | 0 |
 
 
