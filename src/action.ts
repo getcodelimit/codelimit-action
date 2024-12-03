@@ -5,7 +5,15 @@ import {getInput} from "@actions/core";
 import {promisify} from "util";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
-import {branchExists, createBranch, createInitialCommit, createOrUpdateFile, getRepoName, getRepoOwner} from "./github";
+import {
+    branchExists,
+    createBranch,
+    createInitialCommit,
+    createOrUpdateFile,
+    createPRComment,
+    getRepoName,
+    getRepoOwner
+} from "./github";
 import {exec, getExecOutput} from "@actions/exec";
 import {makeBadge} from "badge-maker";
 
@@ -140,8 +148,7 @@ async function main() {
     await exec(filename, ['scan', '.']);
     const totalsMarkdown = await getExecOutput(filename, ['report', '--totals', '--format', 'markdown']);
     const unitsMarkdown = await getExecOutput(filename, ['report', '--full', '--format', 'markdown']);
-    console.log(totalsMarkdown.stdout);
-    console.log(unitsMarkdown.stdout);
+    const markdownReport = `${totalsMarkdown.stdout}\n${unitsMarkdown.stdout}`;
     const doUpload = getInput('upload') || false;
     const token = getInput('token');
     const octokit = new Octokit({auth: token});
@@ -158,7 +165,13 @@ async function main() {
     if (reportContent) {
         await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/report.json`, reportContent);
     }
-    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/codelimit.md`, `${totalsMarkdown}\n${unitsMarkdown}`);
+    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/codelimit.md`, markdownReport);
+    if (isPullRequest()) {
+        const prNumber = context.payload.pull_request?.number;
+        if (prNumber) {
+            await createPRComment(octokit, owner, repo, prNumber, markdownReport);
+        }
+    }
     let exitCode = 0;
     if (doUpload) {
         console.log('Uploading results...');

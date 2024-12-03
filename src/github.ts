@@ -90,3 +90,12 @@ export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: 
         }
     });
 }
+
+export async function createPRComment(octokit: Octokit, owner: string, repo: string, prNumber: number, comment: string) {
+    await octokit.issues.createComment({
+        owner: owner,
+        repo: repo,
+        issue_number: prNumber,
+        body: comment
+    });
+}
