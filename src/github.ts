@@ -1,5 +1,6 @@
 import {Octokit} from "@octokit/action";
 import {Context} from "@actions/github/lib/context";
+import {context} from "@actions/github";
 
 export async function branchExists(octokit: Octokit, owner: string, repo: string, branchName: string) {
     try {
@@ -98,4 +99,25 @@ export async function createPRComment(octokit: Octokit, owner: string, repo: str
         issue_number: prNumber,
         body: comment
     });
+}
+
+export function isPullRequest() {
+    return context.eventName === 'pull_request';
+}
+
+export function getSourceBranch() {
+    if (isPullRequest()) {
+        return process.env.GITHUB_HEAD_REF;
+    } else {
+        return process.env.GITHUB_REF_NAME;
+    }
+}
+
+export async function createBranchIfNotExists(octokit: Octokit, owner: string, repo: string, branchName: string) {
+    if (!await branchExists(octokit, owner, repo, branchName)) {
+        const initialCommitSha = await createInitialCommit(octokit, owner, repo);
+        await createBranch(octokit, owner, repo, branchName, initialCommitSha);
+    } else {
+        console.log(`Branch ${branchName} already exists`);
+    }
 }
