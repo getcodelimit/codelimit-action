@@ -46749,6 +46749,7 @@ var require_github2 = __commonJS({
     exports2.getRepoName = getRepoName;
     exports2.getIdentity = getIdentity;
     exports2.createOrUpdateFile = createOrUpdateFile;
+    exports2.createPRComment = createPRComment;
     function branchExists(octokit, owner, repo, branchName) {
       return __awaiter2(this, void 0, void 0, function* () {
         try {
@@ -46846,6 +46847,16 @@ var require_github2 = __commonJS({
             name: identity.name,
             email: identity.email
           }
+        });
+      });
+    }
+    function createPRComment(octokit, owner, repo, prNumber, comment) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        yield octokit.issues.createComment({
+          owner,
+          repo,
+          issue_number: prNumber,
+          body: comment
         });
       });
     }
@@ -48910,14 +48921,14 @@ function getBadgeContent(reportContent) {
 }
 function main() {
   return __awaiter(this, void 0, void 0, function* () {
-    var _a;
+    var _a, _b;
     const filename = yield downloadBinary();
     console.log("Scanning codebase...");
     yield (0, exec_1.exec)(filename, ["scan", "."]);
     const totalsMarkdown = yield (0, exec_1.getExecOutput)(filename, ["report", "--totals", "--format", "markdown"]);
     const unitsMarkdown = yield (0, exec_1.getExecOutput)(filename, ["report", "--full", "--format", "markdown"]);
-    console.log(totalsMarkdown.stdout);
-    console.log(unitsMarkdown.stdout);
+    const markdownReport = `${totalsMarkdown.stdout}
+${unitsMarkdown.stdout}`;
     const doUpload = (0, core_1.getInput)("upload") || false;
     const token = (0, core_1.getInput)("token");
     const octokit = new action_1.Octokit({ auth: token });
@@ -48934,8 +48945,13 @@ function main() {
     if (reportContent) {
       yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/report.json`, reportContent);
     }
-    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/codelimit.md`, `${totalsMarkdown}
-${unitsMarkdown}`);
+    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/codelimit.md`, markdownReport);
+    if (isPullRequest()) {
+      const prNumber = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
+      if (prNumber) {
+        yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
+      }
+    }
     let exitCode = 0;
     if (doUpload) {
       console.log("Uploading results...");
@@ -48943,7 +48959,7 @@ ${unitsMarkdown}`);
         console.error("Token for upload not provided.");
         exitCode = 1;
       }
-      const slug = (_a = github_1.context.payload.repository) === null || _a === void 0 ? void 0 : _a.full_name;
+      const slug = (_b = github_1.context.payload.repository) === null || _b === void 0 ? void 0 : _b.full_name;
       if (slug && branch) {
         exitCode = yield (0, exec_1.exec)(filename, ["app", "upload", "--token", token, slug, branch]);
       }
