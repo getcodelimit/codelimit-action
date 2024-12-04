@@ -1,21 +1,11 @@
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
 
-export async function getChangedFiles(token: string) {
-    const eventName = context.eventName
-    if (eventName === undefined) {
+export async function getChangedFiles(octokit: Octokit) {
+    if (context.eventName === undefined) {
         return ['.'];
     }
-    let base;
-    let head;
-    if (eventName === 'pull_request') {
-        base = context.payload.pull_request?.base?.sha
-        head = context.payload.pull_request?.head?.sha
-    } else {
-        base = context.payload.before
-        head = context.payload.after
-    }
-    const octokit = new Octokit({auth: token});
+    const {base, head} = getShas();
     const response = await octokit.repos.compareCommits({
         base, head, owner: context.repo.owner, repo: context.repo.repo
     });
@@ -33,4 +23,17 @@ export async function getChangedFiles(token: string) {
         }
     }
     return result;
+}
+
+function getShas(): { base: string, head: string } {
+    let base;
+    let head;
+    if (context.eventName === 'pull_request') {
+        base = context.payload.pull_request?.base?.sha
+        head = context.payload.pull_request?.head?.sha
+    } else {
+        base = context.payload.before
+        head = context.payload.after
+    }
+    return {base: base, head: head};
 }

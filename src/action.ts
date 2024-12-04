@@ -27,14 +27,7 @@ async function generateMarkdownReport(clBinary: string) {
     return result;
 }
 
-async function main() {
-    const clBinary = await downloadCodeLimitBinary();
-    console.log('Scanning codebase...');
-    await exec(clBinary, ['scan', '.']);
-    const markdownReport = await generateMarkdownReport(clBinary);
-    const doUpload = getInput('upload') || false;
-    const token = getInput('token');
-    const octokit = new Octokit({auth: token});
+async function updateReportsBranch(octokit: Octokit, markdownReport: string) {
     const owner = getRepoOwner(context);
     const repo = getRepoName(context);
     if (!owner || !repo) {
@@ -55,28 +48,31 @@ async function main() {
             await createPRComment(octokit, owner, repo, prNumber, markdownReport);
         }
     }
-    let exitCode = 0;
-    if (doUpload) {
-        console.log('Uploading results...');
-        if (!token) {
-            console.error('Token for upload not provided.');
-            exitCode = 1;
-        }
-        const slug = context.payload.repository?.full_name;
-        if (slug && branch) {
-            exitCode = await exec(clBinary, ['app', 'upload', '--token', token, slug, branch]);
-        }
+}
+
+async function checkChangedFiles(octokit: Octokit, clBinary: string): Promise<number> {
+    const changedFiles = await getChangedFiles(octokit);
+    console.log(`Number of files changed: ${changedFiles.length}`);
+    if (changedFiles.length === 0) {
+        console.log('No files changed, skipping Code Limit');
+        return 0;
+    } else {
+        console.log('Running Code Limit...');
+        return await exec(clBinary, ['check'].concat(changedFiles), {ignoreReturnCode: true});
     }
+}
+
+async function main() {
+    let exitCode = 0;
+    const clBinary = await downloadCodeLimitBinary();
+    console.log('Scanning codebase...');
+    await exec(clBinary, ['scan', '.']);
+    const markdownReport = await generateMarkdownReport(clBinary);
+    const octokit = new Octokit({auth: getInput('token')});
+    await updateReportsBranch(octokit, markdownReport);
     const doCheck = getInput('check') || true;
-    if (doCheck && exitCode === 0) {
-        const changedFiles = await getChangedFiles(token);
-        console.log(`Number of files changed: ${changedFiles.length}`);
-        if (changedFiles.length === 0) {
-            console.log('No files changed, skipping Code Limit');
-        } else {
-            console.log('Running Code Limit...');
-            exitCode = await exec(clBinary, ['check'].concat(changedFiles), {ignoreReturnCode: true});
-        }
+    if (doCheck) {
+        exitCode = await checkChangedFiles(octokit, clBinary);
     }
     fs.unlinkSync(clBinary);
     console.log('Done!');

@@ -14,7 +14,3 @@ inputs:
     description: 'Checked changed files'
     default: 'true'
     required: false
-  upload:
-    description: 'Upload report to Code Limit'
-    default: 'false'
-    required: false
