@@ -41,5 +41,5 @@ jobs:
         uses: actions/checkout@v4
 
       - name: 'Run Code Limit'
-        uses: getcodelimit/codelimit-action@main
+        uses: getcodelimit/codelimit-action@v1
 ```

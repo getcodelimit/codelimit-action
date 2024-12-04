@@ -48920,24 +48920,12 @@ var require_utils7 = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getChangedFiles = getChangedFiles;
     var github_12 = require_github();
-    var action_12 = require_dist_node20();
-    function getChangedFiles(token) {
+    function getChangedFiles(octokit) {
       return __awaiter2(this, void 0, void 0, function* () {
-        var _a, _b, _c, _d;
-        const eventName = github_12.context.eventName;
-        if (eventName === void 0) {
+        if (github_12.context.eventName === void 0) {
           return ["."];
         }
-        let base;
-        let head;
-        if (eventName === "pull_request") {
-          base = (_b = (_a = github_12.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
-          head = (_d = (_c = github_12.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
-        } else {
-          base = github_12.context.payload.before;
-          head = github_12.context.payload.after;
-        }
-        const octokit = new action_12.Octokit({ auth: token });
+        const { base, head } = getShas();
         const response = yield octokit.repos.compareCommits({
           base,
           head,
@@ -48959,6 +48947,19 @@ var require_utils7 = __commonJS({
         }
         return result;
       });
+    }
+    function getShas() {
+      var _a, _b, _c, _d;
+      let base;
+      let head;
+      if (github_12.context.eventName === "pull_request") {
+        base = (_b = (_a = github_12.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
+        head = (_d = (_c = github_12.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+      } else {
+        base = github_12.context.payload.before;
+        head = github_12.context.payload.after;
+      }
+      return { base, head };
     }
   }
 });
@@ -49016,16 +49017,9 @@ function generateMarkdownReport(clBinary) {
     return result;
   });
 }
-function main() {
+function updateReportsBranch(octokit, markdownReport) {
   return __awaiter(this, void 0, void 0, function* () {
-    var _a, _b;
-    const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
-    console.log("Scanning codebase...");
-    yield (0, exec_1.exec)(clBinary, ["scan", "."]);
-    const markdownReport = yield generateMarkdownReport(clBinary);
-    const doUpload = (0, core_1.getInput)("upload") || false;
-    const token = (0, core_1.getInput)("token");
-    const octokit = new action_1.Octokit({ auth: token });
+    var _a;
     const owner = (0, github_2.getRepoOwner)(github_1.context);
     const repo = (0, github_2.getRepoName)(github_1.context);
     if (!owner || !repo) {
@@ -49046,28 +49040,33 @@ function main() {
         yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
       }
     }
-    let exitCode = 0;
-    if (doUpload) {
-      console.log("Uploading results...");
-      if (!token) {
-        console.error("Token for upload not provided.");
-        exitCode = 1;
-      }
-      const slug = (_b = github_1.context.payload.repository) === null || _b === void 0 ? void 0 : _b.full_name;
-      if (slug && branch) {
-        exitCode = yield (0, exec_1.exec)(clBinary, ["app", "upload", "--token", token, slug, branch]);
-      }
+  });
+}
+function checkChangedFiles(octokit, clBinary) {
+  return __awaiter(this, void 0, void 0, function* () {
+    const changedFiles = yield (0, utils_1.getChangedFiles)(octokit);
+    console.log(`Number of files changed: ${changedFiles.length}`);
+    if (changedFiles.length === 0) {
+      console.log("No files changed, skipping Code Limit");
+      return 0;
+    } else {
+      console.log("Running Code Limit...");
+      return yield (0, exec_1.exec)(clBinary, ["check"].concat(changedFiles), { ignoreReturnCode: true });
     }
+  });
+}
+function main() {
+  return __awaiter(this, void 0, void 0, function* () {
+    let exitCode = 0;
+    const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
+    console.log("Scanning codebase...");
+    yield (0, exec_1.exec)(clBinary, ["scan", "."]);
+    const markdownReport = yield generateMarkdownReport(clBinary);
+    const octokit = new action_1.Octokit({ auth: (0, core_1.getInput)("token") });
+    yield updateReportsBranch(octokit, markdownReport);
     const doCheck = (0, core_1.getInput)("check") || true;
-    if (doCheck && exitCode === 0) {
-      const changedFiles = yield (0, utils_1.getChangedFiles)(token);
-      console.log(`Number of files changed: ${changedFiles.length}`);
-      if (changedFiles.length === 0) {
-        console.log("No files changed, skipping Code Limit");
-      } else {
-        console.log("Running Code Limit...");
-        exitCode = yield (0, exec_1.exec)(clBinary, ["check"].concat(changedFiles), { ignoreReturnCode: true });
-      }
+    if (doCheck) {
+      exitCode = yield checkChangedFiles(octokit, clBinary);
     }
     fs_1.default.unlinkSync(clBinary);
     console.log("Done!");

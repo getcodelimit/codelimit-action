@@ -23,6 +23,4 @@ jobs:
       run: yarn install
 
     - name: 'Run Code Limit action'
-      uses: getcodelimit/codelimit-action@main
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
+      uses: getcodelimit/codelimit-action@v1
