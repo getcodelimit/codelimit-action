@@ -9,7 +9,8 @@ runs:
 inputs:
   token:
     description: 'GitHub token for repository'
-    required: true
+    default: ${{ github.token }}
+    required: false
   check:
     description: 'Checked changed files'
     default: 'true'
