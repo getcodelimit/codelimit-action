@@ -43,3 +43,14 @@ jobs:
       - name: 'Run Code Limit'
         uses: getcodelimit/codelimit-action@v1
 ```
+
+## Adding exclude paths
+
+```yaml
+      - name: 'Run Code Limit'
+        uses: getcodelimit/codelimit-action@v1
+        with:
+            excludes:
+            - examples
+            - third_party
+```

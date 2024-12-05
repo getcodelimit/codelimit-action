@@ -82,7 +82,11 @@ async function main() {
     let exitCode = 0;
     const clBinary = await downloadCodeLimitBinary();
     console.log('Scanning codebase...');
-    await exec(clBinary, ['scan', '.']);
+    const excludeOpts = getInput('excludes').reduce(function(r, e) {
+      r.push('--exclude', e);
+      return r;
+    }, []);
+    await exec(clBinary, [...excludeOpts, 'scan', '.']);
     const markdownReport = await generateMarkdownReport(clBinary);
     const octokit = new Octokit({auth: getInput('token')});
     await updateReportsBranch(octokit, markdownReport);
