@@ -46748,8 +46748,10 @@ var require_github2 = __commonJS({
     exports2.getRepoOwner = getRepoOwner;
     exports2.getRepoName = getRepoName;
     exports2.getIdentity = getIdentity;
+    exports2.getFile = getFile;
     exports2.createOrUpdateFile = createOrUpdateFile;
     exports2.createPRComment = createPRComment;
+    exports2.updateComment = updateComment;
     exports2.isPullRequest = isPullRequest;
     exports2.getSourceBranch = getSourceBranch;
     exports2.createBranchIfNotExists = createBranchIfNotExists;
@@ -46822,9 +46824,8 @@ var require_github2 = __commonJS({
         return { name: login, email: `${databaseId}+${login}@users.noreply.github.com` };
       });
     }
-    function createOrUpdateFile(octokit, owner, repo, branchName, path, content) {
+    function getFile(octokit, owner, repo, branchName, path) {
       return __awaiter2(this, void 0, void 0, function* () {
-        let sha = void 0;
         try {
           const res = yield octokit.repos.getContent({
             owner,
@@ -46835,9 +46836,16 @@ var require_github2 = __commonJS({
               "Accept": "application/vnd.github.object+json"
             }
           });
-          sha = res.data.sha;
+          return res.data;
         } catch (e) {
+          return void 0;
         }
+      });
+    }
+    function createOrUpdateFile(octokit, owner, repo, branchName, path, content) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        const file = yield getFile(octokit, owner, repo, branchName, path);
+        const sha = file === null || file === void 0 ? void 0 : file.sha;
         const identity = yield getIdentity(octokit);
         yield octokit.repos.createOrUpdateFileContents({
           owner,
@@ -46856,11 +46864,23 @@ var require_github2 = __commonJS({
     }
     function createPRComment(octokit, owner, repo, prNumber, comment) {
       return __awaiter2(this, void 0, void 0, function* () {
-        yield octokit.issues.createComment({
+        const res = yield octokit.issues.createComment({
           owner,
           repo,
           issue_number: prNumber,
           body: comment
+        });
+        return res.data.id;
+      });
+    }
+    function updateComment(octokit, owner, repo, prNumber, comment, commentId) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        const res = yield octokit.issues.updateComment({
+          owner,
+          repo,
+          issue_number: prNumber,
+          body: comment,
+          comment_id: commentId
         });
       });
     }
@@ -49037,7 +49057,17 @@ function updateReportsBranch(octokit, markdownReport) {
     if ((0, github_2.isPullRequest)()) {
       const prNumber = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
       if (prNumber) {
-        yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
+        const actionStateFile = yield (0, github_2.getFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`);
+        if (actionStateFile) {
+          const actionState = JSON.parse(actionStateFile.content);
+          const commentId = actionState.commentId;
+          yield (0, github_2.updateComment)(octokit, owner, repo, prNumber, markdownReport, commentId);
+        } else {
+          const commentId = yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
+          const actionState = { commentId };
+          const actionStateJson = JSON.stringify(actionState);
+          yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`, actionStateJson);
+        }
       }
     }
   });
