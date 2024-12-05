@@ -1,12 +1,12 @@
 {
   "version": "0.11.3",
-  "uuid": "112cd98e-3915-48ee-9961-221f8ab3a242",
+  "uuid": "d594f3c3-f016-4603-a7de-c553c7caea21",
   "root": "/github/workspace",
   "codebase": {
     "totals": {
       "TypeScript": {
         "files": 6,
-        "lines_of_code": 321,
+        "lines_of_code": 322,
         "functions": 26,
         "hard_to_maintain": 0,
         "unmaintainable": 0
@@ -17,7 +17,7 @@
         "entries": [
           "src/"
         ],
-        "profile": [140, 127, 0, 0]
+        "profile": [140, 128, 0, 0]
       },
       "src/": {
         "entries": [
@@ -27,7 +27,7 @@
           "github.ts",
           "entities/"
         ],
-        "profile": [140, 127, 0, 0]
+        "profile": [140, 128, 0, 0]
       },
       "src/entities/": {
         "entries": [
@@ -39,16 +39,16 @@
     },
     "files": {
       "src/action.ts": {
-        "checksum": "ad6f5358e8081382dd04d61ea6bb7edb",
+        "checksum": "0fdc1b4a5c6ef6d67f0b83830e1cac23",
         "language": "TypeScript",
-        "loc": 92,
-        "profile": [22, 53, 0, 0],
+        "loc": 93,
+        "profile": [22, 54, 0, 0],
         "measurements": [
           {"unit_name": "generateMarkdownReport", "start": {"line": 18, "column": 16}, "end": {"line": 28, "column": 2}, "value": 11},
           {"unit_name": "updateReportsBranch", "start": {"line": 30, "column": 16}, "end": {"line": 48, "column": 2}, "value": 19},
-          {"unit_name": "updatePullRequestComment", "start": {"line": 50, "column": 16}, "end": {"line": 67, "column": 2}, "value": 18},
-          {"unit_name": "checkChangedFiles", "start": {"line": 69, "column": 16}, "end": {"line": 79, "column": 2}, "value": 11},
-          {"unit_name": "main", "start": {"line": 81, "column": 16}, "end": {"line": 96, "column": 2}, "value": 16}
+          {"unit_name": "updatePullRequestComment", "start": {"line": 50, "column": 16}, "end": {"line": 68, "column": 2}, "value": 19},
+          {"unit_name": "checkChangedFiles", "start": {"line": 70, "column": 16}, "end": {"line": 80, "column": 2}, "value": 11},
+          {"unit_name": "main", "start": {"line": 82, "column": 16}, "end": {"line": 97, "column": 2}, "value": 16}
         ]
       },
       "src/codelimit.ts": {
