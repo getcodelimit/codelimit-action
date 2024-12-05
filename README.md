@@ -1,4 +1,4 @@
-# Code Limit GitHub Action (test-branch-2)
+# Code Limit GitHub Action
 
 <div align="center">
 
