@@ -5,11 +5,11 @@ import {Octokit} from "@octokit/action";
 import {
     createBranchIfNotExists,
     createOrUpdateFile,
-    createPRComment,
+    createPRComment, getFile,
     getRepoName,
     getRepoOwner,
     getSourceBranch,
-    isPullRequest
+    isPullRequest, updateComment
 } from "./github";
 import {exec, getExecOutput} from "@actions/exec";
 import {downloadCodeLimitBinary, getBadgeContent, getReportContent} from "./codelimit";
@@ -45,7 +45,17 @@ async function updateReportsBranch(octokit: Octokit, markdownReport: string) {
     if (isPullRequest()) {
         const prNumber = context.payload.pull_request?.number;
         if (prNumber) {
-            await createPRComment(octokit, owner, repo, prNumber, markdownReport);
+            const actionStateFile = await getFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`);
+            if (actionStateFile) {
+                const actionState = JSON.parse(actionStateFile.content) as ActionState;
+                const commentId = actionState.commentId;
+                await updateComment(octokit, owner, repo, prNumber, markdownReport, commentId);
+            } else {
+                const commentId = await createPRComment(octokit, owner, repo, prNumber, markdownReport);
+                const actionState: ActionState = {commentId: commentId};
+                const actionStateJson = JSON.stringify(actionState);
+                await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`, actionStateJson);
+            }
         }
     }
 }

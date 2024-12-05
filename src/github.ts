@@ -1,6 +1,7 @@
 import {Octokit} from "@octokit/action";
 import {Context} from "@actions/github/lib/context";
 import {context} from "@actions/github";
+import {GetContentResponse} from "./entities/GetContentResponse";
 
 export async function branchExists(octokit: Octokit, owner: string, repo: string, branchName: string) {
     try {
@@ -60,8 +61,7 @@ export async function getIdentity(octokit: Octokit): Promise<{ name: string, ema
     return {name: login, email: `${databaseId}+${login}@users.noreply.github.com`};
 }
 
-export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: string, branchName: string, path: string, content: string) {
-    let sha = undefined;
+export async function getFile(octokit: Octokit, owner: string, repo: string, branchName: string, path: string): Promise<GetContentResponse | undefined> {
     try {
         const res = await octokit.repos.getContent({
             owner: owner,
@@ -72,10 +72,15 @@ export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: 
                 "Accept": "application/vnd.github.object+json"
             }
         });
-        sha = (res.data as any).sha;
+        return res.data as GetContentResponse;
     } catch (e) {
-        /* do nothing */
+        return undefined;
     }
+}
+
+export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: string, branchName: string, path: string, content: string) {
+    const file = await getFile(octokit, owner, repo, branchName, path);
+    const sha = file?.sha;
     const identity = await getIdentity(octokit);
     await octokit.repos.createOrUpdateFileContents({
         owner: owner,
@@ -92,12 +97,23 @@ export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: 
     });
 }
 
-export async function createPRComment(octokit: Octokit, owner: string, repo: string, prNumber: number, comment: string) {
-    await octokit.issues.createComment({
+export async function createPRComment(octokit: Octokit, owner: string, repo: string, prNumber: number, comment: string): Promise<number> {
+    const res = await octokit.issues.createComment({
         owner: owner,
         repo: repo,
         issue_number: prNumber,
         body: comment
+    });
+    return res.data.id;
+}
+
+export async function updateComment(octokit: Octokit, owner: string, repo: string, prNumber: number, comment: string, commentId: number) {
+    const res = await octokit.issues.updateComment({
+        owner: owner,
+        repo: repo,
+        issue_number: prNumber,
+        body: comment,
+        comment_id: commentId
     });
 }
 
