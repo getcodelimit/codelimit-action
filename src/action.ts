@@ -16,6 +16,7 @@ import {downloadCodeLimitBinary, getBadgeContent, getReportContent} from "./code
 import {getChangedFiles} from "./utils";
 
 async function generateMarkdownReport(clBinary: string) {
+    console.log('Hello world');
     const totalsMarkdown = await getExecOutput(clBinary, ['report', '--totals', '--format', 'markdown']);
     const unitsMarkdown = await getExecOutput(clBinary, ['report', '--full', '--format', 'markdown']);
     let result = '';
