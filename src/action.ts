@@ -30,11 +30,11 @@ async function generateMarkdownReport(clBinary: string) {
 async function updateReportsBranch(octokit: Octokit, markdownReport: string) {
     const owner = getRepoOwner(context);
     const repo = getRepoName(context);
-    if (!owner || !repo) {
-        console.error('Could not determine repository owner or name');
+    const branch = getSourceBranch();
+    if (!owner || !repo || !branch) {
+        console.error('Could not determine repository owner, name, or branch');
         process.exit(1);
     }
-    const branch = getSourceBranch();
     await createBranchIfNotExists(octokit, owner, repo, '_codelimit_reports');
     const reportContent = getReportContent();
     await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/badge.svg`, getBadgeContent(reportContent));
@@ -43,19 +43,25 @@ async function updateReportsBranch(octokit: Octokit, markdownReport: string) {
     }
     await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/codelimit.md`, markdownReport);
     if (isPullRequest()) {
-        const prNumber = context.payload.pull_request?.number;
-        if (prNumber) {
-            const actionStateFile = await getFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`);
-            if (actionStateFile) {
-                const actionState = JSON.parse(actionStateFile.content) as ActionState;
-                const commentId = actionState.commentId;
-                await updateComment(octokit, owner, repo, prNumber, markdownReport, commentId);
-            } else {
-                const commentId = await createPRComment(octokit, owner, repo, prNumber, markdownReport);
-                const actionState: ActionState = {commentId: commentId};
-                const actionStateJson = JSON.stringify(actionState);
-                await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`, actionStateJson);
-            }
+        await updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
+    }
+}
+
+async function updatePullRequestComment(octokit: Octokit, owner: string, repo: string, branchName: string, markdownReport: string) {
+    const prNumber = context.payload.pull_request?.number;
+    if (prNumber) {
+        const actionStateFile = await getFile(octokit, owner, repo, '_codelimit_reports', `${branchName}/action.json`);
+        if (actionStateFile) {
+            const actionState = JSON.parse(actionStateFile.content) as ActionState;
+            const commentId = actionState.commentId;
+            console.log(`Updating existing comment with ID: ${commentId}`);
+            await updateComment(octokit, owner, repo, prNumber, markdownReport, commentId);
+        } else {
+            console.log('State file not found, creating new comment');
+            const commentId = await createPRComment(octokit, owner, repo, prNumber, markdownReport);
+            const actionState: ActionState = {commentId: commentId};
+            const actionStateJson = JSON.stringify(actionState);
+            await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branchName}/action.json`, actionStateJson);
         }
     }
 }

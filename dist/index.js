@@ -49039,14 +49039,13 @@ function generateMarkdownReport(clBinary) {
 }
 function updateReportsBranch(octokit, markdownReport) {
   return __awaiter(this, void 0, void 0, function* () {
-    var _a;
     const owner = (0, github_2.getRepoOwner)(github_1.context);
     const repo = (0, github_2.getRepoName)(github_1.context);
-    if (!owner || !repo) {
-      console.error("Could not determine repository owner or name");
+    const branch = (0, github_2.getSourceBranch)();
+    if (!owner || !repo || !branch) {
+      console.error("Could not determine repository owner, name, or branch");
       process.exit(1);
     }
-    const branch = (0, github_2.getSourceBranch)();
     yield (0, github_2.createBranchIfNotExists)(octokit, owner, repo, "_codelimit_reports");
     const reportContent = (0, codelimit_1.getReportContent)();
     yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/badge.svg`, (0, codelimit_1.getBadgeContent)(reportContent));
@@ -49055,19 +49054,27 @@ function updateReportsBranch(octokit, markdownReport) {
     }
     yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/codelimit.md`, markdownReport);
     if ((0, github_2.isPullRequest)()) {
-      const prNumber = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
-      if (prNumber) {
-        const actionStateFile = yield (0, github_2.getFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`);
-        if (actionStateFile) {
-          const actionState = JSON.parse(actionStateFile.content);
-          const commentId = actionState.commentId;
-          yield (0, github_2.updateComment)(octokit, owner, repo, prNumber, markdownReport, commentId);
-        } else {
-          const commentId = yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
-          const actionState = { commentId };
-          const actionStateJson = JSON.stringify(actionState);
-          yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`, actionStateJson);
-        }
+      yield updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
+    }
+  });
+}
+function updatePullRequestComment(octokit, owner, repo, branchName, markdownReport) {
+  return __awaiter(this, void 0, void 0, function* () {
+    var _a;
+    const prNumber = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
+    if (prNumber) {
+      const actionStateFile = yield (0, github_2.getFile)(octokit, owner, repo, "_codelimit_reports", `${branchName}/action.json`);
+      if (actionStateFile) {
+        const actionState = JSON.parse(actionStateFile.content);
+        const commentId = actionState.commentId;
+        console.log(`Updating existing comment with ID: ${commentId}`);
+        yield (0, github_2.updateComment)(octokit, owner, repo, prNumber, markdownReport, commentId);
+      } else {
+        console.log("State file not found, creating new comment");
+        const commentId = yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
+        const actionState = { commentId };
+        const actionStateJson = JSON.stringify(actionState);
+        yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branchName}/action.json`, actionStateJson);
       }
     }
   });
