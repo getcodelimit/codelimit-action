@@ -52,7 +52,8 @@ async function updatePullRequestComment(octokit: Octokit, owner: string, repo: s
     if (prNumber) {
         const actionStateFile = await getFile(octokit, owner, repo, '_codelimit_reports', `${branchName}/action.json`);
         if (actionStateFile) {
-            const actionState = JSON.parse(actionStateFile.content) as ActionState;
+            const fileContent = Buffer.from(actionStateFile.content, 'base64').toString('utf-8');
+            const actionState = JSON.parse(fileContent) as ActionState;
             const commentId = actionState.commentId;
             console.log(`Updating existing comment with ID: ${commentId}`);
             await updateComment(octokit, owner, repo, prNumber, markdownReport, commentId);

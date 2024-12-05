@@ -49065,7 +49065,8 @@ function updatePullRequestComment(octokit, owner, repo, branchName, markdownRepo
     if (prNumber) {
       const actionStateFile = yield (0, github_2.getFile)(octokit, owner, repo, "_codelimit_reports", `${branchName}/action.json`);
       if (actionStateFile) {
-        const actionState = JSON.parse(actionStateFile.content);
+        const fileContent = Buffer.from(actionStateFile.content, "base64").toString("utf-8");
+        const actionState = JSON.parse(fileContent);
         const commentId = actionState.commentId;
         console.log(`Updating existing comment with ID: ${commentId}`);
         yield (0, github_2.updateComment)(octokit, owner, repo, prNumber, markdownReport, commentId);
