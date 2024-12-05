@@ -1,8 +1,11 @@
 ## Codebase totals
 | **Language** | **Files** | **Lines of Code** | **Functions** | ⚠ | ✖ |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| TypeScript | 4 | 284 | 23 | 0 | 0 |
+| TypeScript | 6 | 316 | 25 | 1 | 0 |
 
 
 ## Refactoring report
-Refactoring not necessary, ✨ happy coding! ✨
+| **File** | **Line** | **Column** | **Length** | **Function** |
+| --- | ---: | ---: | ---: | --- |
+| src/action.ts | 30 | 16 | 32 | ⚠ updateReportsBranch |
+
