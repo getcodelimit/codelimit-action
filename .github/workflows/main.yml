@@ -9,6 +9,7 @@ on:
 
 jobs:
   main:
+    if: github.repository == 'getcodelimit/codelimit-action'
     runs-on: ubuntu-latest
     permissions:
       contents: write
