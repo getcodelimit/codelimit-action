@@ -4,6 +4,7 @@
   "description": "",
   "main": "action.js",
   "scripts": {
+    "prepare": "node src/generate-versionjs.js > src/version.ts",
     "build": "tsc",
     "start": "yarn build && node ./build/action.js",
     "dist": "yarn build && esbuild build/action.js --bundle --platform=node --outfile=dist/index.js",

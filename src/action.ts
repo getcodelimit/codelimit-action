@@ -14,6 +14,7 @@ import {
 import {exec, getExecOutput} from "@actions/exec";
 import {downloadCodeLimitBinary, getBadgeContent, getReportContent} from "./codelimit";
 import {getChangedFiles} from "./utils";
+import {version} from "./version";
 
 async function generateMarkdownReport(clBinary: string) {
     const totalsMarkdown = await getExecOutput(clBinary, ['report', '--totals', '--format', 'markdown']);
@@ -80,6 +81,8 @@ async function checkChangedFiles(octokit: Octokit, clBinary: string): Promise<nu
 }
 
 async function main() {
+    console.log(`Code Limit action, version: ${version.revision}`);
+    console.log(JSON.stringify(context));
     let exitCode = 0;
     const clBinary = await downloadCodeLimitBinary();
     console.log('Scanning codebase...');

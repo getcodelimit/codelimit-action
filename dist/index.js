@@ -48984,6 +48984,19 @@ var require_utils7 = __commonJS({
   }
 });
 
+// build/version.js
+var require_version = __commonJS({
+  "build/version.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.version = void 0;
+    exports2.version = {
+      "revision": "3a4fcbe",
+      "year": "2024"
+    };
+  }
+});
+
 // build/action.js
 var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
   function adopt(value) {
@@ -49024,6 +49037,7 @@ var github_2 = require_github2();
 var exec_1 = require_exec();
 var codelimit_1 = require_codelimit();
 var utils_1 = require_utils7();
+var version_1 = require_version();
 function generateMarkdownReport(clBinary) {
   return __awaiter(this, void 0, void 0, function* () {
     const totalsMarkdown = yield (0, exec_1.getExecOutput)(clBinary, ["report", "--totals", "--format", "markdown"]);
@@ -49095,6 +49109,8 @@ function checkChangedFiles(octokit, clBinary) {
 }
 function main() {
   return __awaiter(this, void 0, void 0, function* () {
+    console.log(`Code Limit action, version: ${version_1.version.revision}`);
+    console.log(JSON.stringify(github_1.context));
     let exitCode = 0;
     const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
     console.log("Scanning codebase...");
