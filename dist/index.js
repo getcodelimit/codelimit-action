@@ -46753,6 +46753,7 @@ var require_github2 = __commonJS({
     exports2.createPRComment = createPRComment;
     exports2.updateComment = updateComment;
     exports2.isPullRequest = isPullRequest;
+    exports2.isPullRequestFromFork = isPullRequestFromFork;
     exports2.getSourceBranch = getSourceBranch;
     exports2.createBranchIfNotExists = createBranchIfNotExists;
     var github_12 = require_github();
@@ -46886,6 +46887,10 @@ var require_github2 = __commonJS({
     }
     function isPullRequest() {
       return github_12.context.eventName === "pull_request";
+    }
+    function isPullRequestFromFork() {
+      var _a, _b;
+      return isPullRequest() && ((_b = (_a = github_12.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.repo) === null || _b === void 0 ? void 0 : _b.fork) === true;
     }
     function getSourceBranch() {
       if (isPullRequest()) {
@@ -49110,17 +49115,18 @@ function checkChangedFiles(octokit, clBinary) {
 function main() {
   return __awaiter(this, void 0, void 0, function* () {
     console.log(`Code Limit action, version: ${version_1.version.revision}`);
-    console.log(JSON.stringify(github_1.context));
     let exitCode = 0;
     const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
     console.log("Scanning codebase...");
     yield (0, exec_1.exec)(clBinary, ["scan", "."]);
     const markdownReport = yield generateMarkdownReport(clBinary);
     const octokit = new action_1.Octokit({ auth: (0, core_1.getInput)("token") });
-    yield updateReportsBranch(octokit, markdownReport);
     const doCheck = (0, core_1.getInput)("check") || true;
     if (doCheck) {
       exitCode = yield checkChangedFiles(octokit, clBinary);
+    }
+    if (!(0, github_2.isPullRequestFromFork)()) {
+      yield updateReportsBranch(octokit, markdownReport);
     }
     fs_1.default.unlinkSync(clBinary);
     console.log("Done!");
