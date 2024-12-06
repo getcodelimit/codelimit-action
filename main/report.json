@@ -1,12 +1,19 @@
 {
   "version": "0.11.3",
-  "uuid": "cee6d0fc-ca0a-470b-9346-23176aa03e7b",
+  "uuid": "4a56dc4a-ee72-4390-8171-255ae31817a7",
   "root": "/github/workspace",
   "codebase": {
     "totals": {
+      "JavaScript": {
+        "files": 1,
+        "lines_of_code": 3,
+        "functions": 0,
+        "hard_to_maintain": 0,
+        "unmaintainable": 0
+      },
       "TypeScript": {
         "files": 6,
-        "lines_of_code": 322,
+        "lines_of_code": 325,
         "functions": 26,
         "hard_to_maintain": 0,
         "unmaintainable": 0
@@ -17,17 +24,18 @@
         "entries": [
           "src/"
         ],
-        "profile": [140, 128, 0, 0]
+        "profile": [140, 130, 0, 0]
       },
       "src/": {
         "entries": [
+          "generate-versionjs.js",
           "github.ts",
           "utils.ts",
           "codelimit.ts",
           "action.ts",
           "entities/"
         ],
-        "profile": [140, 128, 0, 0]
+        "profile": [140, 130, 0, 0]
       },
       "src/entities/": {
         "entries": [
@@ -38,6 +46,14 @@
       }
     },
     "files": {
+      "src/generate-versionjs.js": {
+        "checksum": "7abb9921a1ffff7e63a32112242115ea",
+        "language": "JavaScript",
+        "loc": 3,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
+        ]
+      },
       "src/github.ts": {
         "checksum": "1f183a910c256239bf74aadf68f63e97",
         "language": "TypeScript",
@@ -84,16 +100,16 @@
         ]
       },
       "src/action.ts": {
-        "checksum": "0fdc1b4a5c6ef6d67f0b83830e1cac23",
+        "checksum": "9ead3494e38fb33ae92eef3d772a5e64",
         "language": "TypeScript",
-        "loc": 93,
-        "profile": [22, 54, 0, 0],
+        "loc": 96,
+        "profile": [22, 56, 0, 0],
         "measurements": [
-          {"unit_name": "generateMarkdownReport", "start": {"line": 18, "column": 16}, "end": {"line": 28, "column": 2}, "value": 11},
-          {"unit_name": "updateReportsBranch", "start": {"line": 30, "column": 16}, "end": {"line": 48, "column": 2}, "value": 19},
-          {"unit_name": "updatePullRequestComment", "start": {"line": 50, "column": 16}, "end": {"line": 68, "column": 2}, "value": 19},
-          {"unit_name": "checkChangedFiles", "start": {"line": 70, "column": 16}, "end": {"line": 80, "column": 2}, "value": 11},
-          {"unit_name": "main", "start": {"line": 82, "column": 16}, "end": {"line": 97, "column": 2}, "value": 16}
+          {"unit_name": "generateMarkdownReport", "start": {"line": 19, "column": 16}, "end": {"line": 29, "column": 2}, "value": 11},
+          {"unit_name": "updateReportsBranch", "start": {"line": 31, "column": 16}, "end": {"line": 49, "column": 2}, "value": 19},
+          {"unit_name": "updatePullRequestComment", "start": {"line": 51, "column": 16}, "end": {"line": 69, "column": 2}, "value": 19},
+          {"unit_name": "checkChangedFiles", "start": {"line": 71, "column": 16}, "end": {"line": 81, "column": 2}, "value": 11},
+          {"unit_name": "main", "start": {"line": 83, "column": 16}, "end": {"line": 100, "column": 2}, "value": 18}
         ]
       },
       "src/entities/GetContentResponse.ts": {
