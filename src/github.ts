@@ -121,6 +121,10 @@ export function isPullRequest() {
     return context.eventName === 'pull_request';
 }
 
+export function isPullRequestFromFork() {
+    return isPullRequest() && context.payload.pull_request?.head.repo?.fork === true;
+}
+
 export function getSourceBranch() {
     if (isPullRequest()) {
         return process.env.GITHUB_HEAD_REF;

@@ -9,7 +9,7 @@ import {
     getRepoName,
     getRepoOwner,
     getSourceBranch,
-    isPullRequest, updateComment
+    isPullRequest, isPullRequestFromFork, updateComment
 } from "./github";
 import {exec, getExecOutput} from "@actions/exec";
 import {downloadCodeLimitBinary, getBadgeContent, getReportContent} from "./codelimit";
@@ -82,7 +82,6 @@ async function checkChangedFiles(octokit: Octokit, clBinary: string): Promise<nu
 
 async function main() {
     console.log(`Code Limit action, version: ${version.revision}`);
-    console.log(JSON.stringify(context));
     let exitCode = 0;
     const clBinary = await downloadCodeLimitBinary();
     console.log('Scanning codebase...');
@@ -91,10 +90,12 @@ async function main() {
     await exec(clBinary, [...excludeOpts, 'scan', '.']);
     const markdownReport = await generateMarkdownReport(clBinary);
     const octokit = new Octokit({auth: getInput('token')});
-    await updateReportsBranch(octokit, markdownReport);
     const doCheck = getInput('check') || true;
     if (doCheck) {
         exitCode = await checkChangedFiles(octokit, clBinary);
+    }
+    if (!isPullRequestFromFork()) {
+        await updateReportsBranch(octokit, markdownReport);
     }
     fs.unlinkSync(clBinary);
     console.log('Done!');
