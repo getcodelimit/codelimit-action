@@ -1,5 +1,5 @@
 import fs from "fs";
-import {getInput} from "@actions/core";
+import {getInput, getMultilineInput} from "@actions/core";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
 import {
@@ -82,10 +82,8 @@ async function main() {
     let exitCode = 0;
     const clBinary = await downloadCodeLimitBinary();
     console.log('Scanning codebase...');
-    const excludeOpts = getInput('excludes').reduce(function(r, e) {
-      r.push('--exclude', e);
-      return r;
-    }, []);
+    const excludes = getMultilineInput('excludes');
+    const excludeOpts = excludes.flatMap(e => ['--exclude', e]);
     await exec(clBinary, [...excludeOpts, 'scan', '.']);
     const markdownReport = await generateMarkdownReport(clBinary);
     const octokit = new Octokit({auth: getInput('token')});

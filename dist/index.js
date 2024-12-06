@@ -49097,7 +49097,9 @@ function main() {
     let exitCode = 0;
     const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
     console.log("Scanning codebase...");
-    yield (0, exec_1.exec)(clBinary, ["scan", "."]);
+    const excludes = (0, core_1.getMultilineInput)("excludes");
+    const excludeOpts = excludes.flatMap((e) => ["--exclude", e]);
+    yield (0, exec_1.exec)(clBinary, [...excludeOpts, "scan", "."]);
     const markdownReport = yield generateMarkdownReport(clBinary);
     const octokit = new action_1.Octokit({ auth: (0, core_1.getInput)("token") });
     yield updateReportsBranch(octokit, markdownReport);

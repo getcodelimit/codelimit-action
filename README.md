@@ -50,7 +50,7 @@ jobs:
       - name: 'Run Code Limit'
         uses: getcodelimit/codelimit-action@v1
         with:
-            excludes:
-            - examples
-            - third_party
+          excludes:
+          - examples/*
+          - third_party/*
 ```
