@@ -85,9 +85,7 @@ async function main() {
     let exitCode = 0;
     const clBinary = await downloadCodeLimitBinary();
     console.log('Scanning codebase...');
-    const excludes = getMultilineInput('excludes');
-    const excludeOpts = excludes.flatMap(e => ['--exclude', e]);
-    await exec(clBinary, [...excludeOpts, 'scan', '.']);
+    await exec(clBinary, ['scan', '.']);
     const markdownReport = await generateMarkdownReport(clBinary);
     const octokit = new Octokit({auth: getInput('token')});
     const doCheck = getInput('check') || true;
