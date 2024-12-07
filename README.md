@@ -43,3 +43,18 @@ jobs:
       - name: 'Run Code Limit'
         uses: getcodelimit/codelimit-action@v1
 ```
+
+## Excluding files
+
+Use the input parameter `excludes` to exclude files and directories, this
+action parameter takes a list of
+[patterns](https://git-scm.com/docs/gitignore#_pattern_format).
+
+```yaml
+      - name: 'Run Code Limit'
+        uses: getcodelimit/codelimit-action@v1
+        with:
+          excludes:
+          - examples
+          - third_party
+```
