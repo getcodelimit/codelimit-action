@@ -26,5 +26,13 @@ jobs:
     - name: 'Install dependencies'
       run: yarn install
 
+    - name: 'Build dist'
+      run: yarn dist
+
+    - name: 'Commit dist'
+      uses: stefanzweifel/git-auto-commit-action@v4
+      with:
+        commit_message: 'Distribution build'
+
     - name: 'Run Code Limit action'
       uses: getcodelimit/codelimit-action@main
