@@ -15,7 +15,3 @@ inputs:
     description: 'Checked changed files'
     default: 'true'
     required: false
-  excludes:
-    description: 'Extra exclude patterns to pass to Code Limit'
-    default: []
-    required: false
