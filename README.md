@@ -15,7 +15,7 @@
 <div align="center">
 
 [![main](https://github.com/getcodelimit/codelimit-action/actions/workflows/main.yml/badge.svg)](https://github.com/getcodelimit/codelimit-action/actions/workflows/main.yml)
-[![Checked with Code Limit](https://github.com/getcodelimit/codelimit-action/blob/_codelimit_reports/main/badge.svg)](https://github.com/getcodelimit/codelimit-action/blob/_codelimit_reports/main/codelimit.md)
+[![codelimit](https://github.com/getcodelimit/codelimit-action/blob/_codelimit_reports/main/badge.svg?raw=true)](https://github.com/getcodelimit/codelimit-action/blob/_codelimit_reports/main/codelimit.md)
 
 </div>
 
