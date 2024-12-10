@@ -48904,7 +48904,7 @@ var require_codelimit = __commonJS({
         } else if (profile[2] > 0) {
           return makeBadgeSvg("Needs refactoring", "orange");
         } else {
-          return makeBadgeSvg("Passed", "green");
+          return makeBadgeSvg("Passed", "brightgreen");
         }
       }
     }
@@ -48996,7 +48996,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "4c54366",
+      "revision": "db10a03",
       "year": "2024"
     };
   }
