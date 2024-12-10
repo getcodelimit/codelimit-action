@@ -46,7 +46,7 @@ export function getReportContent(): string | undefined {
     return fs.readFileSync('.codelimit_cache/codelimit.json', 'utf8');
 }
 
-function makeBadgeSvg(message: string, color: 'red' | 'orange' | 'green' | 'grey'): string {
+function makeBadgeSvg(message: string, color: string): string {
     const badge = {
         label: 'Code Limit',
         message: message,
@@ -66,7 +66,7 @@ export function getBadgeContent(reportContent: string | undefined): string {
         } else if (profile[2] > 0) {
             return makeBadgeSvg('Needs refactoring', 'orange');
         } else {
-            return makeBadgeSvg('Passed', 'green');
+            return makeBadgeSvg('Passed', 'brightgreen');
         }
     }
 }
