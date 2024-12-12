@@ -46853,7 +46853,7 @@ var require_github2 = __commonJS({
           repo,
           path,
           sha,
-          message: `Update by Code Limit`,
+          message: `Update by CodeLimit`,
           branch: branchName,
           content: Buffer.from(content).toString("base64"),
           committer: {
@@ -48873,12 +48873,12 @@ var require_codelimit = __commonJS({
     function downloadCodeLimitBinary() {
       return __awaiter2(this, void 0, void 0, function* () {
         const binaryUrl = yield getLatestBinaryUrl();
-        console.log(`Downloading Code Limit binary from URL: ${binaryUrl}`);
+        console.log(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
         const response = yield (0, node_fetch_1.default)(binaryUrl);
         const filename = path_1.default.join(__dirname, getBinaryName());
         yield streamPipeline(response.body, fs_12.default.createWriteStream(filename));
         fs_12.default.chmodSync(filename, "777");
-        console.log(`Code Limit binary downloaded: ${filename}`);
+        console.log(`CodeLimit binary downloaded: ${filename}`);
         return filename;
       });
     }
@@ -48887,7 +48887,7 @@ var require_codelimit = __commonJS({
     }
     function makeBadgeSvg(message, color) {
       const badge = {
-        label: "Code Limit",
+        label: "CodeLimit",
         message,
         color
       };
@@ -48996,7 +48996,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "db10a03",
+      "revision": "2cc0240",
       "year": "2024"
     };
   }
@@ -49104,17 +49104,17 @@ function checkChangedFiles(octokit, clBinary) {
     const changedFiles = yield (0, utils_1.getChangedFiles)(octokit);
     console.log(`Number of files changed: ${changedFiles.length}`);
     if (changedFiles.length === 0) {
-      console.log("No files changed, skipping Code Limit");
+      console.log("No files changed, skipping CodeLimit");
       return 0;
     } else {
-      console.log("Running Code Limit...");
+      console.log("Running CodeLimit...");
       return yield (0, exec_1.exec)(clBinary, ["check"].concat(changedFiles), { ignoreReturnCode: true });
     }
   });
 }
 function main() {
   return __awaiter(this, void 0, void 0, function* () {
-    console.log(`Code Limit action, version: ${version_1.version.revision}`);
+    console.log(`CodeLimit action, version: ${version_1.version.revision}`);
     let exitCode = 0;
     const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
     console.log("Scanning codebase...");
