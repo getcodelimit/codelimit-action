@@ -87,7 +87,7 @@ export async function createOrUpdateFile(octokit: Octokit, owner: string, repo: 
         repo: repo,
         path: path,
         sha: sha,
-        message: `Update by Code Limit`,
+        message: `Update by CodeLimit`,
         branch: branchName,
         content: Buffer.from(content).toString('base64'),
         committer: {

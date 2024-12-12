@@ -72,16 +72,16 @@ async function checkChangedFiles(octokit: Octokit, clBinary: string): Promise<nu
     const changedFiles = await getChangedFiles(octokit);
     console.log(`Number of files changed: ${changedFiles.length}`);
     if (changedFiles.length === 0) {
-        console.log('No files changed, skipping Code Limit');
+        console.log('No files changed, skipping CodeLimit');
         return 0;
     } else {
-        console.log('Running Code Limit...');
+        console.log('Running CodeLimit...');
         return await exec(clBinary, ['check'].concat(changedFiles), {ignoreReturnCode: true});
     }
 }
 
 async function main() {
-    console.log(`Code Limit action, version: ${version.revision}`);
+    console.log(`CodeLimit action, version: ${version.revision}`);
     let exitCode = 0;
     const clBinary = await downloadCodeLimitBinary();
     console.log('Scanning codebase...');

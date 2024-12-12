@@ -1,4 +1,4 @@
-# Code Limit GitHub Action
+# CodeLimit GitHub Action
 
 <div align="center">
 
@@ -19,7 +19,7 @@
 
 </div>
 
-To run Code Limit on every push and before every merge to main, append it to
+To run CodeLimit on every push and before every merge to main, append it to
 your GH Action workflow:
 
 ```yaml
@@ -40,6 +40,6 @@ jobs:
       - name: 'Checkout sources'
         uses: actions/checkout@v4
 
-      - name: 'Run Code Limit'
+      - name: 'Run CodeLimit'
         uses: getcodelimit/codelimit-action@v1
 ```

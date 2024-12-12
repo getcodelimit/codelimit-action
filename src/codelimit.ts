@@ -33,12 +33,12 @@ async function getLatestBinaryUrl() {
 
 export async function downloadCodeLimitBinary() {
     const binaryUrl = await getLatestBinaryUrl();
-    console.log(`Downloading Code Limit binary from URL: ${binaryUrl}`);
+    console.log(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
     const response = await nodeFetch(binaryUrl);
     const filename = path.join(__dirname, getBinaryName());
     await streamPipeline(response.body, fs.createWriteStream(filename));
     fs.chmodSync(filename, '777');
-    console.log(`Code Limit binary downloaded: ${filename}`);
+    console.log(`CodeLimit binary downloaded: ${filename}`);
     return filename;
 }
 
@@ -48,7 +48,7 @@ export function getReportContent(): string | undefined {
 
 function makeBadgeSvg(message: string, color: string): string {
     const badge = {
-        label: 'Code Limit',
+        label: 'CodeLimit',
         message: message,
         color: color
     };
