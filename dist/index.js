@@ -48996,7 +48996,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "2cc0240",
+      "revision": "3e5b0e7",
       "year": "2024"
     };
   }
@@ -49126,7 +49126,14 @@ function main() {
       exitCode = yield checkChangedFiles(octokit, clBinary);
     }
     if (!(0, github_2.isPullRequestFromFork)()) {
-      yield updateReportsBranch(octokit, markdownReport);
+      try {
+        yield updateReportsBranch(octokit, markdownReport);
+      } catch (e) {
+        console.error("Failed to update reports branch");
+        if (e instanceof Error) {
+          console.error(`Reason: ${e.message}`);
+        }
+      }
     }
     fs_1.default.unlinkSync(clBinary);
     console.log("Done!");
