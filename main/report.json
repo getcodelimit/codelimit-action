@@ -1,6 +1,6 @@
 {
-  "version": "0.13.0",
-  "uuid": "49766a2f-f4e0-4dd9-aa29-4c9121dea7db",
+  "version": "0.14.3",
+  "uuid": "cdbdfa6e-f0d4-40ea-be68-087cf11bb4fc",
   "root": "/github/workspace",
   "codebase": {
     "totals": {
@@ -13,7 +13,7 @@
       },
       "TypeScript": {
         "files": 6,
-        "lines_of_code": 329,
+        "lines_of_code": 336,
         "functions": 27,
         "hard_to_maintain": 0,
         "unmaintainable": 0
@@ -24,7 +24,7 @@
         "entries": [
           "src/"
         ],
-        "profile": [143, 131, 0, 0]
+        "profile": [143, 138, 0, 0]
       },
       "src/": {
         "entries": [
@@ -35,7 +35,7 @@
           "action.ts",
           "entities/"
         ],
-        "profile": [143, 131, 0, 0]
+        "profile": [143, 138, 0, 0]
       },
       "src/entities/": {
         "entries": [
@@ -101,16 +101,16 @@
         ]
       },
       "src/action.ts": {
-        "checksum": "e73fde664d17d9d45e17f429dfd61fa3",
+        "checksum": "08818da2bd136716d3ef0d5ad2381740",
         "language": "TypeScript",
-        "loc": 97,
-        "profile": [22, 57, 0, 0],
+        "loc": 104,
+        "profile": [22, 64, 0, 0],
         "measurements": [
           {"unit_name": "generateMarkdownReport", "start": {"line": 19, "column": 16}, "end": {"line": 29, "column": 2}, "value": 11},
           {"unit_name": "updateReportsBranch", "start": {"line": 31, "column": 16}, "end": {"line": 49, "column": 2}, "value": 19},
           {"unit_name": "updatePullRequestComment", "start": {"line": 51, "column": 16}, "end": {"line": 69, "column": 2}, "value": 19},
           {"unit_name": "checkChangedFiles", "start": {"line": 71, "column": 16}, "end": {"line": 81, "column": 2}, "value": 11},
-          {"unit_name": "main", "start": {"line": 83, "column": 16}, "end": {"line": 101, "column": 2}, "value": 19}
+          {"unit_name": "main", "start": {"line": 83, "column": 16}, "end": {"line": 108, "column": 2}, "value": 26}
         ]
       },
       "src/entities/GetContentResponse.ts": {
