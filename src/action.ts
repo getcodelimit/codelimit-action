@@ -93,7 +93,14 @@ async function main() {
         exitCode = await checkChangedFiles(octokit, clBinary);
     }
     if (!isPullRequestFromFork()) {
-        await updateReportsBranch(octokit, markdownReport);
+        try {
+            await updateReportsBranch(octokit, markdownReport);
+        } catch (e: unknown) {
+            console.error('Failed to update reports branch');
+            if (e instanceof Error) {
+                console.error(`Reason: ${e.message}`);
+            }
+        }
     }
     fs.unlinkSync(clBinary);
     console.log('Done!');
