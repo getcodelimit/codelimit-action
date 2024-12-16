@@ -34,5 +34,5 @@ jobs:
       with:
         commit_message: 'Distribution build'
 
-    - name: 'Run Code Limit action'
+    - name: 'Run CodeLimit action'
       uses: getcodelimit/codelimit-action@main
