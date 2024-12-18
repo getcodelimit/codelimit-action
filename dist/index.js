@@ -48838,7 +48838,8 @@ var require_codelimit = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.downloadCodeLimitBinary = downloadCodeLimitBinary;
     exports2.getReportContent = getReportContent;
-    exports2.getBadgeContent = getBadgeContent;
+    exports2.makeNotFoundBadgeSvg = makeNotFoundBadgeSvg;
+    exports2.makeStatusBadgeSvg = makeStatusBadgeSvg;
     var node_fetch_1 = __importDefault2(require_lib3());
     var path_1 = __importDefault2(require("path"));
     var fs_12 = __importDefault2(require("fs"));
@@ -48893,19 +48894,17 @@ var require_codelimit = __commonJS({
       };
       return (0, badge_maker_1.makeBadge)(badge);
     }
-    function getBadgeContent(reportContent) {
-      if (!reportContent) {
-        return makeBadgeSvg("Not found", "grey");
+    function makeNotFoundBadgeSvg() {
+      return makeBadgeSvg("Not found", "grey");
+    }
+    function makeStatusBadgeSvg(codebase) {
+      const profile = codebase.tree["./"].profile;
+      if (profile[3] > 0) {
+        return makeBadgeSvg("Needs refactoring", "red");
       } else {
-        const reportJson = JSON.parse(reportContent);
-        const profile = reportJson.codebase.tree["./"].profile;
-        if (profile[3] > 0) {
-          return makeBadgeSvg("Needs refactoring", "red");
-        } else if (profile[2] > 0) {
-          return makeBadgeSvg("Needs refactoring", "orange");
-        } else {
-          return makeBadgeSvg("Passed", "brightgreen");
-        }
+        const profile2Percentage = Math.floor(profile[2] / (profile[0] + profile[1] + profile[2]) * 100);
+        const color = profile2Percentage > 20 ? "orange" : "brightgreen";
+        return makeBadgeSvg(`${100 - profile2Percentage}%`, color);
       }
     }
   }
@@ -48996,7 +48995,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "0a8b806",
+      "revision": "171fe46",
       "year": "2024"
     };
   }
@@ -49067,7 +49066,14 @@ function updateReportsBranch(octokit, markdownReport) {
     }
     yield (0, github_2.createBranchIfNotExists)(octokit, owner, repo, "_codelimit_reports");
     const reportContent = (0, codelimit_1.getReportContent)();
-    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/badge.svg`, (0, codelimit_1.getBadgeContent)(reportContent));
+    let badgeContent;
+    if (reportContent) {
+      const reportJson = JSON.parse(reportContent);
+      badgeContent = (0, codelimit_1.makeStatusBadgeSvg)(reportJson.codebase);
+    } else {
+      badgeContent = (0, codelimit_1.makeNotFoundBadgeSvg)();
+    }
+    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/badge.svg`, badgeContent);
     if (reportContent) {
       yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/report.json`, reportContent);
     }
