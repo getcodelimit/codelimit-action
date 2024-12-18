@@ -3,6 +3,7 @@ import path from "path";
 import fs from "fs";
 import {promisify} from "util";
 import {makeBadge} from "badge-maker";
+import {Codebase} from "./entities/Codebase";
 
 const streamPipeline = promisify(require('stream').pipeline);
 
@@ -55,18 +56,17 @@ function makeBadgeSvg(message: string, color: string): string {
     return makeBadge(badge);
 }
 
-export function getBadgeContent(reportContent: string | undefined): string {
-    if (!reportContent) {
-        return makeBadgeSvg('Not found', 'grey');
+export function makeNotFoundBadgeSvg(): string {
+    return makeBadgeSvg('Not found', 'grey');
+}
+
+export function makeStatusBadgeSvg(codebase: Codebase): string {
+    const profile = codebase.tree['./'].profile
+    if (profile[3] > 0) {
+        return makeBadgeSvg('Needs refactoring', 'red');
     } else {
-        const reportJson = JSON.parse(reportContent);
-        const profile = reportJson.codebase.tree['./'].profile
-        if (profile[3] > 0) {
-            return makeBadgeSvg('Needs refactoring', 'red');
-        } else if (profile[2] > 0) {
-            return makeBadgeSvg('Needs refactoring', 'orange');
-        } else {
-            return makeBadgeSvg('Passed', 'brightgreen');
-        }
+        const profile2Percentage = Math.floor((profile[2] / (profile[0] + profile[1] + profile[2])) * 100);
+        const color = profile2Percentage > 20 ? 'orange' : 'brightgreen';
+        return makeBadgeSvg(`${100 - profile2Percentage}%`, color);
     }
 }

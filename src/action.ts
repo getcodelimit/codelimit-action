@@ -12,7 +12,7 @@ import {
     isPullRequest, isPullRequestFromFork, updateComment
 } from "./github";
 import {exec, getExecOutput} from "@actions/exec";
-import {downloadCodeLimitBinary, getBadgeContent, getReportContent} from "./codelimit";
+import {downloadCodeLimitBinary, getReportContent, makeNotFoundBadgeSvg, makeStatusBadgeSvg} from "./codelimit";
 import {getChangedFiles} from "./utils";
 import {version} from "./version";
 
@@ -38,7 +38,14 @@ async function updateReportsBranch(octokit: Octokit, markdownReport: string) {
     }
     await createBranchIfNotExists(octokit, owner, repo, '_codelimit_reports');
     const reportContent = getReportContent();
-    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/badge.svg`, getBadgeContent(reportContent));
+    let badgeContent;
+    if (reportContent) {
+        const reportJson = JSON.parse(reportContent);
+        badgeContent = makeStatusBadgeSvg(reportJson.codebase);
+    } else {
+        badgeContent = makeNotFoundBadgeSvg();
+    }
+    await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/badge.svg`, badgeContent);
     if (reportContent) {
         await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/report.json`, reportContent);
     }

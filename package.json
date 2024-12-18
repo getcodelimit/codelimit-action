@@ -8,7 +8,7 @@
     "build": "tsc",
     "start": "yarn build && node ./build/action.js",
     "dist": "yarn build && esbuild build/action.js --bundle --platform=node --outfile=dist/index.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -21,9 +21,12 @@
   },
   "homepage": "https://github.com/getcodelimit/codelimit-action#readme",
   "devDependencies": {
+    "@types/jest": "^29.5.14",
     "@types/node": "^22.10.0",
     "@types/node-fetch": "^2.6.12",
     "esbuild": "^0.24.0",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.2.5",
     "typescript": "^5.7.2"
   },
   "dependencies": {
@@ -33,5 +36,17 @@
     "@octokit/action": "^6.0.5",
     "badge-maker": "^4.1.0",
     "node-fetch": "^2.6.13"
+  },
+  "jest": {
+    "preset": "ts-jest",
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": [
+        "ts-jest",
+        {
+          "tsconfig": "tsconfig.json"
+        }
+      ]
+    }
   }
 }
