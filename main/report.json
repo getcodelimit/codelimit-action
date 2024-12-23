@@ -1,7 +1,7 @@
 {
   "version": "0.16.0",
-  "uuid": "18add076-02be-471e-888a-b490e209bc12",
-  "timestamp": "2024-12-23T13:39:50+00:00",
+  "uuid": "e26e7d34-958e-4b18-ab82-5bee889927f1",
+  "timestamp": "2024-12-23T13:56:01+00:00",
   "root": "/github/workspace",
   "repository": {
     "owner": "getcodelimit",
@@ -95,22 +95,22 @@
         ]
       },
       "src/codelimit.ts": {
-        "checksum": "13072b0404c1fa9f414c4d26d19c58e5",
+        "checksum": "3c7803ea65ba25f482d659e0683acc1e",
         "language": "TypeScript",
         "loc": 57,
         "profile": [40, 17, 0, 0],
         "measurements": [
-          {"unit_name": "getBinaryName", "start": {"line": 10, "column": 10}, "end": {"line": 26, "column": 2}, "value": 17},
-          {"unit_name": "getLatestBinaryUrl", "start": {"line": 28, "column": 16}, "end": {"line": 33, "column": 2}, "value": 6},
-          {"unit_name": "downloadCodeLimitBinary", "start": {"line": 35, "column": 23}, "end": {"line": 44, "column": 2}, "value": 10},
-          {"unit_name": "getReportContent", "start": {"line": 46, "column": 17}, "end": {"line": 48, "column": 2}, "value": 3},
-          {"unit_name": "makeBadgeSvg", "start": {"line": 50, "column": 10}, "end": {"line": 57, "column": 2}, "value": 8},
-          {"unit_name": "makeNotFoundBadgeSvg", "start": {"line": 59, "column": 17}, "end": {"line": 61, "column": 2}, "value": 3},
-          {"unit_name": "makeStatusBadgeSvg", "start": {"line": 63, "column": 17}, "end": {"line": 72, "column": 2}, "value": 10}
+          {"unit_name": "getBinaryName", "start": {"line": 11, "column": 10}, "end": {"line": 27, "column": 2}, "value": 17},
+          {"unit_name": "getLatestBinaryUrl", "start": {"line": 29, "column": 16}, "end": {"line": 34, "column": 2}, "value": 6},
+          {"unit_name": "downloadCodeLimitBinary", "start": {"line": 36, "column": 23}, "end": {"line": 45, "column": 2}, "value": 10},
+          {"unit_name": "getReportContent", "start": {"line": 47, "column": 17}, "end": {"line": 49, "column": 2}, "value": 3},
+          {"unit_name": "makeBadgeSvg", "start": {"line": 51, "column": 10}, "end": {"line": 58, "column": 2}, "value": 8},
+          {"unit_name": "makeNotFoundBadgeSvg", "start": {"line": 60, "column": 17}, "end": {"line": 62, "column": 2}, "value": 3},
+          {"unit_name": "makeStatusBadgeSvg", "start": {"line": 64, "column": 17}, "end": {"line": 73, "column": 2}, "value": 10}
         ]
       },
       "src/action.ts": {
-        "checksum": "8d247851b1948f716e925ec7e6240a40",
+        "checksum": "86f9ce032c7cc07fdaa46127dacfdffa",
         "language": "TypeScript",
         "loc": 94,
         "profile": [22, 38, 34, 0],
