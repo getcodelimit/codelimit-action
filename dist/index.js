@@ -52486,7 +52486,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "d49c4cc",
+      "revision": "d27204a",
       "year": "2024"
     };
   }
@@ -52674,7 +52674,14 @@ function main() {
       }
     }
     if ((0, github_2.isPullRequest)()) {
-      yield updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
+      try {
+        yield updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
+      } catch (e) {
+        (0, signale_1.error)("Failed to update pull request comment");
+        if (e instanceof Error) {
+          (0, signale_1.error)(`Reason: ${e.message}`);
+        }
+      }
     }
     fs_1.default.unlinkSync(clBinary);
     (0, signale_1.success)("Done!");
