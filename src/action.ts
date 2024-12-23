@@ -117,7 +117,14 @@ async function main() {
         }
     }
     if (isPullRequest()) {
-        await updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
+        try {
+            await updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
+        } catch (e: unknown) {
+            error('Failed to update pull request comment');
+            if (e instanceof Error) {
+                error(`Reason: ${e.message}`);
+            }
+        }
     }
     fs.unlinkSync(clBinary);
     success('Done!');
