@@ -17,7 +17,7 @@ import {exec, getExecOutput} from "@actions/exec";
 import {downloadCodeLimitBinary, getReportContent, makeNotFoundBadgeSvg, makeStatusBadgeSvg} from "./codelimit";
 import {getChangedFiles} from "./utils";
 import {version} from "./version";
-import signale, {error, info, pending, success} from "signale";
+import signale, {error, info, success} from "signale";
 
 signale.config({
     displayFilename: true,
@@ -64,7 +64,7 @@ async function updatePullRequestComment(octokit: Octokit, owner: string, repo: s
             const fileContent = Buffer.from(actionStateFile.content, 'base64').toString('utf-8');
             const actionState = JSON.parse(fileContent) as ActionState;
             const commentId = actionState.commentId;
-            pending(`Updating existing comment with ID: ${commentId}`);
+            info(`Updating existing comment with ID: ${commentId}`);
             await updateComment(octokit, owner, repo, prNumber, markdownReport, commentId);
         } else {
             info('State file not found, creating new comment');
@@ -83,7 +83,7 @@ async function checkChangedFiles(octokit: Octokit, clBinary: string): Promise<nu
         info('No files changed, skipping CodeLimit');
         return 0;
     } else {
-        pending('Running CodeLimit...');
+        info('Running CodeLimit...');
         return await exec(clBinary, ['check'].concat(changedFiles), {ignoreReturnCode: true});
     }
 }
@@ -92,7 +92,7 @@ async function main() {
     info(`CodeLimit action, version: ${version.revision}`);
     let exitCode = 0;
     const clBinary = await downloadCodeLimitBinary();
-    pending('Scanning codebase...');
+    info('Scanning codebase...');
     await exec(clBinary, ['scan', '.']);
     const markdownReport = await generateMarkdownReport(clBinary);
     const octokit = new Octokit({auth: getInput('token')});

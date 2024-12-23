@@ -4,6 +4,7 @@ import fs from "fs";
 import {promisify} from "util";
 import {makeBadge} from "badge-maker";
 import {Codebase} from "./entities/Codebase";
+import {info, success} from "signale";
 
 const streamPipeline = promisify(require('stream').pipeline);
 
@@ -34,12 +35,12 @@ async function getLatestBinaryUrl() {
 
 export async function downloadCodeLimitBinary() {
     const binaryUrl = await getLatestBinaryUrl();
-    console.log(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
+    info(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
     const response = await nodeFetch(binaryUrl);
     const filename = path.join(__dirname, getBinaryName());
     await streamPipeline(response.body, fs.createWriteStream(filename));
     fs.chmodSync(filename, '777');
-    console.log(`CodeLimit binary downloaded: ${filename}`);
+    success(`CodeLimit binary downloaded: ${filename}`);
     return filename;
 }
 

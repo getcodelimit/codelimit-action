@@ -48800,206 +48800,6 @@ var require_lib5 = __commonJS({
   }
 });
 
-// build/codelimit.js
-var require_codelimit = __commonJS({
-  "build/codelimit.js"(exports2) {
-    "use strict";
-    var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
-      function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
-        });
-      }
-      return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) {
-          try {
-            step(generator.next(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function rejected(value) {
-          try {
-            step(generator["throw"](value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-        }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-      });
-    };
-    var __importDefault2 = exports2 && exports2.__importDefault || function(mod) {
-      return mod && mod.__esModule ? mod : { "default": mod };
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.downloadCodeLimitBinary = downloadCodeLimitBinary;
-    exports2.getReportContent = getReportContent;
-    exports2.makeNotFoundBadgeSvg = makeNotFoundBadgeSvg;
-    exports2.makeStatusBadgeSvg = makeStatusBadgeSvg;
-    var node_fetch_1 = __importDefault2(require_lib3());
-    var path_1 = __importDefault2(require("path"));
-    var fs_12 = __importDefault2(require("fs"));
-    var util_1 = require("util");
-    var badge_maker_1 = require_lib5();
-    var streamPipeline = (0, util_1.promisify)(require("stream").pipeline);
-    function getBinaryName() {
-      const binaries = {
-        "darwin": "codelimit-macos",
-        "win32": "codelimit.exe",
-        "linux": "codelimit-linux"
-      };
-      if (process.env.RUNNER_OS) {
-        const platform = process.env.RUNNER_OS.toLowerCase();
-        if (platform in binaries) {
-          return binaries[platform];
-        }
-      }
-      if (process.platform in binaries) {
-        return binaries[process.platform];
-      }
-      return binaries["linux"];
-    }
-    function getLatestBinaryUrl() {
-      return __awaiter2(this, void 0, void 0, function* () {
-        const latestUrl = "https://github.com/getcodelimit/codelimit/releases/latest";
-        const res = yield (0, node_fetch_1.default)(latestUrl);
-        const downloadUrl = res.url.replace("/tag/", "/download/");
-        return `${downloadUrl}/${getBinaryName()}`;
-      });
-    }
-    function downloadCodeLimitBinary() {
-      return __awaiter2(this, void 0, void 0, function* () {
-        const binaryUrl = yield getLatestBinaryUrl();
-        console.log(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
-        const response = yield (0, node_fetch_1.default)(binaryUrl);
-        const filename = path_1.default.join(__dirname, getBinaryName());
-        yield streamPipeline(response.body, fs_12.default.createWriteStream(filename));
-        fs_12.default.chmodSync(filename, "777");
-        console.log(`CodeLimit binary downloaded: ${filename}`);
-        return filename;
-      });
-    }
-    function getReportContent() {
-      return fs_12.default.readFileSync(".codelimit_cache/codelimit.json", "utf8");
-    }
-    function makeBadgeSvg(message, color) {
-      const badge = {
-        label: "CodeLimit",
-        message,
-        color
-      };
-      return (0, badge_maker_1.makeBadge)(badge);
-    }
-    function makeNotFoundBadgeSvg() {
-      return makeBadgeSvg("Not found", "grey");
-    }
-    function makeStatusBadgeSvg(codebase) {
-      const profile = codebase.tree["./"].profile;
-      if (profile[3] > 0) {
-        return makeBadgeSvg("Needs refactoring", "red");
-      } else {
-        const profile2Percentage = Math.round(profile[2] / (profile[0] + profile[1] + profile[2]) * 100);
-        const color = profile2Percentage > 20 ? "orange" : "brightgreen";
-        return makeBadgeSvg(`${100 - profile2Percentage}%`, color);
-      }
-    }
-  }
-});
-
-// build/utils.js
-var require_utils7 = __commonJS({
-  "build/utils.js"(exports2) {
-    "use strict";
-    var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
-      function adopt(value) {
-        return value instanceof P ? value : new P(function(resolve) {
-          resolve(value);
-        });
-      }
-      return new (P || (P = Promise))(function(resolve, reject) {
-        function fulfilled(value) {
-          try {
-            step(generator.next(value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function rejected(value) {
-          try {
-            step(generator["throw"](value));
-          } catch (e) {
-            reject(e);
-          }
-        }
-        function step(result) {
-          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
-        }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-      });
-    };
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.getChangedFiles = getChangedFiles;
-    var github_12 = require_github();
-    function getChangedFiles(octokit) {
-      return __awaiter2(this, void 0, void 0, function* () {
-        if (github_12.context.eventName === void 0) {
-          return ["."];
-        }
-        const { base, head } = getShas();
-        const response = yield octokit.repos.compareCommits({
-          base,
-          head,
-          owner: github_12.context.repo.owner,
-          repo: github_12.context.repo.repo
-        });
-        if (response.status !== 200) {
-          return ["."];
-        }
-        const files = response.data.files;
-        const result = [];
-        if (files) {
-          for (const file of files) {
-            const filename = file.filename;
-            if (file.status === "modified" || file.status === "added") {
-              result.push(filename);
-            }
-          }
-        }
-        return result;
-      });
-    }
-    function getShas() {
-      var _a, _b, _c, _d;
-      let base;
-      let head;
-      if (github_12.context.eventName === "pull_request") {
-        base = (_b = (_a = github_12.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
-        head = (_d = (_c = github_12.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
-      } else {
-        base = github_12.context.payload.before;
-        head = github_12.context.payload.after;
-      }
-      return { base, head };
-    }
-  }
-});
-
-// build/version.js
-var require_version = __commonJS({
-  "build/version.js"(exports2) {
-    "use strict";
-    Object.defineProperty(exports2, "__esModule", { value: true });
-    exports2.version = void 0;
-    exports2.version = {
-      "revision": "b375376",
-      "year": "2024"
-    };
-  }
-});
-
 // node_modules/escape-string-regexp/index.js
 var require_escape_string_regexp = __commonJS({
   "node_modules/escape-string-regexp/index.js"(exports2, module2) {
@@ -52491,6 +52291,207 @@ var require_signale2 = __commonJS({
   }
 });
 
+// build/codelimit.js
+var require_codelimit = __commonJS({
+  "build/codelimit.js"(exports2) {
+    "use strict";
+    var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    var __importDefault2 = exports2 && exports2.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.downloadCodeLimitBinary = downloadCodeLimitBinary;
+    exports2.getReportContent = getReportContent;
+    exports2.makeNotFoundBadgeSvg = makeNotFoundBadgeSvg;
+    exports2.makeStatusBadgeSvg = makeStatusBadgeSvg;
+    var node_fetch_1 = __importDefault2(require_lib3());
+    var path_1 = __importDefault2(require("path"));
+    var fs_12 = __importDefault2(require("fs"));
+    var util_1 = require("util");
+    var badge_maker_1 = require_lib5();
+    var signale_12 = require_signale2();
+    var streamPipeline = (0, util_1.promisify)(require("stream").pipeline);
+    function getBinaryName() {
+      const binaries = {
+        "darwin": "codelimit-macos",
+        "win32": "codelimit.exe",
+        "linux": "codelimit-linux"
+      };
+      if (process.env.RUNNER_OS) {
+        const platform = process.env.RUNNER_OS.toLowerCase();
+        if (platform in binaries) {
+          return binaries[platform];
+        }
+      }
+      if (process.platform in binaries) {
+        return binaries[process.platform];
+      }
+      return binaries["linux"];
+    }
+    function getLatestBinaryUrl() {
+      return __awaiter2(this, void 0, void 0, function* () {
+        const latestUrl = "https://github.com/getcodelimit/codelimit/releases/latest";
+        const res = yield (0, node_fetch_1.default)(latestUrl);
+        const downloadUrl = res.url.replace("/tag/", "/download/");
+        return `${downloadUrl}/${getBinaryName()}`;
+      });
+    }
+    function downloadCodeLimitBinary() {
+      return __awaiter2(this, void 0, void 0, function* () {
+        const binaryUrl = yield getLatestBinaryUrl();
+        (0, signale_12.info)(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
+        const response = yield (0, node_fetch_1.default)(binaryUrl);
+        const filename = path_1.default.join(__dirname, getBinaryName());
+        yield streamPipeline(response.body, fs_12.default.createWriteStream(filename));
+        fs_12.default.chmodSync(filename, "777");
+        (0, signale_12.success)(`CodeLimit binary downloaded: ${filename}`);
+        return filename;
+      });
+    }
+    function getReportContent() {
+      return fs_12.default.readFileSync(".codelimit_cache/codelimit.json", "utf8");
+    }
+    function makeBadgeSvg(message, color) {
+      const badge = {
+        label: "CodeLimit",
+        message,
+        color
+      };
+      return (0, badge_maker_1.makeBadge)(badge);
+    }
+    function makeNotFoundBadgeSvg() {
+      return makeBadgeSvg("Not found", "grey");
+    }
+    function makeStatusBadgeSvg(codebase) {
+      const profile = codebase.tree["./"].profile;
+      if (profile[3] > 0) {
+        return makeBadgeSvg("Needs refactoring", "red");
+      } else {
+        const profile2Percentage = Math.round(profile[2] / (profile[0] + profile[1] + profile[2]) * 100);
+        const color = profile2Percentage > 20 ? "orange" : "brightgreen";
+        return makeBadgeSvg(`${100 - profile2Percentage}%`, color);
+      }
+    }
+  }
+});
+
+// build/utils.js
+var require_utils7 = __commonJS({
+  "build/utils.js"(exports2) {
+    "use strict";
+    var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.getChangedFiles = getChangedFiles;
+    var github_12 = require_github();
+    function getChangedFiles(octokit) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        if (github_12.context.eventName === void 0) {
+          return ["."];
+        }
+        const { base, head } = getShas();
+        const response = yield octokit.repos.compareCommits({
+          base,
+          head,
+          owner: github_12.context.repo.owner,
+          repo: github_12.context.repo.repo
+        });
+        if (response.status !== 200) {
+          return ["."];
+        }
+        const files = response.data.files;
+        const result = [];
+        if (files) {
+          for (const file of files) {
+            const filename = file.filename;
+            if (file.status === "modified" || file.status === "added") {
+              result.push(filename);
+            }
+          }
+        }
+        return result;
+      });
+    }
+    function getShas() {
+      var _a, _b, _c, _d;
+      let base;
+      let head;
+      if (github_12.context.eventName === "pull_request") {
+        base = (_b = (_a = github_12.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
+        head = (_d = (_c = github_12.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+      } else {
+        base = github_12.context.payload.before;
+        head = github_12.context.payload.after;
+      }
+      return { base, head };
+    }
+  }
+});
+
+// build/version.js
+var require_version = __commonJS({
+  "build/version.js"(exports2) {
+    "use strict";
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.version = void 0;
+    exports2.version = {
+      "revision": "61e09ec",
+      "year": "2024"
+    };
+  }
+});
+
 // build/action.js
 var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
   if (k2 === void 0) k2 = k;
@@ -52618,7 +52619,7 @@ function updatePullRequestComment(octokit, owner, repo, branch, markdownReport) 
         const fileContent = Buffer.from(actionStateFile.content, "base64").toString("utf-8");
         const actionState = JSON.parse(fileContent);
         const commentId = actionState.commentId;
-        (0, signale_1.pending)(`Updating existing comment with ID: ${commentId}`);
+        (0, signale_1.info)(`Updating existing comment with ID: ${commentId}`);
         yield (0, github_2.updateComment)(octokit, owner, repo, prNumber, markdownReport, commentId);
       } else {
         (0, signale_1.info)("State file not found, creating new comment");
@@ -52638,7 +52639,7 @@ function checkChangedFiles(octokit, clBinary) {
       (0, signale_1.info)("No files changed, skipping CodeLimit");
       return 0;
     } else {
-      (0, signale_1.pending)("Running CodeLimit...");
+      (0, signale_1.info)("Running CodeLimit...");
       return yield (0, exec_1.exec)(clBinary, ["check"].concat(changedFiles), { ignoreReturnCode: true });
     }
   });
@@ -52648,7 +52649,7 @@ function main() {
     (0, signale_1.info)(`CodeLimit action, version: ${version_1.version.revision}`);
     let exitCode = 0;
     const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
-    (0, signale_1.pending)("Scanning codebase...");
+    (0, signale_1.info)("Scanning codebase...");
     yield (0, exec_1.exec)(clBinary, ["scan", "."]);
     const markdownReport = yield generateMarkdownReport(clBinary);
     const octokit = new action_1.Octokit({ auth: (0, core_1.getInput)("token") });
