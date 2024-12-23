@@ -1,15 +1,17 @@
 import fs from "fs";
-import {getInput, getMultilineInput} from "@actions/core";
+import {getInput} from "@actions/core";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
 import {
     createBranchIfNotExists,
     createOrUpdateFile,
-    createPRComment, getFile,
+    createPRComment,
+    getFile,
     getRepoName,
     getRepoOwner,
     getSourceBranch,
-    isPullRequest, isPullRequestFromFork, updateComment
+    isPullRequest,
+    updateComment
 } from "./github";
 import {exec, getExecOutput} from "@actions/exec";
 import {downloadCodeLimitBinary, getReportContent, makeNotFoundBadgeSvg, makeStatusBadgeSvg} from "./codelimit";
@@ -28,14 +30,7 @@ async function generateMarkdownReport(clBinary: string) {
     return result;
 }
 
-async function updateReportsBranch(octokit: Octokit, markdownReport: string) {
-    const owner = getRepoOwner(context);
-    const repo = getRepoName(context);
-    const branch = getSourceBranch();
-    if (!owner || !repo || !branch) {
-        console.error('Could not determine repository owner, name, or branch');
-        process.exit(1);
-    }
+async function updateReportsBranch(octokit: Octokit, owner: string, repo: string, branch: string, markdownReport: string) {
     await createBranchIfNotExists(octokit, owner, repo, '_codelimit_reports');
     const reportContent = getReportContent();
     let badgeContent;
@@ -50,15 +45,12 @@ async function updateReportsBranch(octokit: Octokit, markdownReport: string) {
         await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/report.json`, reportContent);
     }
     await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/codelimit.md`, markdownReport);
-    if (isPullRequest()) {
-        await updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
-    }
 }
 
-async function updatePullRequestComment(octokit: Octokit, owner: string, repo: string, branchName: string, markdownReport: string) {
+async function updatePullRequestComment(octokit: Octokit, owner: string, repo: string, branch: string, markdownReport: string) {
     const prNumber = context.payload.pull_request?.number;
     if (prNumber) {
-        const actionStateFile = await getFile(octokit, owner, repo, '_codelimit_reports', `${branchName}/action.json`);
+        const actionStateFile = await getFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`);
         if (actionStateFile) {
             const fileContent = Buffer.from(actionStateFile.content, 'base64').toString('utf-8');
             const actionState = JSON.parse(fileContent) as ActionState;
@@ -70,7 +62,7 @@ async function updatePullRequestComment(octokit: Octokit, owner: string, repo: s
             const commentId = await createPRComment(octokit, owner, repo, prNumber, markdownReport);
             const actionState: ActionState = {commentId: commentId};
             const actionStateJson = JSON.stringify(actionState);
-            await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branchName}/action.json`, actionStateJson);
+            await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`, actionStateJson);
         }
     }
 }
@@ -99,15 +91,23 @@ async function main() {
     if (doCheck) {
         exitCode = await checkChangedFiles(octokit, clBinary);
     }
-    if (!isPullRequestFromFork()) {
-        try {
-            await updateReportsBranch(octokit, markdownReport);
-        } catch (e: unknown) {
-            console.error('Failed to update reports branch');
-            if (e instanceof Error) {
-                console.error(`Reason: ${e.message}`);
-            }
+    const owner = getRepoOwner(context);
+    const repo = getRepoName(context);
+    const branch = getSourceBranch();
+    if (!owner || !repo || !branch) {
+        console.error('Could not determine repository owner, name, or branch');
+        process.exit(1);
+    }
+    try {
+        await updateReportsBranch(octokit, owner, repo, branch, markdownReport);
+    } catch (e: unknown) {
+        console.error('Failed to update reports branch');
+        if (e instanceof Error) {
+            console.error(`Reason: ${e.message}`);
         }
+    }
+    if (isPullRequest()) {
+        await updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
     }
     fs.unlinkSync(clBinary);
     console.log('Done!');
