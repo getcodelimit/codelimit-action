@@ -48995,7 +48995,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "2ea8e0a",
+      "revision": "270735f",
       "year": "2024"
     };
   }
@@ -49055,15 +49055,8 @@ function generateMarkdownReport(clBinary) {
     return result;
   });
 }
-function updateReportsBranch(octokit, markdownReport) {
+function updateReportsBranch(octokit, owner, repo, branch, markdownReport) {
   return __awaiter(this, void 0, void 0, function* () {
-    const owner = (0, github_2.getRepoOwner)(github_1.context);
-    const repo = (0, github_2.getRepoName)(github_1.context);
-    const branch = (0, github_2.getSourceBranch)();
-    if (!owner || !repo || !branch) {
-      console.error("Could not determine repository owner, name, or branch");
-      process.exit(1);
-    }
     yield (0, github_2.createBranchIfNotExists)(octokit, owner, repo, "_codelimit_reports");
     const reportContent = (0, codelimit_1.getReportContent)();
     let badgeContent;
@@ -49078,17 +49071,14 @@ function updateReportsBranch(octokit, markdownReport) {
       yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/report.json`, reportContent);
     }
     yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/codelimit.md`, markdownReport);
-    if ((0, github_2.isPullRequest)()) {
-      yield updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
-    }
   });
 }
-function updatePullRequestComment(octokit, owner, repo, branchName, markdownReport) {
+function updatePullRequestComment(octokit, owner, repo, branch, markdownReport) {
   return __awaiter(this, void 0, void 0, function* () {
     var _a;
     const prNumber = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
     if (prNumber) {
-      const actionStateFile = yield (0, github_2.getFile)(octokit, owner, repo, "_codelimit_reports", `${branchName}/action.json`);
+      const actionStateFile = yield (0, github_2.getFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`);
       if (actionStateFile) {
         const fileContent = Buffer.from(actionStateFile.content, "base64").toString("utf-8");
         const actionState = JSON.parse(fileContent);
@@ -49100,7 +49090,7 @@ function updatePullRequestComment(octokit, owner, repo, branchName, markdownRepo
         const commentId = yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
         const actionState = { commentId };
         const actionStateJson = JSON.stringify(actionState);
-        yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branchName}/action.json`, actionStateJson);
+        yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`, actionStateJson);
       }
     }
   });
@@ -49131,15 +49121,23 @@ function main() {
     if (doCheck) {
       exitCode = yield checkChangedFiles(octokit, clBinary);
     }
-    if (!(0, github_2.isPullRequestFromFork)()) {
-      try {
-        yield updateReportsBranch(octokit, markdownReport);
-      } catch (e) {
-        console.error("Failed to update reports branch");
-        if (e instanceof Error) {
-          console.error(`Reason: ${e.message}`);
-        }
+    const owner = (0, github_2.getRepoOwner)(github_1.context);
+    const repo = (0, github_2.getRepoName)(github_1.context);
+    const branch = (0, github_2.getSourceBranch)();
+    if (!owner || !repo || !branch) {
+      console.error("Could not determine repository owner, name, or branch");
+      process.exit(1);
+    }
+    try {
+      yield updateReportsBranch(octokit, owner, repo, branch, markdownReport);
+    } catch (e) {
+      console.error("Failed to update reports branch");
+      if (e instanceof Error) {
+        console.error(`Reason: ${e.message}`);
       }
+    }
+    if ((0, github_2.isPullRequest)()) {
+      yield updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
     }
     fs_1.default.unlinkSync(clBinary);
     console.log("Done!");
