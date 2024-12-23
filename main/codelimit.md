@@ -1,9 +1,20 @@
 ## Codebase totals
-| **Language** | **Files** | **Lines of Code** | **Functions** | ⚠ | ❌ |
+### Overview
+| **Language** | **Files** | **Lines of Code** | **Functions** | **⚠** | **❌** |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| TypeScript | 8 | 350 | 28 | 0 | 0 |
-| JavaScript | 1 | 3 | 0 | 0 | 0 |
-| **Totals** | **9** | **353** | **28** | **0** | **0** |
+| TypeScript | 8 | 284 | 28 | 1 | 0 |
+| JavaScript | 1 | 0 | 0 | 0 | 0 |
+| **Totals** | **9** | **284** | **28** | **1** | **0** |
+
+### Summary
+| **Easy / Verbose** | **Hard-to-maintain ⚠** | **Unmaintainable ❌** |
+| ---: | ---: | ---: |
+| 88% | 12% | 0% |
+
+✅ 88% of the functions are maintainable, no refactoring necessary.
+
 
 ## Refactoring report
-Refactoring not necessary, ✨ happy coding! ✨
+| **Function** | **Length** | **File** |
+| --- | ---: | --- |
+| ⚠ [main](https://github.com/getcodelimit/codelimit-action/blob/main/src/action.ts#L82-L115) | 34 | src/action.ts |
