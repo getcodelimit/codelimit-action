@@ -1,7 +1,7 @@
 {
   "version": "0.16.0",
-  "uuid": "f596d69e-a8a9-45fe-8c31-1468087c72ff",
-  "timestamp": "2024-12-23T17:51:32+00:00",
+  "uuid": "860491bf-90a2-4743-abd9-eca25d9cd049",
+  "timestamp": "2024-12-23T19:59:32+00:00",
   "root": "/github/workspace",
   "repository": {
     "owner": "getcodelimit",
@@ -19,7 +19,7 @@
       },
       "TypeScript": {
         "files": 8,
-        "lines_of_code": 288,
+        "lines_of_code": 295,
         "functions": 28,
         "hard_to_maintain": 1,
         "unmaintainable": 0
@@ -30,7 +30,7 @@
         "entries": [
           "src/"
         ],
-        "profile": [142, 112, 34, 0]
+        "profile": [142, 112, 41, 0]
       },
       "src/": {
         "entries": [
@@ -41,7 +41,7 @@
           "action.ts",
           "entities/"
         ],
-        "profile": [142, 112, 34, 0]
+        "profile": [142, 112, 41, 0]
       },
       "src/entities/": {
         "entries": [
@@ -110,16 +110,16 @@
         ]
       },
       "src/action.ts": {
-        "checksum": "268d8783097dd5efb1583c93dd4488a6",
+        "checksum": "3bb4e2875ee883aad24a35963186970f",
         "language": "TypeScript",
-        "loc": 96,
-        "profile": [24, 38, 34, 0],
+        "loc": 103,
+        "profile": [24, 38, 41, 0],
         "measurements": [
           {"unit_name": "generateMarkdownReport", "start": {"line": 26, "column": 16}, "end": {"line": 38, "column": 2}, "value": 13},
           {"unit_name": "updateReportsBranch", "start": {"line": 40, "column": 16}, "end": {"line": 58, "column": 2}, "value": 19},
           {"unit_name": "updatePullRequestComment", "start": {"line": 60, "column": 16}, "end": {"line": 78, "column": 2}, "value": 19},
           {"unit_name": "checkChangedFiles", "start": {"line": 80, "column": 16}, "end": {"line": 90, "column": 2}, "value": 11},
-          {"unit_name": "main", "start": {"line": 92, "column": 16}, "end": {"line": 125, "column": 2}, "value": 34}
+          {"unit_name": "main", "start": {"line": 92, "column": 16}, "end": {"line": 132, "column": 2}, "value": 41}
         ]
       },
       "src/entities/SourceFolder.ts": {
