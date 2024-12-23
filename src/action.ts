@@ -17,6 +17,12 @@ import {exec, getExecOutput} from "@actions/exec";
 import {downloadCodeLimitBinary, getReportContent, makeNotFoundBadgeSvg, makeStatusBadgeSvg} from "./codelimit";
 import {getChangedFiles} from "./utils";
 import {version} from "./version";
+import signale, {error, info, pending, success} from "signale";
+
+signale.config({
+    displayFilename: true,
+    displayTimestamp: true
+});
 
 async function generateMarkdownReport(clBinary: string) {
     const totalsMarkdown = await getExecOutput(clBinary, ['report', '--format', 'markdown']);
@@ -41,10 +47,13 @@ async function updateReportsBranch(octokit: Octokit, owner: string, repo: string
         badgeContent = makeNotFoundBadgeSvg();
     }
     await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/badge.svg`, badgeContent);
+    success(`Updated badge in branch _codelimit_reports/${branch}`);
     if (reportContent) {
         await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/report.json`, reportContent);
+        success(`Updated JSON report in branch _codelimit_reports/${branch}`);
     }
     await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/codelimit.md`, markdownReport);
+    success(`Updated markdown report in branch _codelimit_reports/${branch}`);
 }
 
 async function updatePullRequestComment(octokit: Octokit, owner: string, repo: string, branch: string, markdownReport: string) {
@@ -55,10 +64,10 @@ async function updatePullRequestComment(octokit: Octokit, owner: string, repo: s
             const fileContent = Buffer.from(actionStateFile.content, 'base64').toString('utf-8');
             const actionState = JSON.parse(fileContent) as ActionState;
             const commentId = actionState.commentId;
-            console.log(`Updating existing comment with ID: ${commentId}`);
+            pending(`Updating existing comment with ID: ${commentId}`);
             await updateComment(octokit, owner, repo, prNumber, markdownReport, commentId);
         } else {
-            console.log('State file not found, creating new comment');
+            info('State file not found, creating new comment');
             const commentId = await createPRComment(octokit, owner, repo, prNumber, markdownReport);
             const actionState: ActionState = {commentId: commentId};
             const actionStateJson = JSON.stringify(actionState);
@@ -69,21 +78,21 @@ async function updatePullRequestComment(octokit: Octokit, owner: string, repo: s
 
 async function checkChangedFiles(octokit: Octokit, clBinary: string): Promise<number> {
     const changedFiles = await getChangedFiles(octokit);
-    console.log(`Number of files changed: ${changedFiles.length}`);
+    info(`Number of files changed: ${changedFiles.length}`);
     if (changedFiles.length === 0) {
-        console.log('No files changed, skipping CodeLimit');
+        info('No files changed, skipping CodeLimit');
         return 0;
     } else {
-        console.log('Running CodeLimit...');
+        pending('Running CodeLimit...');
         return await exec(clBinary, ['check'].concat(changedFiles), {ignoreReturnCode: true});
     }
 }
 
 async function main() {
-    console.log(`CodeLimit action, version: ${version.revision}`);
+    info(`CodeLimit action, version: ${version.revision}`);
     let exitCode = 0;
     const clBinary = await downloadCodeLimitBinary();
-    console.log('Scanning codebase...');
+    pending('Scanning codebase...');
     await exec(clBinary, ['scan', '.']);
     const markdownReport = await generateMarkdownReport(clBinary);
     const octokit = new Octokit({auth: getInput('token')});
@@ -95,22 +104,22 @@ async function main() {
     const repo = getRepoName(context);
     const branch = getSourceBranch();
     if (!owner || !repo || !branch) {
-        console.error('Could not determine repository owner, name, or branch');
+        error('Could not determine repository owner, name, or branch');
         process.exit(1);
     }
     try {
         await updateReportsBranch(octokit, owner, repo, branch, markdownReport);
     } catch (e: unknown) {
-        console.error('Failed to update reports branch');
+        error('Failed to update reports branch');
         if (e instanceof Error) {
-            console.error(`Reason: ${e.message}`);
+            error(`Reason: ${e.message}`);
         }
     }
     if (isPullRequest()) {
         await updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
     }
     fs.unlinkSync(clBinary);
-    console.log('Done!');
+    success('Done!');
     process.exit(exitCode);
 }
 

@@ -137,7 +137,6 @@ export async function createBranchIfNotExists(octokit: Octokit, owner: string, r
     if (!await branchExists(octokit, owner, repo, branchName)) {
         const initialCommitSha = await createInitialCommit(octokit, owner, repo);
         await createBranch(octokit, owner, repo, branchName, initialCommitSha);
-    } else {
-        console.log(`Branch ${branchName} already exists`);
+        console.log(`Branch ${branchName} created`);
     }
 }
