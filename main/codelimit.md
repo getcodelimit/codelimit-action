@@ -2,9 +2,9 @@
 ### Overview
 | **Language** | **Files** | **Lines of Code** | **Functions** | **⚠** | **❌** |
 | --- | ---: | ---: | ---: | ---: | ---: |
-| TypeScript | 8 | 284 | 28 | 1 | 0 |
+| TypeScript | 8 | 286 | 28 | 1 | 0 |
 | JavaScript | 1 | 0 | 0 | 0 | 0 |
-| **Totals** | **9** | **284** | **28** | **1** | **0** |
+| **Totals** | **9** | **286** | **28** | **1** | **0** |
 
 ### Summary
 | **Easy / Verbose** | **Hard-to-maintain ⚠** | **Unmaintainable ❌** |
@@ -17,4 +17,4 @@
 ## Refactoring report
 | **Function** | **Length** | **File** |
 | --- | ---: | --- |
-| ⚠ [main](https://github.com/getcodelimit/codelimit-action/blob/main/src/action.ts#L82-L115) | 34 | src/action.ts |
+| ⚠ [main](https://github.com/getcodelimit/codelimit-action/blob/main/src/action.ts#L91-L124) | 34 | src/action.ts |
