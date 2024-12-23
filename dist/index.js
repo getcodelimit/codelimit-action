@@ -48902,7 +48902,7 @@ var require_codelimit = __commonJS({
       if (profile[3] > 0) {
         return makeBadgeSvg("Needs refactoring", "red");
       } else {
-        const profile2Percentage = Math.floor(profile[2] / (profile[0] + profile[1] + profile[2]) * 100);
+        const profile2Percentage = Math.round(profile[2] / (profile[0] + profile[1] + profile[2]) * 100);
         const color = profile2Percentage > 20 ? "orange" : "brightgreen";
         return makeBadgeSvg(`${100 - profile2Percentage}%`, color);
       }
@@ -48995,7 +48995,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "171fe46",
+      "revision": "2ea8e0a",
       "year": "2024"
     };
   }
@@ -49044,8 +49044,8 @@ var utils_1 = require_utils7();
 var version_1 = require_version();
 function generateMarkdownReport(clBinary) {
   return __awaiter(this, void 0, void 0, function* () {
-    const totalsMarkdown = yield (0, exec_1.getExecOutput)(clBinary, ["report", "--totals", "--format", "markdown"]);
-    const unitsMarkdown = yield (0, exec_1.getExecOutput)(clBinary, ["report", "--full", "--format", "markdown"]);
+    const totalsMarkdown = yield (0, exec_1.getExecOutput)(clBinary, ["report", "--format", "markdown"]);
+    const unitsMarkdown = yield (0, exec_1.getExecOutput)(clBinary, ["findings", "--format", "markdown"]);
     let result = "";
     result += "## Codebase totals\n";
     result += totalsMarkdown.stdout;
