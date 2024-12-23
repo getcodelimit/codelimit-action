@@ -17,8 +17,8 @@ import {getChangedFiles} from "./utils";
 import {version} from "./version";
 
 async function generateMarkdownReport(clBinary: string) {
-    const totalsMarkdown = await getExecOutput(clBinary, ['report', '--totals', '--format', 'markdown']);
-    const unitsMarkdown = await getExecOutput(clBinary, ['report', '--full', '--format', 'markdown']);
+    const totalsMarkdown = await getExecOutput(clBinary, ['report', '--format', 'markdown']);
+    const unitsMarkdown = await getExecOutput(clBinary, ['findings', '--format', 'markdown']);
     let result = '';
     result += '## Codebase totals\n';
     result += totalsMarkdown.stdout;

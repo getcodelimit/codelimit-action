@@ -65,7 +65,7 @@ export function makeStatusBadgeSvg(codebase: Codebase): string {
     if (profile[3] > 0) {
         return makeBadgeSvg('Needs refactoring', 'red');
     } else {
-        const profile2Percentage = Math.floor((profile[2] / (profile[0] + profile[1] + profile[2])) * 100);
+        const profile2Percentage = Math.round((profile[2] / (profile[0] + profile[1] + profile[2])) * 100);
         const color = profile2Percentage > 20 ? 'orange' : 'brightgreen';
         return makeBadgeSvg(`${100 - profile2Percentage}%`, color);
     }
