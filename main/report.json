@@ -1,7 +1,7 @@
 {
   "version": "0.16.0",
-  "uuid": "8b101247-8e55-46b1-b8b1-fe2b064f7c14",
-  "timestamp": "2024-12-23T13:01:39+00:00",
+  "uuid": "18add076-02be-471e-888a-b490e209bc12",
+  "timestamp": "2024-12-23T13:39:50+00:00",
   "root": "/github/workspace",
   "repository": {
     "owner": "getcodelimit",
@@ -19,7 +19,7 @@
       },
       "TypeScript": {
         "files": 8,
-        "lines_of_code": 284,
+        "lines_of_code": 286,
         "functions": 28,
         "hard_to_maintain": 1,
         "unmaintainable": 0
@@ -30,7 +30,7 @@
         "entries": [
           "src/"
         ],
-        "profile": [141, 109, 34, 0]
+        "profile": [140, 112, 34, 0]
       },
       "src/": {
         "entries": [
@@ -41,7 +41,7 @@
           "action.ts",
           "entities/"
         ],
-        "profile": [141, 109, 34, 0]
+        "profile": [140, 112, 34, 0]
       },
       "src/entities/": {
         "entries": [
@@ -63,10 +63,10 @@
         ]
       },
       "src/github.ts": {
-        "checksum": "d197ac82914bbb8912420d9ef7c1ea98",
+        "checksum": "d689044359b80b6000dda160f70f59c0",
         "language": "TypeScript",
-        "loc": 112,
-        "profile": [78, 34, 0, 0],
+        "loc": 111,
+        "profile": [77, 34, 0, 0],
         "measurements": [
           {"unit_name": "branchExists", "start": {"line": 6, "column": 23}, "end": {"line": 15, "column": 2}, "value": 10},
           {"unit_name": "createBranch", "start": {"line": 17, "column": 23}, "end": {"line": 27, "column": 2}, "value": 11},
@@ -81,7 +81,7 @@
           {"unit_name": "isPullRequest", "start": {"line": 120, "column": 17}, "end": {"line": 122, "column": 2}, "value": 3},
           {"unit_name": "isPullRequestFromFork", "start": {"line": 124, "column": 17}, "end": {"line": 126, "column": 2}, "value": 3},
           {"unit_name": "getSourceBranch", "start": {"line": 128, "column": 17}, "end": {"line": 134, "column": 2}, "value": 7},
-          {"unit_name": "createBranchIfNotExists", "start": {"line": 136, "column": 23}, "end": {"line": 143, "column": 2}, "value": 8}
+          {"unit_name": "createBranchIfNotExists", "start": {"line": 136, "column": 23}, "end": {"line": 142, "column": 2}, "value": 7}
         ]
       },
       "src/utils.ts": {
@@ -110,16 +110,16 @@
         ]
       },
       "src/action.ts": {
-        "checksum": "7cf56ebd3f397079f4c537121696e42c",
+        "checksum": "8d247851b1948f716e925ec7e6240a40",
         "language": "TypeScript",
-        "loc": 91,
-        "profile": [22, 35, 34, 0],
+        "loc": 94,
+        "profile": [22, 38, 34, 0],
         "measurements": [
-          {"unit_name": "generateMarkdownReport", "start": {"line": 21, "column": 16}, "end": {"line": 31, "column": 2}, "value": 11},
-          {"unit_name": "updateReportsBranch", "start": {"line": 33, "column": 16}, "end": {"line": 48, "column": 2}, "value": 16},
-          {"unit_name": "updatePullRequestComment", "start": {"line": 50, "column": 16}, "end": {"line": 68, "column": 2}, "value": 19},
-          {"unit_name": "checkChangedFiles", "start": {"line": 70, "column": 16}, "end": {"line": 80, "column": 2}, "value": 11},
-          {"unit_name": "main", "start": {"line": 82, "column": 16}, "end": {"line": 115, "column": 2}, "value": 34}
+          {"unit_name": "generateMarkdownReport", "start": {"line": 27, "column": 16}, "end": {"line": 37, "column": 2}, "value": 11},
+          {"unit_name": "updateReportsBranch", "start": {"line": 39, "column": 16}, "end": {"line": 57, "column": 2}, "value": 19},
+          {"unit_name": "updatePullRequestComment", "start": {"line": 59, "column": 16}, "end": {"line": 77, "column": 2}, "value": 19},
+          {"unit_name": "checkChangedFiles", "start": {"line": 79, "column": 16}, "end": {"line": 89, "column": 2}, "value": 11},
+          {"unit_name": "main", "start": {"line": 91, "column": 16}, "end": {"line": 124, "column": 2}, "value": 34}
         ]
       },
       "src/entities/SourceFolder.ts": {
