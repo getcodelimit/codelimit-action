@@ -52327,6 +52327,7 @@ var require_codelimit = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.downloadCodeLimitBinary = downloadCodeLimitBinary;
+    exports2.installCodeLimit = installCodeLimit;
     exports2.getReportContent = getReportContent;
     exports2.makeNotFoundBadgeSvg = makeNotFoundBadgeSvg;
     exports2.makeStatusBadgeSvg = makeStatusBadgeSvg;
@@ -52336,6 +52337,7 @@ var require_codelimit = __commonJS({
     var util_1 = require("util");
     var badge_maker_1 = require_lib5();
     var signale_12 = require_signale2();
+    var exec_12 = require_exec();
     var streamPipeline = (0, util_1.promisify)(require("stream").pipeline);
     function getBinaryName() {
       const binaries = {
@@ -52372,6 +52374,13 @@ var require_codelimit = __commonJS({
         fs_12.default.chmodSync(filename, "777");
         (0, signale_12.success)(`CodeLimit binary downloaded: ${filename}`);
         return filename;
+      });
+    }
+    function installCodeLimit() {
+      return __awaiter2(this, void 0, void 0, function* () {
+        yield (0, exec_12.exec)("pipx", ["install", "git+https://github.com/getcodelimit/codelimit.git"]);
+        yield (0, exec_12.exec)("pipx", ["list"]);
+        return "codelimit";
       });
     }
     function getReportContent() {
@@ -52486,8 +52495,8 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "c977354",
-      "year": "2024"
+      "revision": "86e68ce",
+      "year": "2025"
     };
   }
 });
@@ -52643,23 +52652,13 @@ function checkChangedFiles(octokit, clBinary) {
     }
   });
 }
-function main() {
+function updateRepository(octokit, clBinary) {
   return __awaiter(this, void 0, void 0, function* () {
-    (0, signale_1.info)(`CodeLimit action, version: ${version_1.version.revision}`);
-    let exitCode = 0;
-    const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
-    (0, signale_1.info)("Scanning codebase...");
-    yield (0, exec_1.exec)(clBinary, ["scan", "."]);
     const reportMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["report", "--format", "markdown"])).stdout;
     const findingsMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["findings", "--format", "markdown"])).stdout;
     const findingsFullMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["findings", "--full", "--format", "markdown"])).stdout;
     const markdownReport = yield generateMarkdownReport(reportMarkdown, findingsMarkdown);
     const markdownFullFindingsReport = yield generateMarkdownReport(reportMarkdown, findingsFullMarkdown);
-    const octokit = new action_1.Octokit({ auth: (0, core_1.getInput)("token") });
-    const doCheck = (0, core_1.getInput)("check") || true;
-    if (doCheck) {
-      exitCode = yield checkChangedFiles(octokit, clBinary);
-    }
     const owner = (0, github_2.getRepoOwner)(github_1.context);
     const repo = (0, github_2.getRepoName)(github_1.context);
     const branch = (0, github_2.getSourceBranch)();
@@ -52685,6 +52684,30 @@ function main() {
         }
       }
     }
+  });
+}
+function main() {
+  return __awaiter(this, void 0, void 0, function* () {
+    (0, signale_1.info)(`CodeLimit-action, version: ${version_1.version.revision}`);
+    const codeLimitVersion = (0, core_1.getInput)("codelimit-version") || "latest";
+    let clBinary;
+    if (codeLimitVersion === "latest") {
+      clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
+    } else {
+      clBinary = yield (0, codelimit_1.installCodeLimit)();
+    }
+    (0, signale_1.info)(`CodeLimit binary: ${clBinary}`);
+    (0, signale_1.info)("CodeLimit version:");
+    yield (0, exec_1.exec)(clBinary, ["--version"]);
+    (0, signale_1.info)("Scanning codebase...");
+    yield (0, exec_1.exec)(clBinary, ["scan", "."]);
+    const octokit = new action_1.Octokit({ auth: (0, core_1.getInput)("token") });
+    const doCheck = (0, core_1.getBooleanInput)("check");
+    let exitCode = 0;
+    if (doCheck) {
+      exitCode = yield checkChangedFiles(octokit, clBinary);
+    }
+    yield updateRepository(octokit, clBinary);
     fs_1.default.unlinkSync(clBinary);
     (0, signale_1.success)("Done!");
     process.exit(exitCode);
