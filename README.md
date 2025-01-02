@@ -46,8 +46,15 @@ jobs:
 
 ## Inputs
 
-| Name | Description | Required | Default |
-| --- | --- | --- | --- |
-| token | GitHub token for storing results | false | ${{ github.token }} |
-| check | Check changed files | false | true |
-| codelimit-version | CodeLimit version | false | 'latest' |
+- `token`:
+  Description: GitHub token for storing results  
+  Required: false
+  Default: ${{ github.token }}
+- `check`:
+  Description: Check changed files
+  Required: false
+  Default: true
+- `codelimit_version`:
+  Desciption: CodeLimit version
+  Required: false 
+  Default: 'latest'

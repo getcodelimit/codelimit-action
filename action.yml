@@ -15,7 +15,7 @@ inputs:
     description: 'Check changed files'
     required: false
     default: true
-  codelimit-version:
+  codelimit_version:
     description: 'CodeLimit version'
     required: false
     default: 'latest'
