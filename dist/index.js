@@ -52327,7 +52327,6 @@ var require_codelimit = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.downloadCodeLimitBinary = downloadCodeLimitBinary;
-    exports2.installCodeLimit = installCodeLimit;
     exports2.getReportContent = getReportContent;
     exports2.makeNotFoundBadgeSvg = makeNotFoundBadgeSvg;
     exports2.makeStatusBadgeSvg = makeStatusBadgeSvg;
@@ -52337,7 +52336,6 @@ var require_codelimit = __commonJS({
     var util_1 = require("util");
     var badge_maker_1 = require_lib5();
     var signale_12 = require_signale2();
-    var exec_12 = require_exec();
     var streamPipeline = (0, util_1.promisify)(require("stream").pipeline);
     function getBinaryName() {
       const binaries = {
@@ -52364,9 +52362,14 @@ var require_codelimit = __commonJS({
         return `${downloadUrl}/${getBinaryName()}`;
       });
     }
-    function downloadCodeLimitBinary() {
+    function downloadCodeLimitBinary(version) {
       return __awaiter2(this, void 0, void 0, function* () {
-        const binaryUrl = yield getLatestBinaryUrl();
+        let binaryUrl;
+        if (version === "latest") {
+          binaryUrl = yield getLatestBinaryUrl();
+        } else {
+          binaryUrl = `https://github.com/getcodelimit/codelimit/releases/download/${version}/${getBinaryName()}`;
+        }
         (0, signale_12.info)(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
         const response = yield (0, node_fetch_1.default)(binaryUrl);
         const filename = path_1.default.join(__dirname, getBinaryName());
@@ -52374,13 +52377,6 @@ var require_codelimit = __commonJS({
         fs_12.default.chmodSync(filename, "777");
         (0, signale_12.success)(`CodeLimit binary downloaded: ${filename}`);
         return filename;
-      });
-    }
-    function installCodeLimit() {
-      return __awaiter2(this, void 0, void 0, function* () {
-        yield (0, exec_12.exec)("pipx", ["install", "git+https://github.com/getcodelimit/codelimit.git"]);
-        yield (0, exec_12.exec)("pipx", ["list"]);
-        return "codelimit";
       });
     }
     function getReportContent() {
@@ -52495,7 +52491,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "f378387",
+      "revision": "158da01",
       "year": "2025"
     };
   }
@@ -52690,13 +52686,7 @@ function main() {
   return __awaiter(this, void 0, void 0, function* () {
     (0, signale_1.info)(`CodeLimit-action, version: ${version_1.version.revision}`);
     const codeLimitVersion = (0, core_1.getInput)("codelimit_version") || "latest";
-    (0, signale_1.info)(`CodeLimit version requested: ${codeLimitVersion}`);
-    let clBinary;
-    if (codeLimitVersion === "latest") {
-      clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
-    } else {
-      clBinary = yield (0, codelimit_1.installCodeLimit)();
-    }
+    const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)(codeLimitVersion);
     (0, signale_1.info)(`CodeLimit binary: ${clBinary}`);
     (0, signale_1.info)("CodeLimit version:");
     yield (0, exec_1.exec)(clBinary, ["--version"]);
