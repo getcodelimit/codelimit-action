@@ -1,7 +1,7 @@
 {
   "version": "0.17.0",
-  "uuid": "92eb9382-3051-4057-b07e-1172dde3c62e",
-  "timestamp": "2025-01-02T20:29:28+00:00",
+  "uuid": "d1e7ac2e-a9c5-4c2b-b73e-2b6d40e0744a",
+  "timestamp": "2025-01-02T20:34:37+00:00",
   "root": "/github/workspace",
   "repository": {
     "owner": "getcodelimit",
@@ -19,7 +19,7 @@
       },
       "TypeScript": {
         "files": 8,
-        "lines_of_code": 325,
+        "lines_of_code": 326,
         "functions": 30,
         "hard_to_maintain": 1,
         "unmaintainable": 0
@@ -30,7 +30,7 @@
         "entries": [
           "src/"
         ],
-        "profile": [156, 137, 32, 0]
+        "profile": [156, 138, 32, 0]
       },
       "src/": {
         "entries": [
@@ -41,7 +41,7 @@
           "action.ts",
           "entities/"
         ],
-        "profile": [156, 137, 32, 0]
+        "profile": [156, 138, 32, 0]
       },
       "src/entities/": {
         "entries": [
@@ -111,17 +111,17 @@
         ]
       },
       "src/action.ts": {
-        "checksum": "637fa193470a8315659b83709b6efc9e",
+        "checksum": "c837111f0447b3851f280ebe7ff4fd2d",
         "language": "TypeScript",
-        "loc": 117,
-        "profile": [22, 63, 32, 0],
+        "loc": 118,
+        "profile": [22, 64, 32, 0],
         "measurements": [
           {"unit_name": "generateMarkdownReport", "start": {"line": 32, "column": 16}, "end": {"line": 42, "column": 2}, "value": 11},
           {"unit_name": "updateReportsBranch", "start": {"line": 44, "column": 16}, "end": {"line": 62, "column": 2}, "value": 19},
           {"unit_name": "updatePullRequestComment", "start": {"line": 64, "column": 16}, "end": {"line": 82, "column": 2}, "value": 19},
           {"unit_name": "checkChangedFiles", "start": {"line": 84, "column": 16}, "end": {"line": 94, "column": 2}, "value": 11},
           {"unit_name": "updateRepository", "start": {"line": 96, "column": 16}, "end": {"line": 127, "column": 2}, "value": 32},
-          {"unit_name": "main", "start": {"line": 129, "column": 16}, "end": {"line": 153, "column": 2}, "value": 25}
+          {"unit_name": "main", "start": {"line": 129, "column": 16}, "end": {"line": 154, "column": 2}, "value": 26}
         ]
       },
       "src/entities/SourceFolder.ts": {
