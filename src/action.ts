@@ -14,13 +14,7 @@ import {
     updateComment
 } from "./github";
 import {exec, getExecOutput} from "@actions/exec";
-import {
-    downloadCodeLimitBinary,
-    getReportContent,
-    installCodeLimit,
-    makeNotFoundBadgeSvg,
-    makeStatusBadgeSvg
-} from "./codelimit";
+import {downloadCodeLimitBinary, getReportContent, makeNotFoundBadgeSvg, makeStatusBadgeSvg} from "./codelimit";
 import {getChangedFiles} from "./utils";
 import {version} from "./version";
 import signale, {error, info, success} from "signale";
@@ -129,13 +123,7 @@ async function updateRepository(octokit: Octokit, clBinary: string) {
 async function main() {
     info(`CodeLimit-action, version: ${version.revision}`);
     const codeLimitVersion = getInput('codelimit_version') || 'latest';
-    info(`CodeLimit version requested: ${codeLimitVersion}`);
-    let clBinary;
-    if (codeLimitVersion === 'latest') {
-        clBinary = await downloadCodeLimitBinary();
-    } else {
-        clBinary = await installCodeLimit();
-    }
+    const clBinary = await downloadCodeLimitBinary(codeLimitVersion);
     info(`CodeLimit binary: ${clBinary}`);
     info('CodeLimit version:');
     await exec(clBinary, ['--version']);

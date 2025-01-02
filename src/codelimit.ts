@@ -5,7 +5,6 @@ import {promisify} from "util";
 import {makeBadge} from "badge-maker";
 import {Codebase} from "./entities/Codebase";
 import {info, success} from "signale";
-import {exec} from "@actions/exec";
 
 const streamPipeline = promisify(require('stream').pipeline);
 
@@ -34,8 +33,13 @@ async function getLatestBinaryUrl() {
     return `${downloadUrl}/${getBinaryName()}`;
 }
 
-export async function downloadCodeLimitBinary(): Promise<string> {
-    const binaryUrl = await getLatestBinaryUrl();
+export async function downloadCodeLimitBinary(version: string): Promise<string> {
+    let binaryUrl;
+    if (version === 'latest') {
+        binaryUrl = await getLatestBinaryUrl();
+    } else {
+        binaryUrl = `https://github.com/getcodelimit/codelimit/releases/download/${version}/${getBinaryName()}`;
+    }
     info(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
     const response = await nodeFetch(binaryUrl);
     const filename = path.join(__dirname, getBinaryName());
@@ -43,12 +47,6 @@ export async function downloadCodeLimitBinary(): Promise<string> {
     fs.chmodSync(filename, '777');
     success(`CodeLimit binary downloaded: ${filename}`);
     return filename;
-}
-
-export async function installCodeLimit(): Promise<string> {
-    await exec('pipx', ['install', 'git+https://github.com/getcodelimit/codelimit.git']);
-    await exec('pipx', ['list']);
-    return 'codelimit';
 }
 
 export function getReportContent(): string | undefined {
