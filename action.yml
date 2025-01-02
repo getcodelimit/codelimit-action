@@ -8,10 +8,14 @@ runs:
   image: 'Dockerfile'
 inputs:
   token:
-    description: 'GitHub token for repository'
+    description: 'GitHub token for storing results'
+    required: false
     default: ${{ github.token }}
-    required: false
   check:
-    description: 'Checked changed files'
-    default: 'true'
+    description: 'Check changed files'
     required: false
+    default: true
+  codelimit-version:
+    description: 'CodeLimit version'
+    required: false
+    default: 'latest'

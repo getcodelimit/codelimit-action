@@ -43,3 +43,11 @@ jobs:
       - name: 'Run CodeLimit'
         uses: getcodelimit/codelimit-action@v1
 ```
+
+## Inputs
+
+| Name | Description | Required | Default |
+| --- | --- | --- | --- |
+| token | GitHub token for storing results | false | ${{ github.token }} |
+| check | Check changed files | false | true |
+| codelimit-version | CodeLimit version | false | 'latest' |

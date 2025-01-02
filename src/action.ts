@@ -1,5 +1,5 @@
 import fs from "fs";
-import {getInput} from "@actions/core";
+import {getBooleanInput, getInput} from "@actions/core";
 import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
 import {
@@ -14,7 +14,13 @@ import {
     updateComment
 } from "./github";
 import {exec, getExecOutput} from "@actions/exec";
-import {downloadCodeLimitBinary, getReportContent, makeNotFoundBadgeSvg, makeStatusBadgeSvg} from "./codelimit";
+import {
+    downloadCodeLimitBinary,
+    getReportContent,
+    installCodeLimit,
+    makeNotFoundBadgeSvg,
+    makeStatusBadgeSvg
+} from "./codelimit";
 import {getChangedFiles} from "./utils";
 import {version} from "./version";
 import signale, {error, info, success} from "signale";
@@ -87,22 +93,12 @@ async function checkChangedFiles(octokit: Octokit, clBinary: string): Promise<nu
     }
 }
 
-async function main() {
-    info(`CodeLimit action, version: ${version.revision}`);
-    let exitCode = 0;
-    const clBinary = await downloadCodeLimitBinary();
-    info('Scanning codebase...');
-    await exec(clBinary, ['scan', '.']);
+async function updateRepository(octokit: Octokit, clBinary: string) {
     const reportMarkdown = (await getExecOutput(clBinary, ['report', '--format', 'markdown'])).stdout;
     const findingsMarkdown = (await getExecOutput(clBinary, ['findings', '--format', 'markdown'])).stdout;
     const findingsFullMarkdown = (await getExecOutput(clBinary, ['findings', '--full', '--format', 'markdown'])).stdout;
     const markdownReport = await generateMarkdownReport(reportMarkdown, findingsMarkdown);
     const markdownFullFindingsReport = await generateMarkdownReport(reportMarkdown, findingsFullMarkdown);
-    const octokit = new Octokit({auth: getInput('token')});
-    const doCheck = getInput('check') || true;
-    if (doCheck) {
-        exitCode = await checkChangedFiles(octokit, clBinary);
-    }
     const owner = getRepoOwner(context);
     const repo = getRepoName(context);
     const branch = getSourceBranch();
@@ -128,6 +124,29 @@ async function main() {
             }
         }
     }
+}
+
+async function main() {
+    info(`CodeLimit-action, version: ${version.revision}`);
+    const codeLimitVersion = getInput('codelimit-version') || 'latest';
+    let clBinary;
+    if (codeLimitVersion === 'latest') {
+        clBinary = await downloadCodeLimitBinary();
+    } else {
+        clBinary = await installCodeLimit();
+    }
+    info(`CodeLimit binary: ${clBinary}`);
+    info('CodeLimit version:');
+    await exec(clBinary, ['--version']);
+    info('Scanning codebase...');
+    await exec(clBinary, ['scan', '.']);
+    const octokit = new Octokit({auth: getInput('token')});
+    const doCheck = getBooleanInput('check');
+    let exitCode = 0;
+    if (doCheck) {
+        exitCode = await checkChangedFiles(octokit, clBinary);
+    }
+    await updateRepository(octokit, clBinary);
     fs.unlinkSync(clBinary);
     success('Done!');
     process.exit(exitCode);

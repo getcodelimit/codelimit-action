@@ -39,3 +39,6 @@ jobs:
 
     - name: 'Run CodeLimit action'
       uses: getcodelimit/codelimit-action@main
+      with:
+        check: false
+        codelimit-version: 'main'
