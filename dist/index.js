@@ -52495,7 +52495,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "aed798f",
+      "revision": "d0b863a",
       "year": "2025"
     };
   }
@@ -52690,6 +52690,7 @@ function main() {
   return __awaiter(this, void 0, void 0, function* () {
     (0, signale_1.info)(`CodeLimit-action, version: ${version_1.version.revision}`);
     const codeLimitVersion = (0, core_1.getInput)("codelimit-version") || "latest";
+    (0, signale_1.info)(`CodeLimit version requested: ${codeLimitVersion}`);
     let clBinary;
     if (codeLimitVersion === "latest") {
       clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)();
