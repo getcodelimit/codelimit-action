@@ -36,9 +36,3 @@ jobs:
       uses: stefanzweifel/git-auto-commit-action@v4
       with:
         commit_message: 'Distribution build'
-
-    - name: 'Run CodeLimit action'
-      uses: getcodelimit/codelimit-action@main
-      with:
-        check: false
-        codelimit-version: 'main'
