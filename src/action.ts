@@ -129,6 +129,7 @@ async function updateRepository(octokit: Octokit, clBinary: string) {
 async function main() {
     info(`CodeLimit-action, version: ${version.revision}`);
     const codeLimitVersion = getInput('codelimit-version') || 'latest';
+    info(`CodeLimit version requested: ${codeLimitVersion}`);
     let clBinary;
     if (codeLimitVersion === 'latest') {
         clBinary = await downloadCodeLimitBinary();
