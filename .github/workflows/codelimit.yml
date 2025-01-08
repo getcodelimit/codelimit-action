@@ -17,4 +17,4 @@ jobs:
       uses: getcodelimit/codelimit-action@main
       with:
         check: false
-        codelimit_version: 'main'
+        codelimit_version: 'latest'
