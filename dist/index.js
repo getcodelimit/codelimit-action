@@ -52330,6 +52330,7 @@ var require_codelimit = __commonJS({
     exports2.getReportContent = getReportContent;
     exports2.makeNotFoundBadgeSvg = makeNotFoundBadgeSvg;
     exports2.makeStatusBadgeSvg = makeStatusBadgeSvg;
+    exports2.qualityProfilePercentage = qualityProfilePercentage;
     var node_fetch_1 = __importDefault2(require_lib3());
     var path_1 = __importDefault2(require("path"));
     var fs_12 = __importDefault2(require("fs"));
@@ -52399,10 +52400,18 @@ var require_codelimit = __commonJS({
       if (profile[3] > 0) {
         return makeBadgeSvg("Needs refactoring", "red");
       } else {
-        const profile2Percentage = Math.round(profile[2] / (profile[0] + profile[1] + profile[2]) * 100);
-        const color = profile2Percentage > 20 ? "orange" : "brightgreen";
-        return makeBadgeSvg(`${100 - profile2Percentage}%`, color);
+        const percentages = qualityProfilePercentage(profile);
+        const color = percentages[2] > 20 ? "orange" : "brightgreen";
+        return makeBadgeSvg(`${100 - percentages[2]}%`, color);
       }
+    }
+    function qualityProfilePercentage(profile) {
+      const total = profile.reduce((num, val) => val + num, 0);
+      const unmaintainable = profile[3] > 0 ? Math.ceil(profile[3] / total * 100 - 1e-3) : 0;
+      const hardToMaintain = profile[2] > 0 ? Math.ceil(profile[2] / total * 100 - 1e-3) : 0;
+      const verbose = profile[1] > 0 ? Math.ceil(profile[1] / total * 100 - 1e-3) : 0;
+      const easy = 100 - unmaintainable - hardToMaintain - verbose;
+      return [easy, verbose, hardToMaintain, unmaintainable];
     }
   }
 });
@@ -52492,8 +52501,8 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "ba7cbe7",
-      "year": "2025"
+      "revision": "61e09ec",
+      "year": "2024"
     };
   }
 });
