@@ -52501,8 +52501,8 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "61e09ec",
-      "year": "2024"
+      "revision": "1fb900e",
+      "year": "2025"
     };
   }
 });
