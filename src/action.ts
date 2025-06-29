@@ -38,7 +38,7 @@ async function generateMarkdownReport(reportMarkdown: string, findingsMarkdown: 
 export function addLinkToFindingsMarkdown(findingsMarkdown: string, owner: string, repo: string,
                                           branch: string): string {
     const link = `https://github.com/${owner}/${repo}/blob/_codelimit_reports/${branch}/codelimit.md#findings`;
-    return findingsMarkdown.replace(/^\d+ more rows?/g, (match) => `[${match}](${link})`);
+    return findingsMarkdown.replace(/^\d+ more rows?/gm, (match) => `[${match}](${link})`);
 }
 
 async function updateReportsBranch(octokit: Octokit, owner: string, repo: string, branch: string, markdown: string) {
