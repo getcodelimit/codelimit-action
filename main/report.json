@@ -1,7 +1,7 @@
 {
   "version": "0.19.6",
-  "uuid": "a5542f9e-3d46-4b9e-88a2-673a428a37d3",
-  "timestamp": "2025-06-29T07:00:26+00:00",
+  "uuid": "4b05b034-a277-43d8-a853-9d1648845ea9",
+  "timestamp": "2025-06-29T07:02:05+00:00",
   "root": "/github/workspace",
   "repository": {
     "owner": "getcodelimit",
@@ -19,8 +19,8 @@
       },
       "TypeScript": {
         "files": 8,
-        "lines_of_code": 329,
-        "functions": 30,
+        "lines_of_code": 337,
+        "functions": 31,
         "hard_to_maintain": 1,
         "unmaintainable": 0
       }
@@ -30,7 +30,7 @@
         "entries": [
           "src/"
         ],
-        "profile": [165, 132, 32, 0]
+        "profile": [170, 134, 33, 0]
       },
       "src/": {
         "entries": [
@@ -41,7 +41,7 @@
           "github.ts",
           "entities/"
         ],
-        "profile": [165, 132, 32, 0]
+        "profile": [170, 134, 33, 0]
       },
       "src/entities/": {
         "entries": [
@@ -63,17 +63,18 @@
         ]
       },
       "src/action.ts": {
-        "checksum": "942b0e0aeea97161a42a6c0187256e6b",
+        "checksum": "71ec9d9b51006ee88dd1efc151813eb8",
         "language": "TypeScript",
-        "loc": 112,
-        "profile": [22, 58, 32, 0],
+        "loc": 120,
+        "profile": [27, 60, 33, 0],
         "measurements": [
           {"unit_name": "generateMarkdownReport", "start": {"line": 26, "column": 16}, "end": {"line": 36, "column": 2}, "value": 11},
-          {"unit_name": "updateReportsBranch", "start": {"line": 38, "column": 16}, "end": {"line": 56, "column": 2}, "value": 19},
-          {"unit_name": "updatePullRequestComment", "start": {"line": 58, "column": 16}, "end": {"line": 76, "column": 2}, "value": 19},
-          {"unit_name": "checkChangedFiles", "start": {"line": 78, "column": 16}, "end": {"line": 88, "column": 2}, "value": 11},
-          {"unit_name": "updateRepository", "start": {"line": 90, "column": 16}, "end": {"line": 121, "column": 2}, "value": 32},
-          {"unit_name": "main", "start": {"line": 123, "column": 16}, "end": {"line": 142, "column": 2}, "value": 20}
+          {"unit_name": "addLinkToFindingsMarkdown", "start": {"line": 38, "column": 17}, "end": {"line": 42, "column": 2}, "value": 5},
+          {"unit_name": "updateReportsBranch", "start": {"line": 44, "column": 16}, "end": {"line": 62, "column": 2}, "value": 19},
+          {"unit_name": "updatePullRequestComment", "start": {"line": 64, "column": 16}, "end": {"line": 84, "column": 2}, "value": 21},
+          {"unit_name": "checkChangedFiles", "start": {"line": 86, "column": 16}, "end": {"line": 96, "column": 2}, "value": 11},
+          {"unit_name": "updateRepository", "start": {"line": 98, "column": 16}, "end": {"line": 130, "column": 2}, "value": 33},
+          {"unit_name": "main", "start": {"line": 132, "column": 16}, "end": {"line": 151, "column": 2}, "value": 20}
         ]
       },
       "src/utils.ts": {
