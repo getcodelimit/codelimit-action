@@ -30,7 +30,7 @@ test('make 80% badge', () => {
 
     expect(result).toContain('#4c1');
     expect(result).toContain('80%</text>');
-})
+});
 
 test('make 60% badge', () => {
     const codebase = {
@@ -46,7 +46,7 @@ test('make 60% badge', () => {
 
     expect(result).toContain('#fe7d37');
     expect(result).toContain('60%</text>');
-})
+});
 
 test('make 93% badge', () => {
     const codebase = {
