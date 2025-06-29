@@ -52501,7 +52501,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "624d69a",
+      "revision": "8e3c1ed",
       "year": "2025"
     };
   }
@@ -52605,7 +52605,7 @@ function generateMarkdownReport(reportMarkdown, findingsMarkdown) {
 }
 function addLinkToFindingsMarkdown(findingsMarkdown, owner, repo, branch) {
   const link = `https://github.com/${owner}/${repo}/blob/_codelimit_reports/${branch}/codelimit.md#findings`;
-  return findingsMarkdown.replace(/^\d+ more rows?/g, (match) => `[${match}](${link})`);
+  return findingsMarkdown.replace(/^\d+ more rows?/gm, (match) => `[${match}](${link})`);
 }
 function updateReportsBranch(octokit, owner, repo, branch, markdown) {
   return __awaiter(this, void 0, void 0, function* () {
