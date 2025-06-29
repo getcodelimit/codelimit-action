@@ -35,6 +35,12 @@ async function generateMarkdownReport(reportMarkdown: string, findingsMarkdown: 
     return result;
 }
 
+export function addLinkToFindingsMarkdown(findingsMarkdown: string, owner: string, repo: string,
+                                          branch: string): string {
+    const link = `https://github.com/${owner}/${repo}/blob/_codelimit_reports/${branch}/codelimit.md#findings`;
+    return findingsMarkdown.replace(/^\d+ more rows?/g, (match) => `[${match}](${link})`);
+}
+
 async function updateReportsBranch(octokit: Octokit, owner: string, repo: string, branch: string, markdown: string) {
     await createBranchIfNotExists(octokit, owner, repo, '_codelimit_reports');
     const reportContent = getReportContent();
@@ -55,7 +61,8 @@ async function updateReportsBranch(octokit: Octokit, owner: string, repo: string
     success(`Updated markdown report in branch _codelimit_reports/${branch}`);
 }
 
-async function updatePullRequestComment(octokit: Octokit, owner: string, repo: string, branch: string, markdownReport: string) {
+async function updatePullRequestComment(octokit: Octokit, owner: string, repo: string, branch: string,
+                                        markdownReport: string) {
     const prNumber = context.payload.pull_request?.number;
     if (prNumber) {
         const actionStateFile = await getFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`);
@@ -70,7 +77,8 @@ async function updatePullRequestComment(octokit: Octokit, owner: string, repo: s
             const commentId = await createPRComment(octokit, owner, repo, prNumber, markdownReport);
             const actionState: ActionState = {commentId: commentId};
             const actionStateJson = JSON.stringify(actionState);
-            await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`, actionStateJson);
+            await createOrUpdateFile(octokit, owner, repo, '_codelimit_reports', `${branch}/action.json`,
+                actionStateJson);
         }
     }
 }
@@ -88,11 +96,6 @@ async function checkChangedFiles(octokit: Octokit, clBinary: string): Promise<nu
 }
 
 async function updateRepository(octokit: Octokit, clBinary: string) {
-    const reportMarkdown = (await getExecOutput(clBinary, ['report', '--format', 'markdown'])).stdout;
-    const findingsMarkdown = (await getExecOutput(clBinary, ['findings', '--format', 'markdown'])).stdout;
-    const findingsFullMarkdown = (await getExecOutput(clBinary, ['findings', '--full', '--format', 'markdown'])).stdout;
-    const markdownReport = await generateMarkdownReport(reportMarkdown, findingsMarkdown);
-    const markdownFullFindingsReport = await generateMarkdownReport(reportMarkdown, findingsFullMarkdown);
     const owner = getRepoOwner(context);
     const repo = getRepoName(context);
     const branch = getSourceBranch();
@@ -100,6 +103,12 @@ async function updateRepository(octokit: Octokit, clBinary: string) {
         error('Could not determine repository owner, name, or branch');
         process.exit(1);
     }
+    const reportMarkdown = (await getExecOutput(clBinary, ['report', '--format', 'markdown'])).stdout;
+    const findingsMarkdown = (await getExecOutput(clBinary, ['findings', '--format', 'markdown'])).stdout;
+    const findingsMarkdownWithLink = addLinkToFindingsMarkdown(findingsMarkdown, owner, repo, branch);
+    const findingsFullMarkdown = (await getExecOutput(clBinary, ['findings', '--full', '--format', 'markdown'])).stdout;
+    const markdownReport = await generateMarkdownReport(reportMarkdown, findingsMarkdownWithLink);
+    const markdownFullFindingsReport = await generateMarkdownReport(reportMarkdown, findingsFullMarkdown);
     try {
         await updateReportsBranch(octokit, owner, repo, branch, markdownFullFindingsReport);
     } catch (e: unknown) {
