@@ -1,7 +1,7 @@
 {
-  "version": "0.18.1",
-  "uuid": "edd2f97c-a8c8-46ff-b7b4-2fff5a2888dd",
-  "timestamp": "2025-01-14T19:16:32+00:00",
+  "version": "0.19.6",
+  "uuid": "60e265fa-c7cc-492f-8d7d-743a8cae394a",
+  "timestamp": "2025-06-29T06:44:20+00:00",
   "root": "/github/workspace",
   "repository": {
     "owner": "getcodelimit",
@@ -35,20 +35,20 @@
       "src/": {
         "entries": [
           "generate-versionjs.js",
-          "github.ts",
+          "action.ts",
           "utils.ts",
           "codelimit.ts",
-          "action.ts",
+          "github.ts",
           "entities/"
         ],
         "profile": [165, 132, 32, 0]
       },
       "src/entities/": {
         "entries": [
-          "SourceFolder.ts",
-          "GetContentResponse.ts",
+          "Codebase.ts",
           "ActionState.ts",
-          "Codebase.ts"
+          "SourceFolder.ts",
+          "GetContentResponse.ts"
         ],
         "profile": [0, 0, 0, 0]
       }
@@ -62,26 +62,18 @@
         "measurements": [
         ]
       },
-      "src/github.ts": {
-        "checksum": "d689044359b80b6000dda160f70f59c0",
+      "src/action.ts": {
+        "checksum": "942b0e0aeea97161a42a6c0187256e6b",
         "language": "TypeScript",
-        "loc": 111,
-        "profile": [77, 34, 0, 0],
+        "loc": 112,
+        "profile": [22, 58, 32, 0],
         "measurements": [
-          {"unit_name": "branchExists", "start": {"line": 6, "column": 23}, "end": {"line": 15, "column": 2}, "value": 10},
-          {"unit_name": "createBranch", "start": {"line": 17, "column": 23}, "end": {"line": 27, "column": 2}, "value": 11},
-          {"unit_name": "createInitialCommit", "start": {"line": 29, "column": 23}, "end": {"line": 39, "column": 2}, "value": 11},
-          {"unit_name": "getRepoOwner", "start": {"line": 41, "column": 17}, "end": {"line": 43, "column": 2}, "value": 3},
-          {"unit_name": "getRepoName", "start": {"line": 45, "column": 17}, "end": {"line": 47, "column": 2}, "value": 3},
-          {"unit_name": "getIdentity", "start": {"line": 49, "column": 23}, "end": {"line": 49, "column": 93}, "value": 1},
-          {"unit_name": "getFile", "start": {"line": 64, "column": 23}, "end": {"line": 79, "column": 2}, "value": 16},
-          {"unit_name": "createOrUpdateFile", "start": {"line": 81, "column": 23}, "end": {"line": 98, "column": 2}, "value": 18},
-          {"unit_name": "createPRComment", "start": {"line": 100, "column": 23}, "end": {"line": 108, "column": 2}, "value": 9},
-          {"unit_name": "updateComment", "start": {"line": 110, "column": 23}, "end": {"line": 118, "column": 2}, "value": 9},
-          {"unit_name": "isPullRequest", "start": {"line": 120, "column": 17}, "end": {"line": 122, "column": 2}, "value": 3},
-          {"unit_name": "isPullRequestFromFork", "start": {"line": 124, "column": 17}, "end": {"line": 126, "column": 2}, "value": 3},
-          {"unit_name": "getSourceBranch", "start": {"line": 128, "column": 17}, "end": {"line": 134, "column": 2}, "value": 7},
-          {"unit_name": "createBranchIfNotExists", "start": {"line": 136, "column": 23}, "end": {"line": 142, "column": 2}, "value": 7}
+          {"unit_name": "generateMarkdownReport", "start": {"line": 26, "column": 16}, "end": {"line": 36, "column": 2}, "value": 11},
+          {"unit_name": "updateReportsBranch", "start": {"line": 38, "column": 16}, "end": {"line": 56, "column": 2}, "value": 19},
+          {"unit_name": "updatePullRequestComment", "start": {"line": 58, "column": 16}, "end": {"line": 76, "column": 2}, "value": 19},
+          {"unit_name": "checkChangedFiles", "start": {"line": 78, "column": 16}, "end": {"line": 88, "column": 2}, "value": 11},
+          {"unit_name": "updateRepository", "start": {"line": 90, "column": 16}, "end": {"line": 121, "column": 2}, "value": 32},
+          {"unit_name": "main", "start": {"line": 123, "column": 16}, "end": {"line": 142, "column": 2}, "value": 20}
         ]
       },
       "src/utils.ts": {
@@ -110,30 +102,30 @@
           {"unit_name": "qualityProfilePercentage", "start": {"line": 81, "column": 17}, "end": {"line": 88, "column": 2}, "value": 8}
         ]
       },
-      "src/action.ts": {
-        "checksum": "942b0e0aeea97161a42a6c0187256e6b",
+      "src/github.ts": {
+        "checksum": "d689044359b80b6000dda160f70f59c0",
         "language": "TypeScript",
-        "loc": 112,
-        "profile": [22, 58, 32, 0],
+        "loc": 111,
+        "profile": [77, 34, 0, 0],
         "measurements": [
-          {"unit_name": "generateMarkdownReport", "start": {"line": 26, "column": 16}, "end": {"line": 36, "column": 2}, "value": 11},
-          {"unit_name": "updateReportsBranch", "start": {"line": 38, "column": 16}, "end": {"line": 56, "column": 2}, "value": 19},
-          {"unit_name": "updatePullRequestComment", "start": {"line": 58, "column": 16}, "end": {"line": 76, "column": 2}, "value": 19},
-          {"unit_name": "checkChangedFiles", "start": {"line": 78, "column": 16}, "end": {"line": 88, "column": 2}, "value": 11},
-          {"unit_name": "updateRepository", "start": {"line": 90, "column": 16}, "end": {"line": 121, "column": 2}, "value": 32},
-          {"unit_name": "main", "start": {"line": 123, "column": 16}, "end": {"line": 142, "column": 2}, "value": 20}
+          {"unit_name": "branchExists", "start": {"line": 6, "column": 23}, "end": {"line": 15, "column": 2}, "value": 10},
+          {"unit_name": "createBranch", "start": {"line": 17, "column": 23}, "end": {"line": 27, "column": 2}, "value": 11},
+          {"unit_name": "createInitialCommit", "start": {"line": 29, "column": 23}, "end": {"line": 39, "column": 2}, "value": 11},
+          {"unit_name": "getRepoOwner", "start": {"line": 41, "column": 17}, "end": {"line": 43, "column": 2}, "value": 3},
+          {"unit_name": "getRepoName", "start": {"line": 45, "column": 17}, "end": {"line": 47, "column": 2}, "value": 3},
+          {"unit_name": "getIdentity", "start": {"line": 49, "column": 23}, "end": {"line": 49, "column": 93}, "value": 1},
+          {"unit_name": "getFile", "start": {"line": 64, "column": 23}, "end": {"line": 79, "column": 2}, "value": 16},
+          {"unit_name": "createOrUpdateFile", "start": {"line": 81, "column": 23}, "end": {"line": 98, "column": 2}, "value": 18},
+          {"unit_name": "createPRComment", "start": {"line": 100, "column": 23}, "end": {"line": 108, "column": 2}, "value": 9},
+          {"unit_name": "updateComment", "start": {"line": 110, "column": 23}, "end": {"line": 118, "column": 2}, "value": 9},
+          {"unit_name": "isPullRequest", "start": {"line": 120, "column": 17}, "end": {"line": 122, "column": 2}, "value": 3},
+          {"unit_name": "isPullRequestFromFork", "start": {"line": 124, "column": 17}, "end": {"line": 126, "column": 2}, "value": 3},
+          {"unit_name": "getSourceBranch", "start": {"line": 128, "column": 17}, "end": {"line": 134, "column": 2}, "value": 7},
+          {"unit_name": "createBranchIfNotExists", "start": {"line": 136, "column": 23}, "end": {"line": 142, "column": 2}, "value": 7}
         ]
       },
-      "src/entities/SourceFolder.ts": {
-        "checksum": "c0c97cfb0534a30f15ba9c6f0f0c9f88",
-        "language": "TypeScript",
-        "loc": 0,
-        "profile": [0, 0, 0, 0],
-        "measurements": [
-        ]
-      },
-      "src/entities/GetContentResponse.ts": {
-        "checksum": "b3e7c836690820191692e9d258bc7610",
+      "src/entities/Codebase.ts": {
+        "checksum": "9fc3ab06ae231b813c52eb9f255b9896",
         "language": "TypeScript",
         "loc": 0,
         "profile": [0, 0, 0, 0],
@@ -148,8 +140,16 @@
         "measurements": [
         ]
       },
-      "src/entities/Codebase.ts": {
-        "checksum": "9fc3ab06ae231b813c52eb9f255b9896",
+      "src/entities/SourceFolder.ts": {
+        "checksum": "c0c97cfb0534a30f15ba9c6f0f0c9f88",
+        "language": "TypeScript",
+        "loc": 0,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
+        ]
+      },
+      "src/entities/GetContentResponse.ts": {
+        "checksum": "b3e7c836690820191692e9d258bc7610",
         "language": "TypeScript",
         "loc": 0,
         "profile": [0, 0, 0, 0],
