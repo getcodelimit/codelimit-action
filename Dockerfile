@@ -1,4 +1,4 @@
-FROM node:20
+FROM node:24
 WORKDIR /usr/src/app
 COPY dist ./dist
 CMD [ "node", "/usr/src/app/dist/index.js" ]

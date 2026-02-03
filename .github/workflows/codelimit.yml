@@ -1,4 +1,4 @@
-name: 'codelimit'
+name: codelimit
 
 on:
   workflow_run:
@@ -10,10 +10,10 @@ jobs:
   ci:
     runs-on: ubuntu-latest
     steps:
-    - name: 'Checkout sources'
-      uses: actions/checkout@v4
+    - name: Checkout sources
+      uses: actions/checkout@v6
 
-    - name: 'Run CodeLimit'
+    - name: Run CodeLimit
       uses: getcodelimit/codelimit-action@main
       with:
         check: false
