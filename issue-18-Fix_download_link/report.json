@@ -1,0 +1,162 @@
+{
+  "version": "0.21.0",
+  "uuid": "d8507d14-40dd-4aff-acda-4faf372ba45a",
+  "timestamp": "2026-02-24T08:36:28+00:00",
+  "root": "/github/workspace",
+  "repository": {
+    "owner": "getcodelimit",
+    "name": "codelimit-action",
+    "branch": "issue-18-Fix_download_link"
+  },
+  "codebase": {
+    "totals": {
+      "TypeScript": {
+        "files": 8,
+        "lines_of_code": 337,
+        "functions": 31,
+        "hard_to_maintain": 1,
+        "unmaintainable": 0
+      },
+      "JavaScript": {
+        "files": 1,
+        "lines_of_code": 0,
+        "functions": 0,
+        "hard_to_maintain": 0,
+        "unmaintainable": 0
+      }
+    },
+    "tree": {
+      "./": {
+        "entries": [
+          "src/"
+        ],
+        "profile": [170, 134, 33, 0]
+      },
+      "src/": {
+        "entries": [
+          "action.ts",
+          "utils.ts",
+          "codelimit.ts",
+          "github.ts",
+          "generate-versionjs.js",
+          "entities/"
+        ],
+        "profile": [170, 134, 33, 0]
+      },
+      "src/entities/": {
+        "entries": [
+          "ActionState.ts",
+          "SourceFolder.ts",
+          "GetContentResponse.ts",
+          "Codebase.ts"
+        ],
+        "profile": [0, 0, 0, 0]
+      }
+    },
+    "files": {
+      "src/action.ts": {
+        "checksum": "71ec9d9b51006ee88dd1efc151813eb8",
+        "language": "TypeScript",
+        "loc": 120,
+        "profile": [27, 60, 33, 0],
+        "measurements": [
+          {"unit_name": "generateMarkdownReport", "start": {"line": 26, "column": 16}, "end": {"line": 36, "column": 2}, "value": 11},
+          {"unit_name": "addLinkToFindingsMarkdown", "start": {"line": 38, "column": 17}, "end": {"line": 42, "column": 2}, "value": 5},
+          {"unit_name": "updateReportsBranch", "start": {"line": 44, "column": 16}, "end": {"line": 62, "column": 2}, "value": 19},
+          {"unit_name": "updatePullRequestComment", "start": {"line": 64, "column": 16}, "end": {"line": 84, "column": 2}, "value": 21},
+          {"unit_name": "checkChangedFiles", "start": {"line": 86, "column": 16}, "end": {"line": 96, "column": 2}, "value": 11},
+          {"unit_name": "updateRepository", "start": {"line": 98, "column": 16}, "end": {"line": 130, "column": 2}, "value": 33},
+          {"unit_name": "main", "start": {"line": 132, "column": 16}, "end": {"line": 151, "column": 2}, "value": 20}
+        ]
+      },
+      "src/utils.ts": {
+        "checksum": "a81c8faa5a91ccf62ae6c81c097e0aa7",
+        "language": "TypeScript",
+        "loc": 35,
+        "profile": [12, 23, 0, 0],
+        "measurements": [
+          {"unit_name": "getChangedFiles", "start": {"line": 4, "column": 23}, "end": {"line": 26, "column": 2}, "value": 23},
+          {"unit_name": "getShas", "start": {"line": 28, "column": 10}, "end": {"line": 39, "column": 2}, "value": 12}
+        ]
+      },
+      "src/codelimit.ts": {
+        "checksum": "b079ccba981262b530b57c44513eb37a",
+        "language": "TypeScript",
+        "loc": 71,
+        "profile": [54, 17, 0, 0],
+        "measurements": [
+          {"unit_name": "getBinaryName", "start": {"line": 11, "column": 10}, "end": {"line": 27, "column": 2}, "value": 17},
+          {"unit_name": "getLatestBinaryUrl", "start": {"line": 29, "column": 16}, "end": {"line": 34, "column": 2}, "value": 6},
+          {"unit_name": "downloadCodeLimitBinary", "start": {"line": 36, "column": 23}, "end": {"line": 50, "column": 2}, "value": 15},
+          {"unit_name": "getReportContent", "start": {"line": 52, "column": 17}, "end": {"line": 54, "column": 2}, "value": 3},
+          {"unit_name": "makeBadgeSvg", "start": {"line": 56, "column": 10}, "end": {"line": 64, "column": 2}, "value": 9},
+          {"unit_name": "makeNotFoundBadgeSvg", "start": {"line": 66, "column": 17}, "end": {"line": 68, "column": 2}, "value": 3},
+          {"unit_name": "makeStatusBadgeSvg", "start": {"line": 70, "column": 17}, "end": {"line": 79, "column": 2}, "value": 10},
+          {"unit_name": "qualityProfilePercentage", "start": {"line": 81, "column": 17}, "end": {"line": 88, "column": 2}, "value": 8}
+        ]
+      },
+      "src/github.ts": {
+        "checksum": "d689044359b80b6000dda160f70f59c0",
+        "language": "TypeScript",
+        "loc": 111,
+        "profile": [77, 34, 0, 0],
+        "measurements": [
+          {"unit_name": "branchExists", "start": {"line": 6, "column": 23}, "end": {"line": 15, "column": 2}, "value": 10},
+          {"unit_name": "createBranch", "start": {"line": 17, "column": 23}, "end": {"line": 27, "column": 2}, "value": 11},
+          {"unit_name": "createInitialCommit", "start": {"line": 29, "column": 23}, "end": {"line": 39, "column": 2}, "value": 11},
+          {"unit_name": "getRepoOwner", "start": {"line": 41, "column": 17}, "end": {"line": 43, "column": 2}, "value": 3},
+          {"unit_name": "getRepoName", "start": {"line": 45, "column": 17}, "end": {"line": 47, "column": 2}, "value": 3},
+          {"unit_name": "getIdentity", "start": {"line": 49, "column": 23}, "end": {"line": 49, "column": 93}, "value": 1},
+          {"unit_name": "getFile", "start": {"line": 64, "column": 23}, "end": {"line": 79, "column": 2}, "value": 16},
+          {"unit_name": "createOrUpdateFile", "start": {"line": 81, "column": 23}, "end": {"line": 98, "column": 2}, "value": 18},
+          {"unit_name": "createPRComment", "start": {"line": 100, "column": 23}, "end": {"line": 108, "column": 2}, "value": 9},
+          {"unit_name": "updateComment", "start": {"line": 110, "column": 23}, "end": {"line": 118, "column": 2}, "value": 9},
+          {"unit_name": "isPullRequest", "start": {"line": 120, "column": 17}, "end": {"line": 122, "column": 2}, "value": 3},
+          {"unit_name": "isPullRequestFromFork", "start": {"line": 124, "column": 17}, "end": {"line": 126, "column": 2}, "value": 3},
+          {"unit_name": "getSourceBranch", "start": {"line": 128, "column": 17}, "end": {"line": 134, "column": 2}, "value": 7},
+          {"unit_name": "createBranchIfNotExists", "start": {"line": 136, "column": 23}, "end": {"line": 142, "column": 2}, "value": 7}
+        ]
+      },
+      "src/generate-versionjs.js": {
+        "checksum": "7abb9921a1ffff7e63a32112242115ea",
+        "language": "JavaScript",
+        "loc": 0,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
+        ]
+      },
+      "src/entities/ActionState.ts": {
+        "checksum": "29f773e72a5aaf47cb0c8f3d98421cb4",
+        "language": "TypeScript",
+        "loc": 0,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
+        ]
+      },
+      "src/entities/SourceFolder.ts": {
+        "checksum": "c0c97cfb0534a30f15ba9c6f0f0c9f88",
+        "language": "TypeScript",
+        "loc": 0,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
+        ]
+      },
+      "src/entities/GetContentResponse.ts": {
+        "checksum": "b3e7c836690820191692e9d258bc7610",
+        "language": "TypeScript",
+        "loc": 0,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
+        ]
+      },
+      "src/entities/Codebase.ts": {
+        "checksum": "9fc3ab06ae231b813c52eb9f255b9896",
+        "language": "TypeScript",
+        "loc": 0,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
+        ]
+      }
+    }
+  }
+}
