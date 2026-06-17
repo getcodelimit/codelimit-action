@@ -16,7 +16,7 @@ jobs:
     - name: Run CodeLimit main version
       uses: getcodelimit/codelimit-action@main
       with:
-        check: false
+        check: true
         codelimit_version: 'latest'
 
     - name: Run CodeLimit v1 version

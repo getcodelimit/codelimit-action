@@ -35,5 +35,7 @@ function getShas(): { base: string, head: string } {
         base = context.payload.before
         head = context.payload.after
     }
+    console.log(`Base SHA: ${base}, Head SHA: ${head}`);
+    console.log(context.payload);
     return {base: base, head: head};
 }
