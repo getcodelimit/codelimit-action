@@ -21,4 +21,5 @@ jobs:
 
     - name: Run CodeLimit v1 version
       uses: getcodelimit/codelimit-action@v1
+      with:
         check: false
