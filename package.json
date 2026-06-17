@@ -2,12 +2,12 @@
   "name": "codelimit-action",
   "version": "1.0.0",
   "description": "",
-  "main": "action.js",
+  "main": "index.js",
   "scripts": {
     "prepare": "node src/generate-versionjs.js > src/version.ts",
     "build": "tsc",
-    "start": "yarn build && node ./build/action.js",
-    "dist": "yarn build && esbuild build/action.js --bundle --platform=node --outfile=dist/index.js",
+    "start": "npm run build && node ./build/index.js",
+    "dist": "npm run build && esbuild build/index.js --bundle --platform=node --outfile=dist/index.js",
     "test": "jest"
   },
   "repository": {
@@ -50,5 +50,8 @@
         }
       ]
     }
+  },
+  "engines": {
+    "node": ">=24.11.1"
   }
 }

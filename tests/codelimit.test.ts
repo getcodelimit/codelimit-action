@@ -1,4 +1,6 @@
-import {makeStatusBadgeSvg, qualityProfilePercentage} from "../src/codelimit";
+import {downloadCodeLimitBinary, makeStatusBadgeSvg, qualityProfilePercentage} from "../src/codelimit";
+import {tmpdir} from "node:os";
+import {existsSync, statSync} from "node:fs";
 
 test('make 100% badge', () => {
     const codebase = {
@@ -72,4 +74,19 @@ test('quality profile percentages', () => {
     result = qualityProfilePercentage([630, 300, 70, 0]);
 
     expect(result).toEqual([63, 30, 7, 0]);
+});
+
+test('download binary', async () => {
+    const result = await downloadCodeLimitBinary('latest', tmpdir());
+
+    expect(existsSync(result)).toBeTruthy();
+    expect(statSync(result).size).toBeGreaterThan(1000);
+});
+
+test('download binary, does not exists', async () => {
+    const doDownload = async () => {
+        await downloadCodeLimitBinary('does-not-exists', tmpdir());
+    }
+
+    await expect(doDownload).rejects.toThrow();
 });
