@@ -1,7 +1,7 @@
 {
   "version": "0.21.0",
-  "uuid": "93fbf1d7-716e-4ffd-b4bb-8d5314f970ab",
-  "timestamp": "2026-06-17T08:54:01+00:00",
+  "uuid": "df18c9ae-a118-416f-9252-c2e87890b39e",
+  "timestamp": "2026-06-17T09:19:59+00:00",
   "root": "/github/workspace",
   "repository": {
     "owner": "getcodelimit",
@@ -18,8 +18,8 @@
         "unmaintainable": 0
       },
       "TypeScript": {
-        "files": 8,
-        "lines_of_code": 337,
+        "files": 9,
+        "lines_of_code": 344,
         "functions": 31,
         "hard_to_maintain": 1,
         "unmaintainable": 0
@@ -30,7 +30,7 @@
         "entries": [
           "src/"
         ],
-        "profile": [170, 134, 33, 0]
+        "profile": [155, 156, 33, 0]
       },
       "src/": {
         "entries": [
@@ -39,9 +39,10 @@
           "utils.ts",
           "github.ts",
           "codelimit.ts",
+          "index.ts",
           "entities/"
         ],
-        "profile": [170, 134, 33, 0]
+        "profile": [155, 156, 33, 0]
       },
       "src/entities/": {
         "entries": [
@@ -63,10 +64,10 @@
         ]
       },
       "src/action.ts": {
-        "checksum": "71ec9d9b51006ee88dd1efc151813eb8",
+        "checksum": "fca452dd49c4008ed13f003fa30ff95f",
         "language": "TypeScript",
-        "loc": 120,
-        "profile": [27, 60, 33, 0],
+        "loc": 122,
+        "profile": [27, 62, 33, 0],
         "measurements": [
           {"unit_name": "generateMarkdownReport", "start": {"line": 26, "column": 16}, "end": {"line": 36, "column": 2}, "value": 11},
           {"unit_name": "addLinkToFindingsMarkdown", "start": {"line": 38, "column": 17}, "end": {"line": 42, "column": 2}, "value": 5},
@@ -74,7 +75,7 @@
           {"unit_name": "updatePullRequestComment", "start": {"line": 64, "column": 16}, "end": {"line": 84, "column": 2}, "value": 21},
           {"unit_name": "checkChangedFiles", "start": {"line": 86, "column": 16}, "end": {"line": 96, "column": 2}, "value": 11},
           {"unit_name": "updateRepository", "start": {"line": 98, "column": 16}, "end": {"line": 130, "column": 2}, "value": 33},
-          {"unit_name": "main", "start": {"line": 132, "column": 16}, "end": {"line": 151, "column": 2}, "value": 20}
+          {"unit_name": "actionMain", "start": {"line": 132, "column": 23}, "end": {"line": 153, "column": 2}, "value": 22}
         ]
       },
       "src/utils.ts": {
@@ -110,19 +111,27 @@
         ]
       },
       "src/codelimit.ts": {
-        "checksum": "b079ccba981262b530b57c44513eb37a",
+        "checksum": "df1f917c88c1d9d76db4ba97676e2e4e",
         "language": "TypeScript",
-        "loc": 71,
-        "profile": [54, 17, 0, 0],
+        "loc": 76,
+        "profile": [39, 37, 0, 0],
         "measurements": [
           {"unit_name": "getBinaryName", "start": {"line": 11, "column": 10}, "end": {"line": 27, "column": 2}, "value": 17},
           {"unit_name": "getLatestBinaryUrl", "start": {"line": 29, "column": 16}, "end": {"line": 34, "column": 2}, "value": 6},
-          {"unit_name": "downloadCodeLimitBinary", "start": {"line": 36, "column": 23}, "end": {"line": 50, "column": 2}, "value": 15},
-          {"unit_name": "getReportContent", "start": {"line": 52, "column": 17}, "end": {"line": 54, "column": 2}, "value": 3},
-          {"unit_name": "makeBadgeSvg", "start": {"line": 56, "column": 10}, "end": {"line": 64, "column": 2}, "value": 9},
-          {"unit_name": "makeNotFoundBadgeSvg", "start": {"line": 66, "column": 17}, "end": {"line": 68, "column": 2}, "value": 3},
-          {"unit_name": "makeStatusBadgeSvg", "start": {"line": 70, "column": 17}, "end": {"line": 79, "column": 2}, "value": 10},
-          {"unit_name": "qualityProfilePercentage", "start": {"line": 81, "column": 17}, "end": {"line": 88, "column": 2}, "value": 8}
+          {"unit_name": "downloadCodeLimitBinary", "start": {"line": 36, "column": 23}, "end": {"line": 55, "column": 2}, "value": 20},
+          {"unit_name": "getReportContent", "start": {"line": 57, "column": 17}, "end": {"line": 59, "column": 2}, "value": 3},
+          {"unit_name": "makeBadgeSvg", "start": {"line": 61, "column": 10}, "end": {"line": 69, "column": 2}, "value": 9},
+          {"unit_name": "makeNotFoundBadgeSvg", "start": {"line": 71, "column": 17}, "end": {"line": 73, "column": 2}, "value": 3},
+          {"unit_name": "makeStatusBadgeSvg", "start": {"line": 75, "column": 17}, "end": {"line": 84, "column": 2}, "value": 10},
+          {"unit_name": "qualityProfilePercentage", "start": {"line": 86, "column": 17}, "end": {"line": 93, "column": 2}, "value": 8}
+        ]
+      },
+      "src/index.ts": {
+        "checksum": "9b99d041ba1a389f43c30ee24d13de02",
+        "language": "TypeScript",
+        "loc": 0,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
         ]
       },
       "src/entities/GetContentResponse.ts": {
