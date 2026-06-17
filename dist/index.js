@@ -63483,6 +63483,7 @@ var require_utils6 = __commonJS({
     var github_1 = require_github();
     function getChangedFiles(octokit) {
       return __awaiter2(this, void 0, void 0, function* () {
+        console.log(`Event name: ${github_1.context.eventName}`);
         if (github_1.context.eventName === void 0) {
           return ["."];
         }
@@ -63521,7 +63522,6 @@ var require_utils6 = __commonJS({
         head = github_1.context.payload.after;
       }
       console.log(`Base SHA: ${base}, Head SHA: ${head}`);
-      console.log(github_1.context.payload);
       return { base, head };
     }
   }
@@ -63534,7 +63534,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "cbf2370",
+      "revision": "f23a243",
       "year": "2026"
     };
   }
