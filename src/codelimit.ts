@@ -4,7 +4,7 @@ import fs from "fs";
 import {promisify} from "util";
 import {makeBadge} from "badge-maker";
 import {Codebase} from "./entities/Codebase";
-import {info, success} from "signale";
+import {fatal, info, success} from "signale";
 
 const streamPipeline = promisify(require('stream').pipeline);
 
@@ -33,7 +33,7 @@ async function getLatestBinaryUrl() {
     return `${downloadUrl}/${getBinaryName()}`;
 }
 
-export async function downloadCodeLimitBinary(version: string): Promise<string> {
+export async function downloadCodeLimitBinary(version: string, targetDir: string = __dirname): Promise<string> {
     let binaryUrl;
     if (version === 'latest') {
         binaryUrl = await getLatestBinaryUrl();
@@ -41,12 +41,17 @@ export async function downloadCodeLimitBinary(version: string): Promise<string> 
         binaryUrl = `https://github.com/getcodelimit/codelimit/releases/download/${version}/${getBinaryName()}`;
     }
     info(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
-    const response = await nodeFetch(binaryUrl);
-    const filename = path.join(__dirname, getBinaryName());
-    await streamPipeline(response.body, fs.createWriteStream(filename));
-    fs.chmodSync(filename, '777');
-    success(`CodeLimit binary downloaded: ${filename}`);
-    return filename;
+    const res = await nodeFetch(binaryUrl);
+    if (res.ok) {
+        const filename = path.join(targetDir, getBinaryName());
+        await streamPipeline(res.body, fs.createWriteStream(filename));
+        fs.chmodSync(filename, '777');
+        success(`CodeLimit binary downloaded: ${filename}`);
+        return filename;
+    } else {
+        fatal('Failed to download CodeLimit binary');
+        throw new Error(`Failed to download CodeLimit binary from URL: ${binaryUrl}, status: ${res.status}`);
+    }
 }
 
 export function getReportContent(): string | undefined {

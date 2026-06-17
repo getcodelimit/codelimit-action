@@ -40,7 +40,7 @@ var require_utils = __commonJS({
 var require_command = __commonJS({
   "node_modules/@actions/core/lib/command.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -53,24 +53,24 @@ var require_command = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.issue = exports2.issueCommand = void 0;
-    var os = __importStar2(require("os"));
-    var utils_12 = require_utils();
+    var os = __importStar(require("os"));
+    var utils_1 = require_utils();
     function issueCommand(command, properties, message) {
       const cmd = new Command(command, properties, message);
       process.stdout.write(cmd.toString() + os.EOL);
@@ -114,10 +114,10 @@ var require_command = __commonJS({
       }
     };
     function escapeData(s) {
-      return (0, utils_12.toCommandValue)(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
+      return (0, utils_1.toCommandValue)(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A");
     }
     function escapeProperty(s) {
-      return (0, utils_12.toCommandValue)(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A").replace(/:/g, "%3A").replace(/,/g, "%2C");
+      return (0, utils_1.toCommandValue)(s).replace(/%/g, "%25").replace(/\r/g, "%0D").replace(/\n/g, "%0A").replace(/:/g, "%3A").replace(/,/g, "%2C");
     }
   }
 });
@@ -126,7 +126,7 @@ var require_command = __commonJS({
 var require_file_command = __commonJS({
   "node_modules/@actions/core/lib/file-command.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -139,26 +139,26 @@ var require_file_command = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.prepareKeyValueMessage = exports2.issueFileCommand = void 0;
-    var crypto = __importStar2(require("crypto"));
-    var fs = __importStar2(require("fs"));
-    var os = __importStar2(require("os"));
-    var utils_12 = require_utils();
+    var crypto = __importStar(require("crypto"));
+    var fs = __importStar(require("fs"));
+    var os = __importStar(require("os"));
+    var utils_1 = require_utils();
     function issueFileCommand(command, message) {
       const filePath = process.env[`GITHUB_${command}`];
       if (!filePath) {
@@ -167,14 +167,14 @@ var require_file_command = __commonJS({
       if (!fs.existsSync(filePath)) {
         throw new Error(`Missing file at path: ${filePath}`);
       }
-      fs.appendFileSync(filePath, `${(0, utils_12.toCommandValue)(message)}${os.EOL}`, {
+      fs.appendFileSync(filePath, `${(0, utils_1.toCommandValue)(message)}${os.EOL}`, {
         encoding: "utf8"
       });
     }
     exports2.issueFileCommand = issueFileCommand;
     function prepareKeyValueMessage(key, value) {
       const delimiter = `ghadelimiter_${crypto.randomUUID()}`;
-      const convertedValue = (0, utils_12.toCommandValue)(value);
+      const convertedValue = (0, utils_1.toCommandValue)(value);
       if (key.includes(delimiter)) {
         throw new Error(`Unexpected input: name should not contain the delimiter "${delimiter}"`);
       }
@@ -6336,7 +6336,7 @@ var require_constants3 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SPECIAL_HEADERS = exports2.HEADER_STATE = exports2.MINOR = exports2.MAJOR = exports2.CONNECTION_TOKEN_CHARS = exports2.HEADER_CHARS = exports2.TOKEN = exports2.STRICT_TOKEN = exports2.HEX = exports2.URL_CHAR = exports2.STRICT_URL_CHAR = exports2.USERINFO_CHARS = exports2.MARK = exports2.ALPHANUM = exports2.NUM = exports2.HEX_MAP = exports2.NUM_MAP = exports2.ALPHA = exports2.FINISH = exports2.H_METHOD_MAP = exports2.METHOD_MAP = exports2.METHODS_RTSP = exports2.METHODS_ICE = exports2.METHODS_HTTP = exports2.METHODS = exports2.LENIENT_FLAGS = exports2.FLAGS = exports2.TYPE = exports2.ERROR = void 0;
-    var utils_12 = require_utils2();
+    var utils_1 = require_utils2();
     var ERROR;
     (function(ERROR2) {
       ERROR2[ERROR2["OK"] = 0] = "OK";
@@ -6496,7 +6496,7 @@ var require_constants3 = __commonJS({
       METHODS.GET,
       METHODS.POST
     ];
-    exports2.METHOD_MAP = utils_12.enumToMap(METHODS);
+    exports2.METHOD_MAP = utils_1.enumToMap(METHODS);
     exports2.H_METHOD_MAP = {};
     Object.keys(exports2.METHOD_MAP).forEach((key) => {
       if (/^H/.test(key)) {
@@ -17267,7 +17267,7 @@ var require_undici = __commonJS({
 var require_lib = __commonJS({
   "node_modules/@actions/http-client/lib/index.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -17280,18 +17280,18 @@ var require_lib = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
@@ -17323,10 +17323,10 @@ var require_lib = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.HttpClient = exports2.isHttps = exports2.HttpClientResponse = exports2.HttpClientError = exports2.getProxyUrl = exports2.MediaTypes = exports2.Headers = exports2.HttpCodes = void 0;
-    var http = __importStar2(require("http"));
-    var https = __importStar2(require("https"));
-    var pm = __importStar2(require_proxy());
-    var tunnel = __importStar2(require_tunnel2());
+    var http = __importStar(require("http"));
+    var https = __importStar(require("https"));
+    var pm = __importStar(require_proxy());
+    var tunnel = __importStar(require_tunnel2());
     var undici_1 = require_undici();
     var HttpCodes;
     (function(HttpCodes2) {
@@ -18021,7 +18021,7 @@ var require_oidc_utils = __commonJS({
     exports2.OidcClient = void 0;
     var http_client_1 = require_lib();
     var auth_1 = require_auth();
-    var core_12 = require_core();
+    var core_1 = require_core();
     var OidcClient = class _OidcClient {
       static createHttpClient(allowRetry = true, maxRetry = 10) {
         const requestOptions = {
@@ -18070,9 +18070,9 @@ var require_oidc_utils = __commonJS({
               const encodedAudience = encodeURIComponent(audience);
               id_token_url = `${id_token_url}&audience=${encodedAudience}`;
             }
-            (0, core_12.debug)(`ID token url is ${id_token_url}`);
+            (0, core_1.debug)(`ID token url is ${id_token_url}`);
             const id_token = yield _OidcClient.getCall(id_token_url);
-            (0, core_12.setSecret)(id_token);
+            (0, core_1.setSecret)(id_token);
             return id_token;
           } catch (error) {
             throw new Error(`Error message: ${error.message}`);
@@ -18118,8 +18118,8 @@ var require_summary = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.summary = exports2.markdownSummary = exports2.SUMMARY_DOCS_URL = exports2.SUMMARY_ENV_VAR = void 0;
     var os_1 = require("os");
-    var fs_12 = require("fs");
-    var { access, appendFile, writeFile } = fs_12.promises;
+    var fs_1 = require("fs");
+    var { access, appendFile, writeFile } = fs_1.promises;
     exports2.SUMMARY_ENV_VAR = "GITHUB_STEP_SUMMARY";
     exports2.SUMMARY_DOCS_URL = "https://docs.github.com/actions/using-workflows/workflow-commands-for-github-actions#adding-a-job-summary";
     var Summary = class {
@@ -18142,7 +18142,7 @@ var require_summary = __commonJS({
             throw new Error(`Unable to find environment variable for $${exports2.SUMMARY_ENV_VAR}. Check if your runtime environment supports job summaries.`);
           }
           try {
-            yield access(pathFromEnv, fs_12.constants.R_OK | fs_12.constants.W_OK);
+            yield access(pathFromEnv, fs_1.constants.R_OK | fs_1.constants.W_OK);
           } catch (_a) {
             throw new Error(`Unable to access summary file: '${pathFromEnv}'. Check if the file has correct read/write permissions.`);
           }
@@ -18382,7 +18382,7 @@ var require_summary = __commonJS({
 var require_path_utils = __commonJS({
   "node_modules/@actions/core/lib/path-utils.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -18395,23 +18395,23 @@ var require_path_utils = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.toPlatformPath = exports2.toWin32Path = exports2.toPosixPath = void 0;
-    var path = __importStar2(require("path"));
+    var path = __importStar(require("path"));
     function toPosixPath(pth) {
       return pth.replace(/[\\]/g, "/");
     }
@@ -18431,7 +18431,7 @@ var require_path_utils = __commonJS({
 var require_io_util = __commonJS({
   "node_modules/@actions/io/lib/io-util.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -18440,18 +18440,18 @@ var require_io_util = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
@@ -18484,8 +18484,8 @@ var require_io_util = __commonJS({
     var _a;
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getCmdPath = exports2.tryGetExecutablePath = exports2.isRooted = exports2.isDirectory = exports2.exists = exports2.READONLY = exports2.UV_FS_O_EXLOCK = exports2.IS_WINDOWS = exports2.unlink = exports2.symlink = exports2.stat = exports2.rmdir = exports2.rm = exports2.rename = exports2.readlink = exports2.readdir = exports2.open = exports2.mkdir = exports2.lstat = exports2.copyFile = exports2.chmod = void 0;
-    var fs = __importStar2(require("fs"));
-    var path = __importStar2(require("path"));
+    var fs = __importStar(require("fs"));
+    var path = __importStar(require("path"));
     _a = fs.promises, exports2.chmod = _a.chmod, exports2.copyFile = _a.copyFile, exports2.lstat = _a.lstat, exports2.mkdir = _a.mkdir, exports2.open = _a.open, exports2.readdir = _a.readdir, exports2.readlink = _a.readlink, exports2.rename = _a.rename, exports2.rm = _a.rm, exports2.rmdir = _a.rmdir, exports2.stat = _a.stat, exports2.symlink = _a.symlink, exports2.unlink = _a.unlink;
     exports2.IS_WINDOWS = process.platform === "win32";
     exports2.UV_FS_O_EXLOCK = 268435456;
@@ -18604,7 +18604,7 @@ var require_io_util = __commonJS({
 var require_io = __commonJS({
   "node_modules/@actions/io/lib/io.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -18613,18 +18613,18 @@ var require_io = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
@@ -18657,8 +18657,8 @@ var require_io = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.findInPath = exports2.which = exports2.mkdirP = exports2.rmRF = exports2.mv = exports2.cp = void 0;
     var assert_1 = require("assert");
-    var path = __importStar2(require("path"));
-    var ioUtil = __importStar2(require_io_util());
+    var path = __importStar(require("path"));
+    var ioUtil = __importStar(require_io_util());
     function cp(source, dest, options = {}) {
       return __awaiter2(this, void 0, void 0, function* () {
         const { force, recursive, copySourceDirectory } = readCopyOptions(options);
@@ -18852,7 +18852,7 @@ var require_io = __commonJS({
 var require_toolrunner = __commonJS({
   "node_modules/@actions/exec/lib/toolrunner.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -18861,18 +18861,18 @@ var require_toolrunner = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
@@ -18904,12 +18904,12 @@ var require_toolrunner = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.argStringToArray = exports2.ToolRunner = void 0;
-    var os = __importStar2(require("os"));
-    var events = __importStar2(require("events"));
-    var child = __importStar2(require("child_process"));
-    var path = __importStar2(require("path"));
-    var io = __importStar2(require_io());
-    var ioUtil = __importStar2(require_io_util());
+    var os = __importStar(require("os"));
+    var events = __importStar(require("events"));
+    var child = __importStar(require("child_process"));
+    var path = __importStar(require("path"));
+    var io = __importStar(require_io());
+    var ioUtil = __importStar(require_io_util());
     var timers_1 = require("timers");
     var IS_WINDOWS = process.platform === "win32";
     var ToolRunner = class extends events.EventEmitter {
@@ -19336,7 +19336,7 @@ var require_toolrunner = __commonJS({
 var require_exec = __commonJS({
   "node_modules/@actions/exec/lib/exec.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -19345,18 +19345,18 @@ var require_exec = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
@@ -19389,7 +19389,7 @@ var require_exec = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getExecOutput = exports2.exec = void 0;
     var string_decoder_1 = require("string_decoder");
-    var tr = __importStar2(require_toolrunner());
+    var tr = __importStar(require_toolrunner());
     function exec(commandLine, args, options) {
       return __awaiter2(this, void 0, void 0, function* () {
         const commandArgs = tr.argStringToArray(commandLine);
@@ -19443,7 +19443,7 @@ var require_exec = __commonJS({
 var require_platform = __commonJS({
   "node_modules/@actions/core/lib/platform.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -19456,18 +19456,18 @@ var require_platform = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
@@ -19497,13 +19497,13 @@ var require_platform = __commonJS({
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
     };
-    var __importDefault2 = exports2 && exports2.__importDefault || function(mod) {
+    var __importDefault = exports2 && exports2.__importDefault || function(mod) {
       return mod && mod.__esModule ? mod : { "default": mod };
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getDetails = exports2.isLinux = exports2.isMacOS = exports2.isWindows = exports2.arch = exports2.platform = void 0;
-    var os_1 = __importDefault2(require("os"));
-    var exec = __importStar2(require_exec());
+    var os_1 = __importDefault(require("os"));
+    var exec = __importStar(require_exec());
     var getWindowsInfo = () => __awaiter2(void 0, void 0, void 0, function* () {
       const { stdout: version } = yield exec.getExecOutput('powershell -command "(Get-CimInstance -ClassName Win32_OperatingSystem).Version"', void 0, {
         silent: true
@@ -19562,7 +19562,7 @@ var require_platform = __commonJS({
 var require_core = __commonJS({
   "node_modules/@actions/core/lib/core.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       var desc = Object.getOwnPropertyDescriptor(m, k);
       if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
@@ -19575,18 +19575,18 @@ var require_core = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.prototype.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
@@ -19620,9 +19620,9 @@ var require_core = __commonJS({
     exports2.platform = exports2.toPlatformPath = exports2.toWin32Path = exports2.toPosixPath = exports2.markdownSummary = exports2.summary = exports2.getIDToken = exports2.getState = exports2.saveState = exports2.group = exports2.endGroup = exports2.startGroup = exports2.info = exports2.notice = exports2.warning = exports2.error = exports2.debug = exports2.isDebug = exports2.setFailed = exports2.setCommandEcho = exports2.setOutput = exports2.getBooleanInput = exports2.getMultilineInput = exports2.getInput = exports2.addPath = exports2.setSecret = exports2.exportVariable = exports2.ExitCode = void 0;
     var command_1 = require_command();
     var file_command_1 = require_file_command();
-    var utils_12 = require_utils();
-    var os = __importStar2(require("os"));
-    var path = __importStar2(require("path"));
+    var utils_1 = require_utils();
+    var os = __importStar(require("os"));
+    var path = __importStar(require("path"));
     var oidc_utils_1 = require_oidc_utils();
     var ExitCode;
     (function(ExitCode2) {
@@ -19630,7 +19630,7 @@ var require_core = __commonJS({
       ExitCode2[ExitCode2["Failure"] = 1] = "Failure";
     })(ExitCode || (exports2.ExitCode = ExitCode = {}));
     function exportVariable(name, val) {
-      const convertedVal = (0, utils_12.toCommandValue)(val);
+      const convertedVal = (0, utils_1.toCommandValue)(val);
       process.env[name] = convertedVal;
       const filePath = process.env["GITHUB_ENV"] || "";
       if (filePath) {
@@ -19690,7 +19690,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
         return (0, file_command_1.issueFileCommand)("OUTPUT", (0, file_command_1.prepareKeyValueMessage)(name, value));
       }
       process.stdout.write(os.EOL);
-      (0, command_1.issueCommand)("set-output", { name }, (0, utils_12.toCommandValue)(value));
+      (0, command_1.issueCommand)("set-output", { name }, (0, utils_1.toCommandValue)(value));
     }
     exports2.setOutput = setOutput;
     function setCommandEcho(enabled) {
@@ -19711,15 +19711,15 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     }
     exports2.debug = debug;
     function error(message, properties = {}) {
-      (0, command_1.issueCommand)("error", (0, utils_12.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
+      (0, command_1.issueCommand)("error", (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
     }
     exports2.error = error;
     function warning(message, properties = {}) {
-      (0, command_1.issueCommand)("warning", (0, utils_12.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
+      (0, command_1.issueCommand)("warning", (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
     }
     exports2.warning = warning;
     function notice(message, properties = {}) {
-      (0, command_1.issueCommand)("notice", (0, utils_12.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
+      (0, command_1.issueCommand)("notice", (0, utils_1.toCommandProperties)(properties), message instanceof Error ? message.toString() : message);
     }
     exports2.notice = notice;
     function info(message) {
@@ -19752,7 +19752,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
       if (filePath) {
         return (0, file_command_1.issueFileCommand)("STATE", (0, file_command_1.prepareKeyValueMessage)(name, value));
       }
-      (0, command_1.issueCommand)("save-state", { name }, (0, utils_12.toCommandValue)(value));
+      (0, command_1.issueCommand)("save-state", { name }, (0, utils_1.toCommandValue)(value));
     }
     exports2.saveState = saveState;
     function getState(name) {
@@ -19783,7 +19783,7 @@ Support boolean input list: \`true | True | TRUE | false | False | FALSE\``);
     Object.defineProperty(exports2, "toPlatformPath", { enumerable: true, get: function() {
       return path_utils_1.toPlatformPath;
     } });
-    exports2.platform = __importStar2(require_platform());
+    exports2.platform = __importStar(require_platform());
   }
 });
 
@@ -19793,7 +19793,7 @@ var require_context = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.Context = void 0;
-    var fs_12 = require("fs");
+    var fs_1 = require("fs");
     var os_1 = require("os");
     var Context = class {
       /**
@@ -19803,8 +19803,8 @@ var require_context = __commonJS({
         var _a, _b, _c;
         this.payload = {};
         if (process.env.GITHUB_EVENT_PATH) {
-          if (fs_12.existsSync(process.env.GITHUB_EVENT_PATH)) {
-            this.payload = JSON.parse(fs_12.readFileSync(process.env.GITHUB_EVENT_PATH, { encoding: "utf8" }));
+          if (fs_1.existsSync(process.env.GITHUB_EVENT_PATH)) {
+            this.payload = JSON.parse(fs_1.readFileSync(process.env.GITHUB_EVENT_PATH, { encoding: "utf8" }));
           } else {
             const path = process.env.GITHUB_EVENT_PATH;
             process.stdout.write(`GITHUB_EVENT_PATH ${path} does not exist${os_1.EOL}`);
@@ -19849,7 +19849,7 @@ var require_context = __commonJS({
 var require_utils3 = __commonJS({
   "node_modules/@actions/github/lib/internal/utils.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -19858,23 +19858,23 @@ var require_utils3 = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getApiBaseUrl = exports2.getProxyAgent = exports2.getAuthString = void 0;
-    var httpClient = __importStar2(require_lib());
+    var httpClient = __importStar(require_lib());
     function getAuthString(token, options) {
       if (!token && !options.auth) {
         throw new Error("Parameter token or opts.auth is required");
@@ -25202,7 +25202,7 @@ var require_dist_node10 = __commonJS({
 var require_utils5 = __commonJS({
   "node_modules/@actions/github/lib/utils.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -25211,25 +25211,25 @@ var require_utils5 = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getOctokitOptions = exports2.GitHub = exports2.defaults = exports2.context = void 0;
-    var Context = __importStar2(require_context());
-    var Utils = __importStar2(require_utils3());
-    var core_12 = require_dist_node8();
+    var Context = __importStar(require_context());
+    var Utils = __importStar(require_utils3());
+    var core_1 = require_dist_node8();
     var plugin_rest_endpoint_methods_1 = require_dist_node9();
     var plugin_paginate_rest_1 = require_dist_node10();
     exports2.context = new Context.Context();
@@ -25240,7 +25240,7 @@ var require_utils5 = __commonJS({
         agent: Utils.getProxyAgent(baseUrl)
       }
     };
-    exports2.GitHub = core_12.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(exports2.defaults);
+    exports2.GitHub = core_1.Octokit.plugin(plugin_rest_endpoint_methods_1.restEndpointMethods, plugin_paginate_rest_1.paginateRest).defaults(exports2.defaults);
     function getOctokitOptions(token, options) {
       const opts = Object.assign({}, options || {});
       const auth = Utils.getAuthString(token, opts);
@@ -25257,7 +25257,7 @@ var require_utils5 = __commonJS({
 var require_github = __commonJS({
   "node_modules/@actions/github/lib/github.js"(exports2) {
     "use strict";
-    var __createBinding2 = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
       if (k2 === void 0) k2 = k;
       Object.defineProperty(o, k2, { enumerable: true, get: function() {
         return m[k];
@@ -25266,28 +25266,28 @@ var require_github = __commonJS({
       if (k2 === void 0) k2 = k;
       o[k2] = m[k];
     });
-    var __setModuleDefault2 = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
       Object.defineProperty(o, "default", { enumerable: true, value: v });
     } : function(o, v) {
       o["default"] = v;
     });
-    var __importStar2 = exports2 && exports2.__importStar || function(mod) {
+    var __importStar = exports2 && exports2.__importStar || function(mod) {
       if (mod && mod.__esModule) return mod;
       var result = {};
       if (mod != null) {
-        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding2(result, mod, k);
+        for (var k in mod) if (k !== "default" && Object.hasOwnProperty.call(mod, k)) __createBinding(result, mod, k);
       }
-      __setModuleDefault2(result, mod);
+      __setModuleDefault(result, mod);
       return result;
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getOctokit = exports2.context = void 0;
-    var Context = __importStar2(require_context());
-    var utils_12 = require_utils5();
+    var Context = __importStar(require_context());
+    var utils_1 = require_utils5();
     exports2.context = new Context.Context();
     function getOctokit(token, options, ...additionalPlugins) {
-      const GitHubWithPlugins = utils_12.GitHub.plugin(...additionalPlugins);
-      return new GitHubWithPlugins(utils_12.getOctokitOptions(token, options));
+      const GitHubWithPlugins = utils_1.GitHub.plugin(...additionalPlugins);
+      return new GitHubWithPlugins(utils_1.getOctokitOptions(token, options));
     }
     exports2.getOctokit = getOctokit;
   }
@@ -31242,7 +31242,7 @@ var require_constants7 = __commonJS({
     "use strict";
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.SPECIAL_HEADERS = exports2.HEADER_STATE = exports2.MINOR = exports2.MAJOR = exports2.CONNECTION_TOKEN_CHARS = exports2.HEADER_CHARS = exports2.TOKEN = exports2.STRICT_TOKEN = exports2.HEX = exports2.URL_CHAR = exports2.STRICT_URL_CHAR = exports2.USERINFO_CHARS = exports2.MARK = exports2.ALPHANUM = exports2.NUM = exports2.HEX_MAP = exports2.NUM_MAP = exports2.ALPHA = exports2.FINISH = exports2.H_METHOD_MAP = exports2.METHOD_MAP = exports2.METHODS_RTSP = exports2.METHODS_ICE = exports2.METHODS_HTTP = exports2.METHODS = exports2.LENIENT_FLAGS = exports2.FLAGS = exports2.TYPE = exports2.ERROR = void 0;
-    var utils_12 = require_utils6();
+    var utils_1 = require_utils6();
     var ERROR;
     (function(ERROR2) {
       ERROR2[ERROR2["OK"] = 0] = "OK";
@@ -31402,7 +31402,7 @@ var require_constants7 = __commonJS({
       METHODS.GET,
       METHODS.POST
     ];
-    exports2.METHOD_MAP = utils_12.enumToMap(METHODS);
+    exports2.METHOD_MAP = utils_1.enumToMap(METHODS);
     exports2.H_METHOD_MAP = {};
     Object.keys(exports2.METHOD_MAP).forEach((key) => {
       if (/^H/.test(key)) {
@@ -47275,7 +47275,7 @@ var require_github2 = __commonJS({
     exports2.isPullRequestFromFork = isPullRequestFromFork;
     exports2.getSourceBranch = getSourceBranch;
     exports2.createBranchIfNotExists = createBranchIfNotExists;
-    var github_12 = require_github();
+    var github_1 = require_github();
     function branchExists(octokit, owner, repo, branchName) {
       return __awaiter2(this, void 0, void 0, function* () {
         try {
@@ -47405,11 +47405,11 @@ var require_github2 = __commonJS({
       });
     }
     function isPullRequest() {
-      return github_12.context.eventName === "pull_request";
+      return github_1.context.eventName === "pull_request";
     }
     function isPullRequestFromFork() {
       var _a, _b;
-      return isPullRequest() && ((_b = (_a = github_12.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.repo) === null || _b === void 0 ? void 0 : _b.fork) === true;
+      return isPullRequest() && ((_b = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.head.repo) === null || _b === void 0 ? void 0 : _b.fork) === true;
     }
     function getSourceBranch() {
       if (isPullRequest()) {
@@ -50868,7 +50868,7 @@ var require_figures = __commonJS({
     "use strict";
     var escapeStringRegexp = require_escape_string_regexp();
     var platform = process.platform;
-    var main2 = {
+    var main = {
       tick: "\u2714",
       cross: "\u2716",
       star: "\u2605",
@@ -50953,11 +50953,11 @@ var require_figures = __commonJS({
       hamburger: "\u2261",
       smiley: "\u263A",
       mustache: "\u250C\u2500\u2510",
-      heart: main2.heart,
-      arrowUp: main2.arrowUp,
-      arrowDown: main2.arrowDown,
-      arrowLeft: main2.arrowLeft,
-      arrowRight: main2.arrowRight,
+      heart: main.heart,
+      arrowUp: main.arrowUp,
+      arrowDown: main.arrowDown,
+      arrowLeft: main.arrowLeft,
+      arrowRight: main.arrowRight,
       radioOn: "(*)",
       radioOff: "( )",
       checkboxOn: "[\xD7]",
@@ -50985,18 +50985,18 @@ var require_figures = __commonJS({
       sevenEighths: "7/8"
     };
     if (platform === "linux") {
-      main2.questionMarkPrefix = "?";
+      main.questionMarkPrefix = "?";
     }
-    var figures = platform === "win32" ? win : main2;
+    var figures = platform === "win32" ? win : main;
     var fn = (str) => {
-      if (figures === main2) {
+      if (figures === main) {
         return str;
       }
-      Object.keys(main2).forEach((key) => {
-        if (main2[key] === figures[key]) {
+      Object.keys(main).forEach((key) => {
+        if (main[key] === figures[key]) {
           return;
         }
-        str = str.replace(new RegExp(escapeStringRegexp(main2[key]), "g"), figures[key]);
+        str = str.replace(new RegExp(escapeStringRegexp(main[key]), "g"), figures[key]);
       });
       return str;
     };
@@ -52841,7 +52841,7 @@ var require_codelimit = __commonJS({
         step((generator = generator.apply(thisArg, _arguments || [])).next());
       });
     };
-    var __importDefault2 = exports2 && exports2.__importDefault || function(mod) {
+    var __importDefault = exports2 && exports2.__importDefault || function(mod) {
       return mod && mod.__esModule ? mod : { "default": mod };
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
@@ -52850,12 +52850,12 @@ var require_codelimit = __commonJS({
     exports2.makeNotFoundBadgeSvg = makeNotFoundBadgeSvg;
     exports2.makeStatusBadgeSvg = makeStatusBadgeSvg;
     exports2.qualityProfilePercentage = qualityProfilePercentage;
-    var node_fetch_1 = __importDefault2(require_lib3());
-    var path_1 = __importDefault2(require("path"));
-    var fs_12 = __importDefault2(require("fs"));
+    var node_fetch_1 = __importDefault(require_lib3());
+    var path_1 = __importDefault(require("path"));
+    var fs_1 = __importDefault(require("fs"));
     var util_1 = require("util");
     var badge_maker_1 = require_lib5();
-    var signale_12 = require_signale2();
+    var signale_1 = require_signale2();
     var streamPipeline = (0, util_1.promisify)(require("stream").pipeline);
     function getBinaryName() {
       const binaries = {
@@ -52882,25 +52882,30 @@ var require_codelimit = __commonJS({
         return `${downloadUrl}/${getBinaryName()}`;
       });
     }
-    function downloadCodeLimitBinary(version) {
-      return __awaiter2(this, void 0, void 0, function* () {
+    function downloadCodeLimitBinary(version_1) {
+      return __awaiter2(this, arguments, void 0, function* (version, targetDir = __dirname) {
         let binaryUrl;
         if (version === "latest") {
           binaryUrl = yield getLatestBinaryUrl();
         } else {
           binaryUrl = `https://github.com/getcodelimit/codelimit/releases/download/${version}/${getBinaryName()}`;
         }
-        (0, signale_12.info)(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
-        const response = yield (0, node_fetch_1.default)(binaryUrl);
-        const filename = path_1.default.join(__dirname, getBinaryName());
-        yield streamPipeline(response.body, fs_12.default.createWriteStream(filename));
-        fs_12.default.chmodSync(filename, "777");
-        (0, signale_12.success)(`CodeLimit binary downloaded: ${filename}`);
-        return filename;
+        (0, signale_1.info)(`Downloading CodeLimit binary from URL: ${binaryUrl}`);
+        const res = yield (0, node_fetch_1.default)(binaryUrl);
+        if (res.ok) {
+          const filename = path_1.default.join(targetDir, getBinaryName());
+          yield streamPipeline(res.body, fs_1.default.createWriteStream(filename));
+          fs_1.default.chmodSync(filename, "777");
+          (0, signale_1.success)(`CodeLimit binary downloaded: ${filename}`);
+          return filename;
+        } else {
+          (0, signale_1.fatal)("Failed to download CodeLimit binary");
+          throw new Error(`Failed to download CodeLimit binary from URL: ${binaryUrl}, status: ${res.status}`);
+        }
       });
     }
     function getReportContent() {
-      return fs_12.default.readFileSync(".codelimit_cache/codelimit.json", "utf8");
+      return fs_1.default.readFileSync(".codelimit_cache/codelimit.json", "utf8");
     }
     function makeBadgeSvg(message, color) {
       const badge = {
@@ -52968,18 +52973,18 @@ var require_utils7 = __commonJS({
     };
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.getChangedFiles = getChangedFiles;
-    var github_12 = require_github();
+    var github_1 = require_github();
     function getChangedFiles(octokit) {
       return __awaiter2(this, void 0, void 0, function* () {
-        if (github_12.context.eventName === void 0) {
+        if (github_1.context.eventName === void 0) {
           return ["."];
         }
         const { base, head } = getShas();
         const response = yield octokit.repos.compareCommits({
           base,
           head,
-          owner: github_12.context.repo.owner,
-          repo: github_12.context.repo.repo
+          owner: github_1.context.repo.owner,
+          repo: github_1.context.repo.repo
         });
         if (response.status !== 200) {
           return ["."];
@@ -53001,12 +53006,12 @@ var require_utils7 = __commonJS({
       var _a, _b, _c, _d;
       let base;
       let head;
-      if (github_12.context.eventName === "pull_request") {
-        base = (_b = (_a = github_12.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
-        head = (_d = (_c = github_12.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
+      if (github_1.context.eventName === "pull_request") {
+        base = (_b = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.base) === null || _b === void 0 ? void 0 : _b.sha;
+        head = (_d = (_c = github_1.context.payload.pull_request) === null || _c === void 0 ? void 0 : _c.head) === null || _d === void 0 ? void 0 : _d.sha;
       } else {
-        base = github_12.context.payload.before;
-        head = github_12.context.payload.after;
+        base = github_1.context.payload.before;
+        head = github_1.context.payload.after;
       }
       return { base, head };
     }
@@ -53020,50 +53025,235 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "0765f67",
+      "revision": "c06b507",
       "year": "2026"
     };
   }
 });
 
 // build/action.js
-var __createBinding = exports && exports.__createBinding || (Object.create ? function(o, m, k, k2) {
-  if (k2 === void 0) k2 = k;
-  var desc = Object.getOwnPropertyDescriptor(m, k);
-  if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
-    desc = { enumerable: true, get: function() {
-      return m[k];
-    } };
-  }
-  Object.defineProperty(o, k2, desc);
-} : function(o, m, k, k2) {
-  if (k2 === void 0) k2 = k;
-  o[k2] = m[k];
-});
-var __setModuleDefault = exports && exports.__setModuleDefault || (Object.create ? function(o, v) {
-  Object.defineProperty(o, "default", { enumerable: true, value: v });
-} : function(o, v) {
-  o["default"] = v;
-});
-var __importStar = exports && exports.__importStar || /* @__PURE__ */ function() {
-  var ownKeys = function(o) {
-    ownKeys = Object.getOwnPropertyNames || function(o2) {
-      var ar = [];
-      for (var k in o2) if (Object.prototype.hasOwnProperty.call(o2, k)) ar[ar.length] = k;
-      return ar;
+var require_action = __commonJS({
+  "build/action.js"(exports2) {
+    "use strict";
+    var __createBinding = exports2 && exports2.__createBinding || (Object.create ? function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      var desc = Object.getOwnPropertyDescriptor(m, k);
+      if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+        desc = { enumerable: true, get: function() {
+          return m[k];
+        } };
+      }
+      Object.defineProperty(o, k2, desc);
+    } : function(o, m, k, k2) {
+      if (k2 === void 0) k2 = k;
+      o[k2] = m[k];
+    });
+    var __setModuleDefault = exports2 && exports2.__setModuleDefault || (Object.create ? function(o, v) {
+      Object.defineProperty(o, "default", { enumerable: true, value: v });
+    } : function(o, v) {
+      o["default"] = v;
+    });
+    var __importStar = exports2 && exports2.__importStar || /* @__PURE__ */ function() {
+      var ownKeys = function(o) {
+        ownKeys = Object.getOwnPropertyNames || function(o2) {
+          var ar = [];
+          for (var k in o2) if (Object.prototype.hasOwnProperty.call(o2, k)) ar[ar.length] = k;
+          return ar;
+        };
+        return ownKeys(o);
+      };
+      return function(mod) {
+        if (mod && mod.__esModule) return mod;
+        var result = {};
+        if (mod != null) {
+          for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+        }
+        __setModuleDefault(result, mod);
+        return result;
+      };
+    }();
+    var __awaiter2 = exports2 && exports2.__awaiter || function(thisArg, _arguments, P, generator) {
+      function adopt(value) {
+        return value instanceof P ? value : new P(function(resolve) {
+          resolve(value);
+        });
+      }
+      return new (P || (P = Promise))(function(resolve, reject) {
+        function fulfilled(value) {
+          try {
+            step(generator.next(value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function rejected(value) {
+          try {
+            step(generator["throw"](value));
+          } catch (e) {
+            reject(e);
+          }
+        }
+        function step(result) {
+          result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected);
+        }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+      });
     };
-    return ownKeys(o);
-  };
-  return function(mod) {
-    if (mod && mod.__esModule) return mod;
-    var result = {};
-    if (mod != null) {
-      for (var k = ownKeys(mod), i = 0; i < k.length; i++) if (k[i] !== "default") __createBinding(result, mod, k[i]);
+    var __importDefault = exports2 && exports2.__importDefault || function(mod) {
+      return mod && mod.__esModule ? mod : { "default": mod };
+    };
+    Object.defineProperty(exports2, "__esModule", { value: true });
+    exports2.addLinkToFindingsMarkdown = addLinkToFindingsMarkdown;
+    exports2.actionMain = actionMain;
+    var fs_1 = __importDefault(require("fs"));
+    var core_1 = require_core();
+    var github_1 = require_github();
+    var action_12 = require_dist_node20();
+    var github_2 = require_github2();
+    var exec_1 = require_exec();
+    var codelimit_1 = require_codelimit();
+    var utils_1 = require_utils7();
+    var version_1 = require_version();
+    var signale_1 = __importStar(require_signale2());
+    signale_1.default.config({
+      displayTimestamp: true
+    });
+    function generateMarkdownReport(reportMarkdown, findingsMarkdown) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        let result = "";
+        result += "## CodeLimit Report\n";
+        result += "\n";
+        result += reportMarkdown;
+        result += "### Findings\n";
+        result += findingsMarkdown;
+        result += "\n";
+        result += "Generated by [CodeLimit](https://getcodelimit.github.io)\n";
+        return result;
+      });
     }
-    __setModuleDefault(result, mod);
-    return result;
-  };
-}();
+    function addLinkToFindingsMarkdown(findingsMarkdown, owner, repo, branch) {
+      const link = `https://github.com/${owner}/${repo}/blob/_codelimit_reports/${branch}/codelimit.md#findings`;
+      return findingsMarkdown.replace(/^\d+ more rows?/gm, (match) => `[${match}](${link})`);
+    }
+    function updateReportsBranch(octokit, owner, repo, branch, markdown) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        yield (0, github_2.createBranchIfNotExists)(octokit, owner, repo, "_codelimit_reports");
+        const reportContent = (0, codelimit_1.getReportContent)();
+        let badgeContent;
+        if (reportContent) {
+          const reportJson = JSON.parse(reportContent);
+          badgeContent = (0, codelimit_1.makeStatusBadgeSvg)(reportJson.codebase);
+        } else {
+          badgeContent = (0, codelimit_1.makeNotFoundBadgeSvg)();
+        }
+        yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/badge.svg`, badgeContent);
+        (0, signale_1.success)(`Updated badge in branch _codelimit_reports/${branch}`);
+        if (reportContent) {
+          yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/report.json`, reportContent);
+          (0, signale_1.success)(`Updated JSON report in branch _codelimit_reports/${branch}`);
+        }
+        yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/codelimit.md`, markdown);
+        (0, signale_1.success)(`Updated markdown report in branch _codelimit_reports/${branch}`);
+      });
+    }
+    function updatePullRequestComment(octokit, owner, repo, branch, markdownReport) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        var _a;
+        const prNumber = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
+        if (prNumber) {
+          const actionStateFile = yield (0, github_2.getFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`);
+          if (actionStateFile) {
+            const fileContent = Buffer.from(actionStateFile.content, "base64").toString("utf-8");
+            const actionState = JSON.parse(fileContent);
+            const commentId = actionState.commentId;
+            (0, signale_1.info)(`Updating existing comment with ID: ${commentId}`);
+            yield (0, github_2.updateComment)(octokit, owner, repo, prNumber, markdownReport, commentId);
+          } else {
+            (0, signale_1.info)("State file not found, creating new comment");
+            const commentId = yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
+            const actionState = { commentId };
+            const actionStateJson = JSON.stringify(actionState);
+            yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`, actionStateJson);
+          }
+        }
+      });
+    }
+    function checkChangedFiles(octokit, clBinary) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        const changedFiles = yield (0, utils_1.getChangedFiles)(octokit);
+        (0, signale_1.info)(`Number of files changed: ${changedFiles.length}`);
+        if (changedFiles.length === 0) {
+          (0, signale_1.info)("No files changed, skipping CodeLimit");
+          return 0;
+        } else {
+          (0, signale_1.info)("Running CodeLimit...");
+          return yield (0, exec_1.exec)(clBinary, ["check"].concat(changedFiles), { ignoreReturnCode: true });
+        }
+      });
+    }
+    function updateRepository(octokit, clBinary) {
+      return __awaiter2(this, void 0, void 0, function* () {
+        const owner = (0, github_2.getRepoOwner)(github_1.context);
+        const repo = (0, github_2.getRepoName)(github_1.context);
+        const branch = (0, github_2.getSourceBranch)();
+        if (!owner || !repo || !branch) {
+          (0, signale_1.error)("Could not determine repository owner, name, or branch");
+          process.exit(1);
+        }
+        const reportMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["report", "--format", "markdown"])).stdout;
+        const findingsMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["findings", "--format", "markdown"])).stdout;
+        const findingsMarkdownWithLink = addLinkToFindingsMarkdown(findingsMarkdown, owner, repo, branch);
+        const findingsFullMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["findings", "--full", "--format", "markdown"])).stdout;
+        const markdownReport = yield generateMarkdownReport(reportMarkdown, findingsMarkdownWithLink);
+        const markdownFullFindingsReport = yield generateMarkdownReport(reportMarkdown, findingsFullMarkdown);
+        try {
+          yield updateReportsBranch(octokit, owner, repo, branch, markdownFullFindingsReport);
+        } catch (e) {
+          (0, signale_1.error)("Failed to update reports branch");
+          if (e instanceof Error) {
+            (0, signale_1.error)(`Reason: ${e.message}`);
+          }
+        }
+        if ((0, github_2.isPullRequest)()) {
+          try {
+            yield updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
+          } catch (e) {
+            (0, signale_1.error)("Failed to update pull request comment");
+            if (e instanceof Error) {
+              (0, signale_1.error)(`Reason: ${e.message}`);
+            }
+          }
+        }
+      });
+    }
+    function actionMain() {
+      return __awaiter2(this, void 0, void 0, function* () {
+        (0, signale_1.info)(`CodeLimit-action, version: ${version_1.version.revision}`);
+        const codeLimitVersion = (0, core_1.getInput)("codelimit_version") || "latest";
+        const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)(codeLimitVersion);
+        (0, signale_1.info)(`CodeLimit binary: ${clBinary}`);
+        (0, signale_1.info)("CodeLimit version:");
+        yield (0, exec_1.exec)(clBinary, ["--version"]);
+        (0, signale_1.info)("Scanning codebase...");
+        yield (0, exec_1.exec)(clBinary, ["scan", "."]);
+        let exitCode = 0;
+        if (process.env.GITHUB_ACTION) {
+          const octokit = new action_12.Octokit({ auth: (0, core_1.getInput)("token") });
+          const doCheck = (0, core_1.getBooleanInput)("check");
+          if (doCheck) {
+            exitCode = yield checkChangedFiles(octokit, clBinary);
+          }
+          yield updateRepository(octokit, clBinary);
+        }
+        fs_1.default.unlinkSync(clBinary);
+        (0, signale_1.success)("Done!");
+        process.exit(exitCode);
+      });
+    }
+  }
+});
+
+// build/index.js
 var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P, generator) {
   function adopt(value) {
     return value instanceof P ? value : new P(function(resolve) {
@@ -53091,155 +53281,11 @@ var __awaiter = exports && exports.__awaiter || function(thisArg, _arguments, P,
     step((generator = generator.apply(thisArg, _arguments || [])).next());
   });
 };
-var __importDefault = exports && exports.__importDefault || function(mod) {
-  return mod && mod.__esModule ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.addLinkToFindingsMarkdown = addLinkToFindingsMarkdown;
-var fs_1 = __importDefault(require("fs"));
-var core_1 = require_core();
-var github_1 = require_github();
-var action_1 = require_dist_node20();
-var github_2 = require_github2();
-var exec_1 = require_exec();
-var codelimit_1 = require_codelimit();
-var utils_1 = require_utils7();
-var version_1 = require_version();
-var signale_1 = __importStar(require_signale2());
-signale_1.default.config({
-  displayTimestamp: true
-});
-function generateMarkdownReport(reportMarkdown, findingsMarkdown) {
-  return __awaiter(this, void 0, void 0, function* () {
-    let result = "";
-    result += "## CodeLimit Report\n";
-    result += "\n";
-    result += reportMarkdown;
-    result += "### Findings\n";
-    result += findingsMarkdown;
-    result += "\n";
-    result += "Generated by [CodeLimit](https://getcodelimit.github.io)\n";
-    return result;
-  });
-}
-function addLinkToFindingsMarkdown(findingsMarkdown, owner, repo, branch) {
-  const link = `https://github.com/${owner}/${repo}/blob/_codelimit_reports/${branch}/codelimit.md#findings`;
-  return findingsMarkdown.replace(/^\d+ more rows?/gm, (match) => `[${match}](${link})`);
-}
-function updateReportsBranch(octokit, owner, repo, branch, markdown) {
-  return __awaiter(this, void 0, void 0, function* () {
-    yield (0, github_2.createBranchIfNotExists)(octokit, owner, repo, "_codelimit_reports");
-    const reportContent = (0, codelimit_1.getReportContent)();
-    let badgeContent;
-    if (reportContent) {
-      const reportJson = JSON.parse(reportContent);
-      badgeContent = (0, codelimit_1.makeStatusBadgeSvg)(reportJson.codebase);
-    } else {
-      badgeContent = (0, codelimit_1.makeNotFoundBadgeSvg)();
-    }
-    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/badge.svg`, badgeContent);
-    (0, signale_1.success)(`Updated badge in branch _codelimit_reports/${branch}`);
-    if (reportContent) {
-      yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/report.json`, reportContent);
-      (0, signale_1.success)(`Updated JSON report in branch _codelimit_reports/${branch}`);
-    }
-    yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/codelimit.md`, markdown);
-    (0, signale_1.success)(`Updated markdown report in branch _codelimit_reports/${branch}`);
-  });
-}
-function updatePullRequestComment(octokit, owner, repo, branch, markdownReport) {
-  return __awaiter(this, void 0, void 0, function* () {
-    var _a;
-    const prNumber = (_a = github_1.context.payload.pull_request) === null || _a === void 0 ? void 0 : _a.number;
-    if (prNumber) {
-      const actionStateFile = yield (0, github_2.getFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`);
-      if (actionStateFile) {
-        const fileContent = Buffer.from(actionStateFile.content, "base64").toString("utf-8");
-        const actionState = JSON.parse(fileContent);
-        const commentId = actionState.commentId;
-        (0, signale_1.info)(`Updating existing comment with ID: ${commentId}`);
-        yield (0, github_2.updateComment)(octokit, owner, repo, prNumber, markdownReport, commentId);
-      } else {
-        (0, signale_1.info)("State file not found, creating new comment");
-        const commentId = yield (0, github_2.createPRComment)(octokit, owner, repo, prNumber, markdownReport);
-        const actionState = { commentId };
-        const actionStateJson = JSON.stringify(actionState);
-        yield (0, github_2.createOrUpdateFile)(octokit, owner, repo, "_codelimit_reports", `${branch}/action.json`, actionStateJson);
-      }
-    }
-  });
-}
-function checkChangedFiles(octokit, clBinary) {
-  return __awaiter(this, void 0, void 0, function* () {
-    const changedFiles = yield (0, utils_1.getChangedFiles)(octokit);
-    (0, signale_1.info)(`Number of files changed: ${changedFiles.length}`);
-    if (changedFiles.length === 0) {
-      (0, signale_1.info)("No files changed, skipping CodeLimit");
-      return 0;
-    } else {
-      (0, signale_1.info)("Running CodeLimit...");
-      return yield (0, exec_1.exec)(clBinary, ["check"].concat(changedFiles), { ignoreReturnCode: true });
-    }
-  });
-}
-function updateRepository(octokit, clBinary) {
-  return __awaiter(this, void 0, void 0, function* () {
-    const owner = (0, github_2.getRepoOwner)(github_1.context);
-    const repo = (0, github_2.getRepoName)(github_1.context);
-    const branch = (0, github_2.getSourceBranch)();
-    if (!owner || !repo || !branch) {
-      (0, signale_1.error)("Could not determine repository owner, name, or branch");
-      process.exit(1);
-    }
-    const reportMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["report", "--format", "markdown"])).stdout;
-    const findingsMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["findings", "--format", "markdown"])).stdout;
-    const findingsMarkdownWithLink = addLinkToFindingsMarkdown(findingsMarkdown, owner, repo, branch);
-    const findingsFullMarkdown = (yield (0, exec_1.getExecOutput)(clBinary, ["findings", "--full", "--format", "markdown"])).stdout;
-    const markdownReport = yield generateMarkdownReport(reportMarkdown, findingsMarkdownWithLink);
-    const markdownFullFindingsReport = yield generateMarkdownReport(reportMarkdown, findingsFullMarkdown);
-    try {
-      yield updateReportsBranch(octokit, owner, repo, branch, markdownFullFindingsReport);
-    } catch (e) {
-      (0, signale_1.error)("Failed to update reports branch");
-      if (e instanceof Error) {
-        (0, signale_1.error)(`Reason: ${e.message}`);
-      }
-    }
-    if ((0, github_2.isPullRequest)()) {
-      try {
-        yield updatePullRequestComment(octokit, owner, repo, branch, markdownReport);
-      } catch (e) {
-        (0, signale_1.error)("Failed to update pull request comment");
-        if (e instanceof Error) {
-          (0, signale_1.error)(`Reason: ${e.message}`);
-        }
-      }
-    }
-  });
-}
-function main() {
-  return __awaiter(this, void 0, void 0, function* () {
-    (0, signale_1.info)(`CodeLimit-action, version: ${version_1.version.revision}`);
-    const codeLimitVersion = (0, core_1.getInput)("codelimit_version") || "latest";
-    const clBinary = yield (0, codelimit_1.downloadCodeLimitBinary)(codeLimitVersion);
-    (0, signale_1.info)(`CodeLimit binary: ${clBinary}`);
-    (0, signale_1.info)("CodeLimit version:");
-    yield (0, exec_1.exec)(clBinary, ["--version"]);
-    (0, signale_1.info)("Scanning codebase...");
-    yield (0, exec_1.exec)(clBinary, ["scan", "."]);
-    const octokit = new action_1.Octokit({ auth: (0, core_1.getInput)("token") });
-    const doCheck = (0, core_1.getBooleanInput)("check");
-    let exitCode = 0;
-    if (doCheck) {
-      exitCode = yield checkChangedFiles(octokit, clBinary);
-    }
-    yield updateRepository(octokit, clBinary);
-    fs_1.default.unlinkSync(clBinary);
-    (0, signale_1.success)("Done!");
-    process.exit(exitCode);
-  });
-}
-main();
+var action_1 = require_action();
+(() => __awaiter(void 0, void 0, void 0, function* () {
+  yield (0, action_1.actionMain)();
+}))();
 /*! Bundled license information:
 
 undici/lib/fetch/body.js:

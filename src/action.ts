@@ -129,7 +129,7 @@ async function updateRepository(octokit: Octokit, clBinary: string) {
     }
 }
 
-async function main() {
+export async function actionMain() {
     info(`CodeLimit-action, version: ${version.revision}`);
     const codeLimitVersion = getInput('codelimit_version') || 'latest';
     const clBinary = await downloadCodeLimitBinary(codeLimitVersion);
@@ -138,16 +138,16 @@ async function main() {
     await exec(clBinary, ['--version']);
     info('Scanning codebase...');
     await exec(clBinary, ['scan', '.']);
-    const octokit = new Octokit({auth: getInput('token')});
-    const doCheck = getBooleanInput('check');
     let exitCode = 0;
-    if (doCheck) {
-        exitCode = await checkChangedFiles(octokit, clBinary);
+    if (process.env.GITHUB_ACTION) {
+        const octokit = new Octokit({auth: getInput('token')});
+        const doCheck = getBooleanInput('check');
+        if (doCheck) {
+            exitCode = await checkChangedFiles(octokit, clBinary);
+        }
+        await updateRepository(octokit, clBinary);
     }
-    await updateRepository(octokit, clBinary);
     fs.unlinkSync(clBinary);
     success('Done!');
     process.exit(exitCode);
 }
-
-main();

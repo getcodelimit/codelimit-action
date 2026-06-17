@@ -13,8 +13,11 @@ jobs:
     - name: Checkout sources
       uses: actions/checkout@v6
 
-    - name: Run CodeLimit
+    - name: Run CodeLimit main version
       uses: getcodelimit/codelimit-action@main
       with:
         check: false
         codelimit_version: 'latest'
+
+    - name: Run CodeLimit v1 version
+      uses: getcodelimit/codelimit-action@v1
