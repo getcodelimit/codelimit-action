@@ -63520,6 +63520,8 @@ var require_utils6 = __commonJS({
         base = github_1.context.payload.before;
         head = github_1.context.payload.after;
       }
+      console.log(`Base SHA: ${base}, Head SHA: ${head}`);
+      console.log(github_1.context.payload);
       return { base, head };
     }
   }
@@ -63532,7 +63534,7 @@ var require_version = __commonJS({
     Object.defineProperty(exports2, "__esModule", { value: true });
     exports2.version = void 0;
     exports2.version = {
-      "revision": "c68436f",
+      "revision": "cbf2370",
       "year": "2026"
     };
   }
