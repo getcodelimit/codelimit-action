@@ -1,7 +1,7 @@
 {
   "version": "0.21.0",
-  "uuid": "df18c9ae-a118-416f-9252-c2e87890b39e",
-  "timestamp": "2026-06-17T09:19:59+00:00",
+  "uuid": "af2c0a41-f9db-43e9-8db3-8bdcf5dfdf8d",
+  "timestamp": "2026-06-17T10:03:48+00:00",
   "root": "/github/workspace",
   "repository": {
     "owner": "getcodelimit",
@@ -10,24 +10,25 @@
   },
   "codebase": {
     "totals": {
+      "TypeScript": {
+        "files": 10,
+        "lines_of_code": 344,
+        "functions": 31,
+        "hard_to_maintain": 1,
+        "unmaintainable": 0
+      },
       "JavaScript": {
         "files": 1,
         "lines_of_code": 0,
         "functions": 0,
         "hard_to_maintain": 0,
         "unmaintainable": 0
-      },
-      "TypeScript": {
-        "files": 9,
-        "lines_of_code": 344,
-        "functions": 31,
-        "hard_to_maintain": 1,
-        "unmaintainable": 0
       }
     },
     "tree": {
       "./": {
         "entries": [
+          "vitest.config.ts",
           "src/"
         ],
         "profile": [155, 156, 33, 0]
@@ -55,6 +56,14 @@
       }
     },
     "files": {
+      "vitest.config.ts": {
+        "checksum": "26c102cfc615637cf9246c6f011e53c9",
+        "language": "TypeScript",
+        "loc": 0,
+        "profile": [0, 0, 0, 0],
+        "measurements": [
+        ]
+      },
       "src/generate-versionjs.js": {
         "checksum": "7abb9921a1ffff7e63a32112242115ea",
         "language": "JavaScript",
