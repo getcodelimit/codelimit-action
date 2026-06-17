@@ -2,8 +2,7 @@ import {context} from "@actions/github";
 import {Octokit} from "@octokit/action";
 
 export async function getChangedFiles(octokit: Octokit) {
-    console.log(`Event name: ${context.eventName}`);
-    if (context.eventName === undefined) {
+    if (context.eventName === undefined || context.eventName === 'workflow_run') {
         return ['.'];
     }
     const {base, head} = getShas();
@@ -36,6 +35,5 @@ function getShas(): { base: string, head: string } {
         base = context.payload.before
         head = context.payload.after
     }
-    console.log(`Base SHA: ${base}, Head SHA: ${head}`);
     return {base: base, head: head};
 }
