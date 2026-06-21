@@ -30,7 +30,7 @@
     "vitest": "^4.1.9"
   },
   "dependencies": {
-    "@actions/core": "^2.0.3",
+    "@actions/core": "^3.0.1",
     "@actions/exec": "^2.0.0",
     "@actions/github": "^8.0.1",
     "@octokit/action": "^8.0.4",
