@@ -21,7 +21,7 @@
   },
   "homepage": "https://github.com/getcodelimit/codelimit-action#readme",
   "devDependencies": {
-    "@types/node": "^25.2.2",
+    "@types/node": "^26.0.0",
     "@types/node-fetch": "^2.6.12",
     "@types/signale": "^1.4.7",
     "esbuild": "^0.28.1",
